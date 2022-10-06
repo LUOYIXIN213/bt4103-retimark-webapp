@@ -4,52 +4,101 @@
 {% endblock %}
 
 {% block content %}
+<head></head>
+<body>
+    <h1>Make an Appointment</h1>
+    <div class="clinic">
+        <div class="text">
+            <div class="inline">
+                <img src="/static/PIC/Clinic.png">
+                <p class="name">Partner clinic: &ensp;</p>
+                <p>Asan Medical Center, Seoul, Korea</p>
+            </div>
+            <div class="inline">
+                <img src="/static/PIC/Address.png">
+                <p class="name">Address: &ensp;</p>
+                <p>88, OLYMPIC-RO 43-GIL, SONGPA-GU, SEOUL 05505, KOREA</p>
+            </div>
+            <div class="inline">
+                <img src="/static/PIC/Link.png">
+                <p class="name">Make an apppointment at: &ensp;</p>
+                <p><a href="https://eng.amc.seoul.kr/gb/lang/appointments/reserve/reserveForm.do">https://eng.amc.seoul.kr/gb/lang/appointments/reserve/reserveForm.do</a></p>
+            </div>
+        </div>
+    </div>
 
-<html>
-<head>
+    <div class="clinic">
+        <div class="text">
+            <div class="inline">
+                <img src="/static/PIC/Clinic.png">
+                <p class="name">Partner clinic: &ensp;</p>
+                <p>Seoul National University Hopsital, Seoul, Korea</p>
+            </div>
+            <div class="inline">
+                <img src="/static/PIC/Address.png">
+                <p class="name">Address: &ensp;</p>
+                <p>101, Daehak-ro Jongno-gu, Seoul 03080, Rep. of Korea</p>
+            </div>
+            <div class="inline">
+                <img src="/static/PIC/Link.png">
+                <p class="name">Make an apppointment at: &ensp;</p>
+                <p><a href="https://www.snuh.org/global/en/patients/appointmentMain.do">https://www.snuh.org/global/en/patients/appointmentMain.do</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="clinic">
+        <div class="text">
+            <div class="inline">
+                <img src="/static/PIC/Clinic.png">
+                <p class="name">Partner clinic: &ensp;</p>
+                <p>Seoul National University Bundang Hospital, Seongnam-si, Korea</p>
+            </div>
+            <div class="inline">
+                <img src="/static/PIC/Address.png">
+                <p class="name">Address: &ensp;</p>
+                <p>82 Gumi-ro, 173 Beon-gil, Gumi-ro, Bundang-gu, Seongnam-si, Gyeonggi-do, South Korea</p>
+            </div>
+            <div class="inline">
+                <img src="/static/PIC/Link.png">
+                <p class="name">Make an apppointment at: &ensp;</p>
+                <p><a href="https://www.snubh.org/dh/module/en/online.do?DP_CD=EN&MENU_ID=002001001">https://www.snubh.org/dh/module/en/online.do?DP_CD=EN&MENU_ID=002001001</a></p>
+            </div>
+        </div>
+    </div>
     <style>
         h1 {
             text-align: center;
             margin-top: 50px;
             margin-bottom: 50px;
+            text-shadow: 1px 1px 5px #BFBFBF;
         }
         .clinic {
-            width: 700px;
-            border: 1px solid #BFBFBF;
+            width: 830px;
             background-color: white;
             box-shadow: 5px 5px 5px #aaaaaa;
-            margin-left: 500px;
+            margin-left: auto;
+            margin-right: auto;
             margin-bottom: 20px;
             border-radius: 5px;
         }
-        p {
-            margin-top: 20px;
+        .text {
+            padding-top: 20px;
+            padding-left: 10px;
+        }
+        .inline {
+            display: flex; 
             margin-left: 30px;
         }
+        .name {
+            color: #ee6617;
+            display: inline;
+        }
+        img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
     </style>
-</head>
-<body>
-
-    <h1>Make an Appointment</h1>
-    <div class="clinic">
-        <p>Partner clinic: clinic name</p>
-        <p>Address: Address</p>
-        <p>Make an apppointment at: link</p>
-    </div>
-
-    <div class="clinic">
-        <p>Partner clinic: clinic name</p>
-        <p>Address: Address</p>
-        <p>Make an apppointment at: link</p>
-    </div>
-
-    <div class="clinic">
-        <p>Partner clinic: clinic name</p>
-        <p>Address: Address</p>
-        <p>Make an apppointment at: link</p>
-    </div>
-    
 </body>
-</html>
-
 {% endblock %}
