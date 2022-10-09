@@ -7,12 +7,48 @@
 </head>
 <body>
     <h1> Register <h1>
-        <a class="btn btn-outline-warning" href="{{ url_for('login_page') }}" role="button">Login</a>
+        <form action="http://127.0.0.1:5000/register_user" method="POST">
+            <div class="mb-3">
+                <label for="exampleInputName1" class="form-label">Name</label>
+                <input type="text" class="form-control" id="exampleInputName1" name="name">
+              </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input type="password" class="form-control" id="exampleInputPassword1" aria-describedby="passwordHelp" name="password">
+              <div id="passwordHelp" class="form-text">Password need to be at least 6 characters long</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <a type="submit" class="btn btn-outline-warning" href="{{ url_for('login_page') }}" role="button">Login</a>
 </body>
 </html>
 <style>
-    body {
+    h1 {
         text-align: center;
-        margin-top: 50px;
+    }
+
+    .form-label {
+        margin-top: 100px;
+        display: left;
+        font-size: xx-large;
+    }
+
+    .form-control {
+        display: inline
+    }
+
+    .form-text {
+        display: left;
+        font-size: medium;
+    }
+
+    button {
+        margin-top: 20px;
+        display: center
     }
 </style>
