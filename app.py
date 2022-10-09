@@ -72,15 +72,10 @@ def register_user():
             db.collection("users").document(person["uid"]).set(data)
             #Go to home page
             return redirect(url_for('home_page'))
-        except requests.exceptions.HTTPError as e:
-            response = e.args[0].response
-            error = response.json()['error']
-            print("error here")
-            print(error)
-            if error['message'] == "EMAIL_EXISTS":
-                return redirect(url_for('login_page'))
-        except Exception as e:
-            print(e)
+        # if the email is registered, redirect to the login page
+        except firebase_admin._auth_utils.EmailAlreadyExistsError as e:
+            return redirect(url_for('login_page'))
+        except:
             return redirect(url_for('register_page'))
 
 @app.route('/home')
