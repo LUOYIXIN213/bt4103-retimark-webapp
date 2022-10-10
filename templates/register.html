@@ -24,27 +24,32 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+        <p style="font-size: large; margin-top: 50px;">Already have account? </p>
         <a type="submit" class="btn btn-outline-warning" href="{{ url_for('login_page') }}" role="button">Login</a>
 </body>
 </html>
 <style>
     h1 {
         text-align: center;
+        margin-top: 100px;
+        margin-bottom: 100px;
     }
 
     .form-label {
         margin-top: 100px;
-        display: left;
-        font-size: xx-large;
+        display: inline;
+        font-size: x-large;
     }
 
     .form-control {
-        display: inline
+        display: inline;
+        max-width: 400px;
     }
 
     .form-text {
-        display: left;
+        display: center;
         font-size: medium;
+        font-style: italic;
     }
 
     button {

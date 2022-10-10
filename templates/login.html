@@ -20,32 +20,37 @@
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <a class="btn btn-outline-warning" href="{{ url_for('home_page') }}" role="button">Login</a>
+        <p style="font-size: large; margin-top: 50px;">Don't have an account yet? </p>
         <a class="btn btn-outline-secondary" href="{{ url_for('register_page') }}" role="button">Register</a>
 </body>
 </html>
 <style>
     h1 {
         text-align: center;
+        margin-top: 100px;
+        margin-bottom: 100px;
     }
 
     .form-label {
         margin-top: 100px;
-        display: left;
-        font-size: xx-large;
+        display: inline;
+        font-size: x-large;
     }
 
     .form-control {
-        display: inline
+        display: inline;
+        max-width: 400px;
     }
 
     .form-text {
-        display: left;
+        display: center;
         font-size: medium;
+        font-style: italic;
     }
 
     button {
         margin-top: 20px;
         display: center
     }
+
 </style>
