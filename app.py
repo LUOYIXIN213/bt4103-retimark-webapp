@@ -100,6 +100,9 @@ def simulation_page():
 def report_page():
     return render_template('report.html')
 
+@app.route('/report_detail')
+def report_detail_page():
+    return render_template('report_detail.html')
 
 @app.route('/appointment')
 def appointment_page():
