@@ -4,5 +4,142 @@
 {% endblock %}
 
 {% block content %}
-    Diagnosis page content
+    <h1> Diabetes Diagnosis </h1>
+    <ul class="nav nav-tabs" id="myTab" role="tablist" style=
+            "max-width: 1000px;
+            margin: auto;
+            #background-color: #FEFBFB;">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="basicinfo-tab" data-toggle="tab" href="#basicinfo" role="tab" aria-controls="basicinfo" aria-selected="true">Basic Information</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="bloodtest-tab" data-toggle="tab" href="#bloodtest" role="tab" aria-controls="bloodtest" aria-selected="false">Blood Test</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="lifestlye-tab" data-toggle="tab" href="#lifestyle" role="tab" aria-controls="lifestyle" aria-selected="false">Lifestyle Records</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="otherdisease-tab" data-toggle="tab" href="#otherdisease" role="tab" aria-controls="otherdisease" aria-selected="false">Other Diseases</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="basicinfo" role="tabpanel" aria-labelledby="basicinfo-tab">
+        <form>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-3 col-form-label">Gender</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sex" id="inlineRadio1" value="option1">
+                    <label class="form-check-label" for="inlineRadio1">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="sex" id="inlineRadio2" value="option2">
+                    <label class="form-check-label" for="inlineRadio2">Female</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-3 col-form-label" >Age (year)</label>
+                <div class="col-sm-10" style="max-width: 500px;">
+                    <input type="text" class="form-control" id="inputPassword3" name="age">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-3 col-form-label">Height (cm)</label>
+                <div class="col-sm-10" style="max-width: 500px;">
+                    <input type="text" class="form-control" id="inputPassword3" name="HE_ht">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-3 col-form-label">Weight (kg)</label>
+                <div class="col-sm-10" style="max-width: 500px;">
+                    <input type="text" class="form-control" id="inputPassword3" name="HE_wt">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-3 col-form-label" style="width: 500px;">Waist Circumference (cm)</label>
+                <div class="col-sm-10" style="max-width: 500px;">
+                    <input type="text" class="form-control" id="inputPassword3" name="HE_wc">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-3 col-form-label" style="width: 500px; margin-bottom: 20px;">Body Mass Index (kg/m2)</label>
+                <div class="col-sm-10" style="max-width: 500px;">
+                    <input type="text" class="form-control" id="inputPassword3" name="HE_BMI">
+                </div>
+            </div>
+        </form>
+        </div>
+
+        <div class="tab-pane fade" id="bloodtest" role="tabpanel" aria-labelledby="bloodtest-tab">
+            <form style=
+            "max-width: 1000px;
+            border-radius: 20px;
+            display: grid;
+            margin: auto;
+            margin-top: 20px;
+            #background-color: #FEFBFB;
+            box-shadow: 5px 5px 5px #aaaaaa;">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Email address</label>
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Example select</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Example multiple select</label>
+                    <select multiple class="form-control" id="exampleFormControlSelect2">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Example textarea</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin：auto;">Submit</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="lifestyle" role="tabpanel" aria-labelledby="lifestyle-tab">...</div>
+        <div class="tab-pane fade" id="otherdisease" role="tabpanel" aria-labelledby="otherdisease-tab">...</div>
+    </div>
+
+
+
+
+    <style>
+        h1 {
+            margin-top: 60px;
+            #text-shadow: 1px 1px 5px #BFBFBF;
+            font-size: xx-large;
+            text-align: center;
+        }
+        button {
+            margin-top: 20px;
+            margin : auto;
+            margin-bottom: 10px;
+        }
+
+        form {
+            max-width: 1000px;
+            border-radius: 20px;
+            display: grid;
+            margin: auto;
+            margin-top: 20px;
+            #background-color: #FEFBFB;
+            box-shadow: 5px 5px 5px #aaaaaa;"
+        }
+
+    </style>
+
+
 {% endblock %}
