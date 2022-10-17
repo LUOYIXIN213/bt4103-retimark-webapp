@@ -54,28 +54,34 @@ def register_user():
         email = result.get('email')
         password = result.get('password')
         name = result.get('name')
+        dob = result.get('DOB')
+        gender = result.get('gender')
         try:
             #Try creating the user account using the provided data
             auth.create_user(email=email, password=password)
-            #Sign in the user
             user = pb.auth().sign_in_with_email_and_password(email, password)
             print(user)
             #Add data to global person
             global person
             person["is_logged_in"] = True
-            person["email"] = user["email"]
-            person["uid"] = user["localId"]
+            person["email"] = email
+            person["uid"] = user['localId']
             person["name"] = name
+            person['DOB'] = dob
+            person['gender'] = gender
+            print("hi")
+            pb.auth().send_email_verification(user['idToken'])
             print("hi")
             #Append data to the firebase realtime database
-            data = {"name": name, "email": email, "password": password}
+            data = {"name": name, "email": email, "password": password, 'dob': dob, "gender": gender}
             db.collection("users").document(person["uid"]).set(data)
             #Go to home page
             return redirect(url_for('home_page'))
         # if the email is registered, redirect to the login page
         except firebase_admin._auth_utils.EmailAlreadyExistsError as e:
             return redirect(url_for('login_page'))
-        except:
+        except Exception as e:
+            print(e)
             return redirect(url_for('register_page'))
 
 @app.route('/home')
