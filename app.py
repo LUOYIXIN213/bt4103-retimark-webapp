@@ -14,7 +14,7 @@ pb = pyrebase.initialize_app(json.load(open('fbconfig.json')))
 db = firestore.client()
 
 #Initialze person as dictionary
-person = {"is_logged_in": False, "name": "", "email": "", "uid": ""}
+person = {"is_logged_in": False, "username": "", "email": "", "uid": ""}
 
 @app.route('/')
 
@@ -41,7 +41,7 @@ def login_user():
             person["uid"] = user["localId"]
             #Get the name of the user
             data = db.collection("users").document(person["uid"]).get().to_dict()
-            person["name"] = data["name"]
+            person["username"] = data["username"]
             #Redirect to home page
             return redirect(url_for('home_page'))
         except:
@@ -53,7 +53,9 @@ def register_user():
         result = request.form
         email = result.get('email')
         password = result.get('password')
-        name = result.get('name')
+        fname = result.get('fname')
+        lname = result.get('lname')
+        username = result.get('username')
         dob = result.get('DOB')
         gender = result.get('gender')
         try:
@@ -66,14 +68,16 @@ def register_user():
             person["is_logged_in"] = True
             person["email"] = email
             person["uid"] = user['localId']
-            person["name"] = name
+            person["fname"] = fname
+            person["lname"] = lname
+            person["username"] = username
             person['DOB'] = dob
             person['gender'] = gender
             print("hi")
             pb.auth().send_email_verification(user['idToken'])
             print("hi")
             #Append data to the firebase realtime database
-            data = {"name": name, "email": email, "password": password, 'dob': dob, "gender": gender}
+            data = {"fname": fname, "lname": lname, "username": username, "email": email, "password": password, 'dob': dob, "gender": gender}
             db.collection("users").document(person["uid"]).set(data)
             #Go to home page
             return redirect(url_for('home_page'))
@@ -87,7 +91,7 @@ def register_user():
 @app.route('/home')
 def home_page():
     if person["is_logged_in"] == True:
-        return render_template("home.html", name = person["name"])
+        return render_template("home.html", name = person["username"])
     else:
         return redirect(url_for('login'))
 
