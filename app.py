@@ -16,6 +16,9 @@ db = firestore.client()
 #Initialze person as dictionary
 person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": ""}
 
+#initalize report_id for diagnosis
+report_id = ""
+
 @app.route('/')
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -96,6 +99,7 @@ def register_user():
             print(e)
             return redirect(url_for('register_page'))
 
+
 @app.route('/home')
 def home_page():
     if person["is_logged_in"] == True:
@@ -104,9 +108,33 @@ def home_page():
         return redirect(url_for('login'))
 
 
-@app.route('/diagnosis')
+@app.route('/diagnosis', methods=['POST', 'GET'])
 def diagnosis_page():
     return render_template('diagnosis.html')
+
+
+@app.route('/diagnosis_user', methods=['POST', 'GET'])
+def diagnosis_user():
+    if request.method == 'POST':
+        result = request.form
+        sex = result.get('sex')
+        print(result.to_dict())
+        try:
+            # Get the name of the user
+            past_report_ref = db.collection("users").document(person["uid"]).collection('past_reports').document()
+            diagnosis_report = {"sex": sex}
+            past_report_ref.set(diagnosis_report)
+            global report_id
+            report_id = past_report_ref.id
+            print(report_id)
+            print(diagnosis_report)
+            return render_template('report_detail.html')
+        except Exception as e:
+            print(e)
+            return render_template('diagnosis.html')
+
+
+
 
 
 @app.route('/simulation')

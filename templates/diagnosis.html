@@ -23,7 +23,7 @@
             <a class="nav-link" id="bloodtest-tab" data-toggle="tab" href="#bloodtest" role="tab" aria-controls="bloodtest" aria-selected="false" style="color: #ee6617;">Blood Test</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="lifestlye-tab" data-toggle="tab" href="#lifestyle" role="tab" aria-controls="lifestyle" aria-selected="false" style="color: #ee6617;">Lifestyle Records</a>
+            <a class="nav-link" id="lifestyle-tab" data-toggle="tab" href="#lifestyle" role="tab" aria-controls="lifestyle" aria-selected="false" style="color: #ee6617;">Lifestyle Records</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="otherdisease-tab" data-toggle="tab" href="#otherdisease" role="tab" aria-controls="otherdisease" aria-selected="false" style="color: #ee6617;">Historical Diseases</a>
@@ -31,27 +31,26 @@
     </ul>
 
     <div class="tab-content" id="myTabContent">
+    <form action={{ url_for('diagnosis_user') }} method="POST">
         <div class="tab-pane fade show active" id="basicinfo" role="tabpanel" aria-labelledby="basicinfo-tab" style=
                 "max-width: 1000px;
                 border-radius: 20px;
                 margin: auto;
                 background-color: antiquewhite;
                 box-shadow: 5px 5px 5px #aaaaaa;
-                margin-top: 20px;
+                margin-top: 10px;
                 margin-bottom: 20px">
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 25%;color: black;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
             </div>
-
-        <form>
-            <div class="form-group row">
+            <div class="form-group row" >
                 <label for="inputEmail3" class="col-sm-3 col-form-label">Gender</label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sex" id="inlineRadio1" value="option1">
+                    <input class="form-check-input" type="radio" name="sex" id="inlineRadio1" value="1">
                     <label class="form-check-label" for="inlineRadio1">Male</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="sex" id="inlineRadio2" value="option2">
+                    <input class="form-check-input" type="radio" name="sex" id="inlineRadio2" value="2">
                     <label class="form-check-label" for="inlineRadio2">Female</label>
                 </div>
             </div>
@@ -85,12 +84,11 @@
                     <input type="text" class="form-control" id="inputPassword3" name="HE_BMI">
                 </div>
             </div>
-        </form>
             <div style="display: flex;
                           justify-content: center;
                           align-items: center;">
             <button type="button" id="nextblood" class="btn btn-warning" style="margin-bottom: 10px">Next</button>
-            </div>
+        </div>
         </div>
 
         <div class="tab-pane fade" id="bloodtest" role="tabpanel" aria-labelledby="bloodtest-tab" style=
@@ -104,8 +102,7 @@
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 50%;color: black;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
             </div>
 
-            <form method="post" target="_self" id="formIdentifier">
-                <div class="form-group row">
+            <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-4 col-form-label">Have you done any clinical blood testing?</label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" onclick="javascript:yesnoCheck();" name="bloodtest" id="yesCheck">
@@ -115,8 +112,8 @@
                         <input class="form-check-input" type="radio" onclick="javascript:yesnoCheck();" name="bloodtest" id="noCheck">
                         <label class="form-check-label" for="inlineRadio2">No</label>
                     </div>
-                </div>
-                <div id="ifYes" style="visibility:hidden">
+            </div>
+                <div id="ifYes" style="display:none">
                     <div class="form-group">
                     <label for="exampleFormControlInput1">If yes, please input your most recent blood testing results below.</label>
                     </div>
@@ -175,19 +172,15 @@
                         </div>
                     </div>
                 </div>
-                <div style="
-                          display: flex;
+            <div style="display: flex;
                           justify-content: center;
                           align-items: center;">
-                    <button type="button" id="nextlifestyle" class="btn btn-warning" style="margin-bottom: 10px">Next</button>
-                </div>
-            </form>
-
-
+                <button type="button" class="btn btn-warning" id="prevbasic" role="button" style="margin-bottom: 10px; margin-right: 10px;">Previous</button>
+                <button type="button" class="btn btn-warning" id="nextlifestyle" role="button" style="margin-bottom: 10px">Next</button>
+            </div>
         </div>
 
-        <div class="tab-pane fade" id="lifestyle" role="tabpanel" aria-labelledby="lifestyle-tab">
-            <div class="tab-pane fade show active" id="basicinfo" role="tabpanel" aria-labelledby="basicinfo-tab" style=
+        <div class="tab-pane fade" id="lifestyle" role="tabpanel" aria-labelledby="lifestyle-tab" style=
                 "max-width: 1000px;
                 border-radius: 20px;
                 margin: auto;
@@ -197,8 +190,7 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%;color: black;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
             </div>
-                <form>
-                    <div class="form-group row">
+                <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-5 col-form-label">Do you drink more than once a month?</label>
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="dr_month" id="dr_month1" value="1">
@@ -220,7 +212,7 @@
                             <label class="form-check-label" for="dr_high2">No</label>
                         </div>
                     </div>
-                    <p style="font-size: 12px"> Select Yes, if 1) your average quanitity per occasion is more than 7 drinks for men and 5 for women;and 2) having drinks at least twice a week.</p>
+            <p style="font-size: 12px; margin-left: 40px;"> Select Yes, if 1) your average quanitity per occasion is more than 7 drinks for men and 5 for women;and 2) having drinks at least twice a week.</p>
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-5 col-form-label">Do you smoke now?</label>
                         <div class="form-check form-check-inline">
@@ -282,15 +274,12 @@
                             <label class="form-check-label" for="pa_aerobic2">No</label>
                         </div>
                     </div>
-                    <div style="
-                          display: flex;
+                <div style="display: flex;
                           justify-content: center;
                           align-items: center;">
-                    <button type="button" id="nextother" class="btn btn-warning" style="margin-bottom: 10px">Next</button>
+                    <button type="button" class="btn btn-warning" id="prevblood" role="button" style="margin-bottom: 10px; margin-right: 10px;">Previous</button>
+                    <button type="button" class="btn btn-warning" id="nextother" role="button" style="margin-bottom: 10px">Next</button>
                 </div>
-
-                </form>
-            </div>
             </div>
 
         <div class="tab-pane fade" id="otherdisease" role="tabpanel" aria-labelledby="otherdisease-tab" style="
@@ -303,7 +292,6 @@
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 100%; color: black;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
                 </div>
-                <form method="post" target="_self" id="formIdentifier">
                     <div class="form-group row">
                         <label for="inputEmail3" class="col-sm-5 col-form-label">Have you been diagnosed stroke?</label>
                         <div class="form-check form-check-inline">
@@ -348,7 +336,7 @@
                             <label class="form-check-label" for="inlineRadio2">No</label>
                         </div>
                     </div>
-                        <div id="if_diabetes_treatment_Yes" style="visibility:hidden">
+            <div id="if_diabetes_treatment_Yes" style="display:none">
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">If yes, please select your treatments.</label>
                             </div>
@@ -375,41 +363,127 @@
                                 </div>
                             </div>
                         </div>
-                    <div style="
-                          margin-bottom: 10px;
-                          display: flex;
+                    <div style="display: flex;
                           justify-content: center;
                           align-items: center;">
-                          <button type="submit" class="btn btn-warning" >Submit</button>
+                        <button type="button" class="btn btn-warning" id="prevlifestyle" role="button" style="margin-bottom: 10px; margin-right: 10px;">Previous</button>
+                        <button type="submit" class="btn btn-warning" role="button" style="margin-bottom: 10px">Submit</button>
                     </div>
-                </form>
             </div>
+    </form>
     </div>
 
     <script type="text/javascript">
         function yesnoCheck() {
             if (document.getElementById('yesCheck').checked) {
-                document.getElementById('ifYes').style.visibility = 'visible';
+                document.getElementById('ifYes').style.display = "block";
             }
-            else document.getElementById('ifYes').style.visibility = 'hidden';
+            else document.getElementById('ifYes').style.display = "none";
 
         }
 
         function diabetes_treatment_Check() {
             if (document.getElementById('yes_diabetes_treatment').checked) {
-                document.getElementById('if_diabetes_treatment_Yes').style.visibility = 'visible';
+                document.getElementById('if_diabetes_treatment_Yes').style.display = "block";
             }
-            else document.getElementById('if_diabetes_treatment_Yes').style.visibility = 'hidden';
+            else document.getElementById('if_diabetes_treatment_Yes').style.display = "none";
 
         }
+
+        document.getElementById("basicinfo-tab").onclick = function() {
+            document.getElementById("basicinfo").style.display = "block";
+            document.getElementById("bloodtest").style.display = "none";
+            document.getElementById("lifestyle").style.display = "none";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("prevbasic").onclick = function() {
+            document.getElementById("basicinfo").style.display = "block";
+            document.getElementById("bloodtest").style.display = "none";
+            document.getElementById("lifestyle").style.display = "none";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("bloodtest-tab").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "block";
+            document.getElementById("lifestyle").style.display = "none";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("nextblood").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "block";
+            document.getElementById("lifestyle").style.display = "none";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("prevblood").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "block";
+            document.getElementById("lifestyle").style.display = "none";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("lifestyle-tab").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "none";
+            document.getElementById("lifestyle").style.display = "block";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("nextlifestyle").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "none";
+            document.getElementById("lifestyle").style.display = "block";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("prevlifestyle").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "none";
+            document.getElementById("lifestyle").style.display = "block";
+            document.getElementById("otherdisease").style.display = "none";
+        }
+
+        document.getElementById("nextother").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "none";
+            document.getElementById("lifestyle").style.display = "none";
+            document.getElementById("otherdisease").style.display = "block";
+        }
+
+
+        document.getElementById("otherdisease-tab").onclick = function() {
+            document.getElementById("basicinfo").style.display = "none";
+            document.getElementById("bloodtest").style.display = "none";
+            document.getElementById("lifestyle").style.display = "none";
+            document.getElementById("otherdisease").style.display = "block";
+        }
+
 
     </script>
 
      <script>
          $(function(){
+             $('#prevbasic').click(function(e){
+                 e.preventDefault();
+                 $('#myTab a[href="#basicinfo"]').tab('show');
+             });
+
+             $('#prevblood').click(function(e){
+                 e.preventDefault();
+                 $('#myTab a[href="#bloodtest"]').tab('show');
+             });
+
              $('#nextblood').click(function(e){
                  e.preventDefault();
                  $('#myTab a[href="#bloodtest"]').tab('show');
+             });
+
+             $('#prevlifestyle').click(function(e){
+                 e.preventDefault();
+                 $('#myTab a[href="#lifestyle"]').tab('show');
              });
 
              $('#nextlifestyle').click(function(e){
@@ -433,15 +507,11 @@
             text-align: center;
         }
 
-        form {
-            max-width: 1000px;
-            border-radius: 20px;
-            display: grid;
-            margin: auto;
-            margin-top: 20px;
+        .form-group {
             margin-left: 20px;
-            margin-bottom: 20px;
         }
+
+
 
     </style>
 
