@@ -31,6 +31,18 @@
         background: white;
         margin-bottom: 30px;
       }
+      .indivChart {
+        height: 100px;
+      }
+      .textBox {
+        width: 70%;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 5px 5px 5px #aaaaaa;
+        border-radius: 5px;
+        background: white;
+        margin-bottom: 30px;
+      }
       #risk-score {
         margin-top: 20px;
         text-align: center;
@@ -45,7 +57,7 @@
     <h3 id="risk-score">Your risk score is 75</h3>
     <h3 id="risk-score">You have a high risk of developing diabetes</h3>
     <div class="chartCard">
-        <div class="chartBox">
+        <div class="textBox">
             <p>* How to interpret the bar chart below:</p>
             <p>Look for the color of the bar!</p>
             <p>If the bar is red, it means your value has exceed the diabetic average; If the bar is green, it means your value is kept to normal.</p>
@@ -53,11 +65,52 @@
     </div>
     <div class="chartCard">
       <div class="chartBox">
-        <canvas id="myChart"></canvas>
+        <div class="indivChart">
+          <canvas id="myChart1"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart2"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart3"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart4"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart5"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart6"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart7"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart8"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart9"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart10"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart11"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart12"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart13"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart14"></canvas>   
+        </div>
       </div>
     </div>
     <div class="chartCard">
-        <div class="chartBox">
+        <div class="textBox">
             <h3 id="advice">Advices</h3>
             <ol>
                 <li>Drinking pattern: </li>
@@ -71,13 +124,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
     // setup block
-    const featureValue = [38, 112, 58, 22, 100, 23, 55]
-    const diabeticValue = [30, 90, 55, 18, 112, 30, 70]
-    const normalValue = [27, 70, 52, 14, 90, 25, 60]
+    const featureValue = [38, 112, 58, 22, 100, 23, 55, 13, 22, 50, 133, 1, 0, 0]
+    const diabeticValue = [30, 90, 55, 18, 112, 30, 70, 10, 25, 55, 152, 2, 1, 0]
+    const normalValue = [27, 70, 52, 14, 90, 25, 60, 5, 18, 35, 147, 0, 0, 0]
+    secondLayer = []
+    const firstLayerBackground =[];
+    const firstLayerBorder = [];
+    const secondLayerBackground =[];
+    const secondLayerBorder = [];
+    for (i=0; i<featureValue.length; i++) {
+      if(featureValue[i]>diabeticValue[i] && featureValue[i]>normalValue[i]) {
+        secondLayer.push(0);
+        firstLayerBackground.push('rgba(255, 99, 132, 0.2)')
+        firstLayerBorder.push('rgb(255, 99, 132)')
+        secondLayerBackground.push('rgba(255, 99, 132, 0.2)')
+        secondLayerBorder.push('rgb(255, 99, 132)')
+      } else {
+        secondLayer.push(diabeticValue[i]-featureValue[i]);
+        firstLayerBackground.push('rgba(75, 192, 192, 0.2)')
+        firstLayerBorder.push('rgb(75, 192, 192)')
+        secondLayerBackground.push('rgba(201, 203, 207, 0.2)')
+        secondLayerBorder.push('rgb(201, 203, 207)')
+      }
+    }
     // display the levels as stacked bar chart
-    const thirdLayer = []
-    const secondLayer = []
-    const firstLayer = []
+    //const thirdLayer = []
+    //const secondLayer = []
+    //const firstLayer = []
+    /*
     for (i=0; i<featureValue.length; i++) {
         if(featureValue[i]<diabeticValue[i] && featureValue[i]<normalValue[i]) {           
             firstLayer.push(featureValue[i])
@@ -128,14 +202,12 @@
             thirdLayerBorder.push('rgb(255, 99, 132)')
         }
     }
-
-    console.log(firstLayerBackground);
-    console.log(firstLayerBorder);
-
+    */
+    /*
     const data = {
-      labels: ["Glucose", "Drinking frequency", "Smoking frequency", "BMI", "Physical activity", "hba1c","Blood pressure"],
+      labels: ["Glucose","","","","","",""],
       datasets: [{
-        label: 'Feature value',
+        label: 'Glucose value',
         data: firstLayer,
         backgroundColor: firstLayerBackground,
         borderColor: firstLayerBorder,
@@ -143,7 +215,7 @@
         barPercentage: 0.6
       },
       {
-        label: 'Feature value',
+        label: 'Glucose value',
         data: secondLayer,
         backgroundColor: secondLayerBackground,
         borderColor: secondLayerBorder,
@@ -156,21 +228,644 @@
         backgroundColor: thirdLayerBackground,
         borderColor: thirdLayerBorder,
         borderWidth: 1,
-        barPercentage: 0.6
+        barPercentage: 0.6,
       }]
     };
-
-    // config block
-    const config = {
-        type: 'bar',
-        data,
+    */
+    // first variable
+    const data1 = {
+      labels: ["Feature 1"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[0]],
+        backgroundColor: firstLayerBackground[0],
+        borderColor: firstLayerBorder[0],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[0]],
+        backgroundColor: secondLayerBackground[0],
+        borderColor: secondLayerBorder[0],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //second variable
+    const data2 = {
+      labels: ["Feature 2"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[1]],
+        backgroundColor: firstLayerBackground[1],
+        borderColor: firstLayerBorder[1],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[1]],
+        backgroundColor: secondLayerBackground[1],
+        borderColor: secondLayerBorder[1],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //third variable
+    const data3 = {
+      labels: ["Feature 3"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[2]],
+        backgroundColor: firstLayerBackground[2],
+        borderColor: firstLayerBorder[2],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[2]],
+        backgroundColor: secondLayerBackground[2],
+        borderColor: secondLayerBorder[2],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //fourth variable
+    const data4 = {
+      labels: ["Feature 4"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[3]],
+        backgroundColor: firstLayerBackground[3],
+        borderColor: firstLayerBorder[3],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[3]],
+        backgroundColor: secondLayerBackground[3],
+        borderColor: secondLayerBorder[3],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //fifth variable
+    const data5 = {
+      labels: ["Feature 1"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[4]],
+        backgroundColor: firstLayerBackground[4],
+        borderColor: firstLayerBorder[4],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[4]],
+        backgroundColor: secondLayerBackground[4],
+        borderColor: secondLayerBorder[4],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //sixth variable
+    const data6 = {
+      labels: ["Feature 6"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[5]],
+        backgroundColor: firstLayerBackground[5],
+        borderColor: firstLayerBorder[5],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[5]],
+        backgroundColor: secondLayerBackground[5],
+        borderColor: secondLayerBorder[5],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //seventh variable
+    const data7 = {
+      labels: ["Feature 7"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[6]],
+        backgroundColor: firstLayerBackground[6],
+        borderColor: firstLayerBorder[6],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[6]],
+        backgroundColor: secondLayerBackground[6],
+        borderColor: secondLayerBorder[6],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //eighth variable
+    const data8 = {
+      labels: ["Feature 8"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[7]],
+        backgroundColor: firstLayerBackground[7],
+        borderColor: firstLayerBorder[7],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[7]],
+        backgroundColor: secondLayerBackground[7],
+        borderColor: secondLayerBorder[7],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //nineth variable
+    const data9 = {
+      labels: ["Feature 9"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[8]],
+        backgroundColor: firstLayerBackground[8],
+        borderColor: firstLayerBorder[8],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[8]],
+        backgroundColor: secondLayerBackground[8],
+        borderColor: secondLayerBorder[8],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //tenth variable
+    const data10 = {
+      labels: ["Feature 10"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[9]],
+        backgroundColor: firstLayerBackground[9],
+        borderColor: firstLayerBorder[9],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[9]],
+        backgroundColor: secondLayerBackground[9],
+        borderColor: secondLayerBorder[9],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //eleventh variable
+    const data11 = {
+      labels: ["Feature 11"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[10]],
+        backgroundColor: firstLayerBackground[10],
+        borderColor: firstLayerBorder[10],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[10]],
+        backgroundColor: secondLayerBackground[10],
+        borderColor: secondLayerBorder[10],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //twelfth variable
+    const data12 = {
+      labels: ["Feature 12"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[11]],
+        backgroundColor: firstLayerBackground[11],
+        borderColor: firstLayerBorder[11],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[11]],
+        backgroundColor: secondLayerBackground[11],
+        borderColor: secondLayerBorder[11],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //thirteenth variable
+    const data13 = {
+      labels: ["Feature 13"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[12]],
+        backgroundColor: firstLayerBackground[12],
+        borderColor: firstLayerBorder[12],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[12]],
+        backgroundColor: secondLayerBackground[12],
+        borderColor: secondLayerBorder[12],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //fourteenth variable
+    const data14 = {
+      labels: ["Feature 14"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[13]],
+        backgroundColor: firstLayerBackground[13],
+        borderColor: firstLayerBorder[13],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[13]],
+        backgroundColor: secondLayerBackground[13],
+        borderColor: secondLayerBorder[13],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //Cut off lines
+    const diabeticLine1 = {
+      id: "diabeticLine1",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[0]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine1 = {
+      id: "normalLine1",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[0]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine2 = {
+      id: "diabeticLine2",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[1]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine2 = {
+      id: "normalLine2",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[1]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine3 = {
+      id: "diabeticLine3",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[2]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine3 = {
+      id: "normalLine3",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[2]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine4 = {
+      id: "diabeticLine4",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[3]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine4 = {
+      id: "normalLine4",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[3]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine5 = {
+      id: "diabeticLine5",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[4]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine5 = {
+      id: "normalLine5",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[4]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine6 = {
+      id: "diabeticLine6",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[5]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine6 = {
+      id: "normalLine6",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[5]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine7 = {
+      id: "diabeticLine7",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[6]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine7 = {
+      id: "normalLine7",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[6]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine8 = {
+      id: "diabeticLine8",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[7]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine8 = {
+      id: "normalLine8",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[7]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine9 = {
+      id: "diabeticLine9",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[8]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine9 = {
+      id: "normalLine9",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[8]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine10 = {
+      id: "diabeticLine10",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[9]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine10 = {
+      id: "normalLine10",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[9]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine11 = {
+      id: "diabeticLine11",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[10]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine11 = {
+      id: "normalLine11",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[10]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine12 = {
+      id: "diabeticLine12",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[11]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine12 = {
+      id: "normalLine12",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[11]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine13 = {
+      id: "diabeticLine13",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[12]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine13 = {
+      id: "normalLine13",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[12]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine14 = {
+      id: "diabeticLine14",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[13]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine14 = {
+      id: "normalLine14",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[13]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    //config block
+    const config1 = {
+      type: 'bar',
+        data: data1,
         options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
             indexAxis: 'y',
             scales: {
                 x: { 
                     stacked: true,
                     grid : {
-                        drawOnChartArea: false
+                      drawOnChartArea: false,
                     },
                     ticks: {
                         display: false
@@ -184,39 +879,482 @@
                     }
                 }
             },
+        },
+        plugins: [diabeticLine1, normalLine1]
+    };
+    const config2 = {
+      type: 'bar',
+        data: data2,
+        options: {
             plugins: {
-                legend: {
-                    display: false
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
                 },
-                datalabels: {
-                    anchor: 'end',
-                    //align: 'top',
-                    formatter: (value, context) => {
-                        const datasetArray=[];
-                        context.chart.data.datasets.forEach(dataset => {
-                            datasetArray.push(dataset.data[context.dataIndex]);
-                        });
-                        function totalSum(total, datapoint) {
-                            return total + datapoint;
-                        }
-                        let sum = datasetArray.reduce(totalSum, 0);
-                        if(context.datasetIndex === datasetArray.length-1) {
-                            return sum;
-                        } else {
-                            return '';
-                        }
-                        
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
                     }
                 }
-            }
+            },
         },
-        plugins: [ChartDataLabels]
+        plugins: [diabeticLine2, normalLine2]
     };
-
+    const config3 = {
+      type: 'bar',
+        data: data3,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine3, normalLine3]
+    };
+    const config4 = {
+      type: 'bar',
+        data: data4,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine4, normalLine4]
+    };
+    const config5 = {
+      type: 'bar',
+        data: data5,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine5, normalLine5]
+    };
+    const config6 = {
+      type: 'bar',
+        data: data6,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine6, normalLine6]
+    };
+    const config7 = {
+      type: 'bar',
+        data: data7,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine7, normalLine7]
+    };
+    const config8 = {
+      type: 'bar',
+        data: data8,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine8, normalLine8]
+    };
+    const config9 = {
+      type: 'bar',
+        data: data9,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine9, normalLine9]
+    };
+    const config10 = {
+      type: 'bar',
+        data: data10,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine10, normalLine10]
+    };
+    const config11 = {
+      type: 'bar',
+        data: data11,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine11, normalLine11]
+    };
+    const config12 = {
+      type: 'bar',
+        data: data12,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine12, normalLine12]
+    };
+    const config13 = {
+      type: 'bar',
+        data: data13,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine13, normalLine13]
+    };
+    const config14 = {
+      type: 'bar',
+        data: data14,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine14, normalLine14]
+    };
+    
     // render init block
-    const myChart = new Chart(
-      document.getElementById('myChart'),
-      config
+    const myChart1 = new Chart(
+      document.getElementById('myChart1'),
+      config1
+    );
+    const myChart2 = new Chart(
+      document.getElementById('myChart2'),
+      config2
+    );
+    const myChart3 = new Chart(
+      document.getElementById('myChart3'),
+      config3
+    );
+    const myChart4 = new Chart(
+      document.getElementById('myChart4'),
+      config4
+    );
+    const myChart5 = new Chart(
+      document.getElementById('myChart5'),
+      config5
+    );
+    const myChart6 = new Chart(
+      document.getElementById('myChart6'),
+      config6
+    );
+    const myChart7 = new Chart(
+      document.getElementById('myChart7'),
+      config7
+    );
+    const myChart8 = new Chart(
+      document.getElementById('myChart8'),
+      config8
+    );
+    const myChart9 = new Chart(
+      document.getElementById('myChart9'),
+      config9
+    );
+    const myChart10 = new Chart(
+      document.getElementById('myChart10'),
+      config10
+    );
+    const myChart11 = new Chart(
+      document.getElementById('myChart11'),
+      config11
+    );
+    const myChart12 = new Chart(
+      document.getElementById('myChart12'),
+      config12
+    );
+    const myChart13 = new Chart(
+      document.getElementById('myChart13'),
+      config13
+    );
+    const myChart14 = new Chart(
+      document.getElementById('myChart14'),
+      config14
     );
     </script>
 
