@@ -221,13 +221,15 @@ def simulation_page():
 
 @app.route('/report')
 def report_page():
-    past_reports = db.collection(u"users").document(person["uid"]).collection("past_reports").stream()
-    report_list = []
-    for doc in past_reports:
-        report_list.append(doc.to_dict())
-        print(f'{doc.id} => {doc.to_dict()}')
-    print(report_list)
-    return render_template('report.html', past_reports = report_list)
+    past_reports = db.collection("users").document(person["uid"]).collection("past_reports").stream()
+    report_list_random = []
+    for report in past_reports:
+        report_list_random.append(report.to_dict())
+        print(f'{report.id} => {report.to_dict()}')
+    print(report_list_random)
+    report_list_sorted = sorted(report_list_random, key=lambda x: x.get('diagnosis_time'))
+    length = len(report_list_sorted)
+    return render_template('report.html', past_reports = report_list_sorted, length = length)
     
 
 @app.route('/report_detail')
