@@ -24,6 +24,10 @@ person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "emai
 diagnosis_report = {}
 report_id = ""
 
+#initialze id for simulation
+simulation_report = {}
+simulation_id = ""
+
 @app.route('/')
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -110,7 +114,20 @@ def home_page():
 
 @app.route('/diagnosis', methods=['POST', 'GET'])
 def diagnosis_page():
-    return render_template('diagnosis.html')
+    if person["is_logged_in"] == True:
+        past_reports_ref = db.collection("users").document(person["uid"]).collection("past_reports")
+        query = past_reports_ref.order_by("diagnosis_time", direction=firestore.Query.DESCENDING).limit(1)
+        results = query.stream()
+        report_list = []
+        for doc in results:
+            report_list.append(doc.to_dict())
+        latest_report = report_list[0]
+        date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
+        print(report_list[0])
+        return render_template('diagnosis.html', latest_report=latest_report,
+                               diagnosis_date=date_time_str.strftime("%Y-%m-%d %H:%M:%S"))
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/diagnosis_user', methods=['POST', 'GET'])
@@ -209,9 +226,110 @@ def diagnosis_user():
 
 
 
-@app.route('/simulation')
+@app.route('/simulation', methods=['POST', 'GET'])
 def simulation_page():
-    return render_template('simulation.html')
+    past_reports_ref = db.collection("users").document(person["uid"]).collection("past_reports")
+    query = past_reports_ref.order_by("diagnosis_time", direction=firestore.Query.DESCENDING).limit(1)
+    results = query.stream()
+    report_list = []
+    for doc in results:
+        report_list.append(doc.to_dict())
+    latest_report = report_list[0]
+    date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
+    print(report_list[0])
+    return render_template('simulation.html', latest_report = latest_report, diagnosis_date = date_time_str.strftime("%Y-%m-%d %H:%M:%S"))
+
+@app.route('/simulation_user', methods=['POST', 'GET'])
+def simulation_user():
+    error = None
+    if request.method == 'POST':
+        result = request.form
+        #get basic information
+        sex = float(result.get('sex'))
+        age = float(result.get('age'))
+        HE_ht = float(result.get('HE_ht'))
+        HE_wt = float(result.get('HE_wt'))
+        HE_wc = float(result.get('HE_wc'))
+        #calculate BMI
+        HE_BMI = HE_wt / (HE_ht / 100) ** 2
+        #pre-processing for obesity
+        if HE_BMI <= 18.5:
+            HE_obe = 1
+        elif HE_BMI <= 25:
+            HE_obe = 2
+        else:
+            HE_obe = 3
+
+        #Get blood test reusults
+        bloodtest = float(result.get('bloodtest'))
+        if bloodtest == 1:
+            HE_sbp = float(result.get('HE_sbp'))
+            HE_dbp = float(result.get('HE_dbp'))
+            HE_chol = float(result.get('HE_chol'))
+            HE_HDL_st2 = float(result.get('HE_HDL_st2'))
+            HE_TG = float(result.get('HE_TG'))
+            HE_glu = float(result.get('HE_glu'))
+            HE_HbA1c = float(result.get('HE_HbA1c'))
+            HE_BUN = float(result.get('HE_BUN'))
+            HE_crea = float(result.get('HE_crea'))
+        else:
+            HE_sbp = None
+            HE_dbp = None
+            HE_chol = None
+            HE_HDL_st2 = None
+            HE_TG = None
+            HE_glu = None
+            HE_HbA1c = None
+            HE_BUN = None
+            HE_crea = None
+
+        #get lifestyles
+        dr_month = float(result.get('dr_month'))
+        dr_high = float(result.get('dr_high'))
+        sm_presnt = float(result.get('sm_presnt'))
+        mh_stress = float(result.get('mh_stress'))
+        pa_vig_tm = float(result.get('pa_vig_tm'))
+        pa_mod_tm = float(result.get('pa_mod_tm'))
+        pa_walk = float(result.get('pa_walk'))
+        pa_aerobic = float(result.get('pa_aerobic'))
+
+        #get history disease
+        DI3_dg = float(result.get('DI3_dg'))
+        DI4_dg = float(result.get('DI4_dg'))
+        HE_DMfh = float(result.get('HE_DMfh'))
+        DE1_3 = float(result.get('DE1_3'))
+        DE1_31 = result.get('DE1_31')
+        if DE1_31 is not None:
+            DE1_31 = float(DE1_31)
+        else:
+            DE1_31 = None
+
+        DE1_32 = result.get('DE1_32')
+        if DE1_32 is not None:
+            DE1_32 = float(DE1_32)
+        else:
+            DE1_32 = None
+
+        print(result.to_dict())
+        try:
+            # Get the name of the user
+            simulation_ref = db.collection("users").document(person["uid"]).collection('past_simulations').document()
+            global simulation_report
+            simulation_report = {"simulated_time": datetime.datetime.now(tz=datetime.timezone.utc), "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
+                                "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol, "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
+                                "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
+                                "dr_month": dr_month, "dr_high": dr_high, "sm_presnt": sm_presnt, "mh_stress": mh_stress, "pa_vig_tm": pa_vig_tm,
+                                "pa_mod_tm": pa_mod_tm, "pa_walk": pa_walk, "pa_aerobic": pa_aerobic,
+                                "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DE1_31": DE1_31, "DE1_32": DE1_32}
+            simulation_ref.set(simulation_report)
+            global simulation_id
+            simulation_id = simulation_ref.id
+            print(simulation_id)
+            print(simulation_report)
+            return render_template('simulated_score.html')
+        except Exception as e:
+            print(e)
+            return render_template('simulation.html')
 
 
 @app.route('/report')
