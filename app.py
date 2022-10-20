@@ -144,7 +144,14 @@ def simulation_page():
 
 @app.route('/report')
 def report_page():
-    return render_template('report.html')
+    past_reports = db.collection(u"users").document(person["uid"]).collection("past_reports").stream()
+    report_list = []
+    for doc in past_reports:
+        report_list.append(doc.to_dict())
+        print(f'{doc.id} => {doc.to_dict()}')
+    print(report_list)
+    return render_template('report.html', past_reports = report_list)
+    
 
 @app.route('/report_detail')
 def report_detail_page():

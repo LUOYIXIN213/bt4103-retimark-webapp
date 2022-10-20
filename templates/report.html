@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}
-    Report
+
 {% endblock %}
 
 {% block content %}
 <head></head>
 <body>
-    <h1>Past Reports</h1>
-
+    <div class="card mb-3" style="max-width: 60%; max-height: 500px; margin: auto;">
+      <img src="/static/PIC/report.png" class="card-img-top" alt="..."
+          style="width: 300px; height: 182px; margin: auto;">
+          <h1> Past Reports </h1>
+    </div>
+    <p>{{ past_reports }}</p>
     <div class="accordion" id="accordionExample">
         <div class="card">
           <div class="card-header" id="headingOne">
@@ -22,26 +26,61 @@
             <div class="card-body">
               <p class="title">Report</p>
               <p class="risk-score">Your risk score is 75</p>
+              <!--Basic Info Secton-->
+              <p class="Subheader">Basic Information</p>
               <div class="report-detail" style="display: flex; align-items: center; justify-content: center;">
                 <ul class="list-name">
-                  <li class="list-item">Age: </li>
-                  <li class="list-item">Weight: </li>
-                  <li class="list-item">Height: </li>
-                  <li class="list-item">Glucose level: </li>
-                  <li class="list-item">hba1c: </li>
-                  <li class="list-item">Physical activity: </li>
+                  <li class="list-item">Age (year): </li>
+                  <li class="list-item">Height (cm): </li>
+                  <li class="list-item">Weight (kg): </li>
+                  <li class="list-item">Waist Circumference (cm): </li>
+                  <li class="list-item">Body Mass Index (kg/m2): </li> 
                 </ul>
                 <ul class="list-value">
-                  <li class="list-item">22</li>
+                  <li class="list-item">{{ past_reports.0.sex}}</li>
                   <li class="list-item">65</li>
                   <li class="list-item">180</li>
                   <li class="list-item">200</li>
                   <li class="list-item">5.3</li>
+                </ul>
+              </div>
+              <!--Blood test Section-->
+              <p class="Subheader">Blood Test</p>
+              <div class="report-detail" style="display: flex; align-items: center; justify-content: center;">
+                <ul class="list-name">
+                  <li class="list-item">Systolic Blood Pressure (mmHg):</li>
+                  <li class="list-item">Diastolic Blood Pressure (mmHg):</li>
+                </ul>
+                <ul class="list-value">
+                  <li class="list-item">Exercise daily</li>
+                  <li class="list-item">Exercise daily</li>
+                </ul>
+              </div>
+              <!--Lifestyle Section-->
+              <p class="Subheader">Lifestyle Records</p>
+              <div class="report-detail" style="display: flex; align-items: center; justify-content: center;">
+                <ul class="list-name">
+                  <li class="list-item">Systolic Blood Pressure (mmHg):</li>
+                  <li class="list-item">Diastolic Blood Pressure (mmHg):</li>
+                </ul>
+                <ul class="list-value">
+                  <li class="list-item">Exercise daily</li>
+                  <li class="list-item">Exercise daily</li>
+                </ul>
+              </div>
+              <!--Historical disease Section-->
+              <p class="Subheader">Historical Diseases</p>
+              <div class="report-detail" style="display: flex; align-items: center; justify-content: center;">
+                <ul class="list-name">
+                  <li class="list-item">Systolic Blood Pressure (mmHg):</li>
+                  <li class="list-item">Diastolic Blood Pressure (mmHg):</li>
+                </ul>
+                <ul class="list-value">
+                  <li class="list-item">Exercise daily</li>
                   <li class="list-item">Exercise daily</li>
                 </ul>
               </div>
               <a class="btn btn-outline-warning" type="button" href="{{ url_for('report_detail_page') }}" style=" margin-bottom: 10px; margin-left: 300px;">View full report</a>
-            </div>
           </div>
         </div>
         <div class="card">
@@ -56,6 +95,7 @@
             <div class="card-body">
                 <p class="title">Report</p>
                 <p class="risk-score">Your risk score is 75</p>
+                <p class="Subheader">Basic Information</p>
                 <div class="report-detail" style="display: flex; align-items: center; justify-content: center;">
                   <ul class="list-name">
                     <li class="list-item">Age: </li>
@@ -63,7 +103,7 @@
                     <li class="list-item">Height: </li>
                     <li class="list-item">Glucose level: </li>
                     <li class="list-item">hba1c: </li>
-                    <li class="list-item">Physical activity: </li>
+                    <li class="list-item">Physical activity: </li> 
                   </ul>
                   <ul class="list-value">
                     <li class="list-item">22</li>
@@ -74,10 +114,20 @@
                     <li class="list-item">Exercise daily</li>
                   </ul>
                 </div>
+                <p class="Subheader">Blood Test</p>
+                <div class="report-detail" style="display: flex; align-items: center; justify-content: center;">
+                  <ul class="list-name">
+                    <li class="list-item">Systolic Blood Pressure (mmHg):</li>
+                    <li class="list-item">Diastolic Blood Pressure (mmHg):</li>
+                  </ul>
+                  <ul class="list-value">
+                    <li class="list-item">Exercise daily</li>
+                    <li class="list-item">Exercise daily</li>
+                  </ul>
+                </div>
                 <a class="btn btn-outline-warning" type="button" href="{{ url_for('report_detail_page') }}" style=" margin-bottom: 10px; margin-left: 300px;">View full report</a>
-              </div>
+            </div>
           </div>
-        </div>
         <div class="card">
           <div class="card-header" id="headingThree">
             <h2 class="mb-0">
@@ -116,15 +166,15 @@
 
     <style>
         h1 {
+            font-size: xx-large;
             text-align: center;
-            margin-top: 50px;
-            margin-bottom: 50px;
         }
         .accordion {
-            width: 800px;
+            width: 60%;
             margin-left: auto;
             margin-right: auto;
             margin-bottom: 50px;
+            margin-top: 10px;
         }
         .title {
             text-align: center;
@@ -143,6 +193,20 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
+        .Subheader {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 20px;
+            text-decoration: underline;
+        }
+        .inline { 
+            display: inline-flex;
+            margin-bottom: 10px;
+        }
+        .report-detail {
+          margin-left: 30px;
+        }
+
     </style>
 </body>
 {% endblock %}

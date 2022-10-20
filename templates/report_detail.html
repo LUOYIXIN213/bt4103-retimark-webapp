@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    Report detail
+
 {% endblock %}
 
 {% block content %}
@@ -15,6 +15,7 @@
         font-family: sans-serif;
       }
       .chartCard {
+        margin-top: 20px;
         width: 100vw;
         /*height: calc(100vh - 40px);*/
         background: transparent;
@@ -29,7 +30,6 @@
         box-shadow: 5px 5px 5px #aaaaaa;
         border-radius: 5px;
         background: white;
-        margin-bottom: 30px;
       }
       .indivChart {
         height: 100px;
@@ -40,12 +40,14 @@
         border-radius: 20px;
         box-shadow: 5px 5px 5px #aaaaaa;
         border-radius: 5px;
-        background: white;
-        margin-bottom: 30px;
+        background: antiquewhite;
+        margin-bottom: auto;
       }
       #risk-score {
-        margin-top: 20px;
+        margin-top: 10px;
         text-align: center;
+        font-size: 150%;
+        font-weight: bold;
       }
       ol {
         margin-left: 20px;
@@ -54,13 +56,17 @@
   </head>
 
   <body>
-    <h3 id="risk-score">Your risk score is 75</h3>
-    <h3 id="risk-score">You have a high risk of developing diabetes</h3>
+    <div class="card mb-3" style="width: 70%; max-height: 500px; margin: auto;">
+      <img src="/static/PIC/report.png" class="card-img-top" alt="..."
+          style="width: 300px; height: 182px; margin: auto;">
+          <p id="risk-score">Your risk score is 75</p>
+          <p id="risk-score">You have a high risk of developing diabetes</p>
+    </div>
     <div class="chartCard">
         <div class="textBox">
-            <p>* How to interpret the bar chart below:</p>
-            <p>Look for the color of the bar!</p>
-            <p>If the bar is red, it means your value has exceed the diabetic average; If the bar is green, it means your value is kept to normal.</p>
+          <p>* How to interpret the bar chart below:</p>
+          <p>Look for the color of the bar!</p>
+          <p>If the bar is red, it means your value has exceed the diabetic average; If the bar is green, it means your value is kept to normal.</p>
         </div>
     </div>
     <div class="chartCard">
