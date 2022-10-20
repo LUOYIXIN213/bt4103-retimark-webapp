@@ -14,7 +14,7 @@ pb = pyrebase.initialize_app(json.load(open('fbconfig.json')))
 db = firestore.client()
 
 #Initialze person as dictionary
-person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": ""}
+person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": "", "riskscore": "Not set yet"}
 
 @app.route('/')
 
@@ -30,6 +30,7 @@ def register_page():
 def login_user():
     if request.method == 'POST':
         result = request.form
+        print(result.to_dict())
         email = result.get('email')
         password = result.get('password')
         try:
@@ -41,8 +42,6 @@ def login_user():
             person["uid"] = user['localId']
             #Get the name of the user
             data = db.collection("users").document(person["uid"]).get().to_dict()
-            print(data)
-            print(person)
             person["username"] = data["username"]
             person["fname"] = data["fname"]
             person["lname"] = data["lname"]
@@ -65,7 +64,6 @@ def register_user():
         username = result.get('username')
         dob = result.get('dob')
         gender = result.get('gender')
-        print(dob)
         try:
             #Try creating the user account using the provided data
             auth.create_user(email=email, password=password)
@@ -80,12 +78,9 @@ def register_user():
             person["username"] = username
             person['dob'] = dob
             person['gender'] = gender
-            print("hi")
             pb.auth().send_email_verification(user['idToken'])
-            print("hi")
             #Append data to the firebase realtime database
             data = {"fname": fname, "lname": lname, "username": username, "email": email, "password": password, 'dob': dob, "gender": gender}
-            print(data)
             db.collection("users").document(person["uid"]).set(data)
             #Go to home page
             return redirect(url_for('home_page'))
@@ -144,13 +139,14 @@ def contact_page():
 
 @app.route('/profile')
 def profile_page():
-    return render_template('profile.html', username = person["username"], fname = person["fname"], lname = person["lname"], email = person["email"], gender = person["gender"], dob = person["dob"])
+    return render_template('profile.html', username = person["username"], fname = person["fname"], lname = person["lname"], email = person["email"], gender = person["gender"], dob = person["dob"], riskscore = person['riskscore'])
 
-@app.route('/change_username')
+@app.route('/change_username', methods=['GET', 'POST'])
 def change_username():
     if request.method == 'POST':
         result = request.form
         username = result.get('username')
+        person['username'] = username
         try: 
             #change username to the firebase realtime database
             data = {"username": username}
@@ -160,6 +156,20 @@ def change_username():
             print(e)
             return redirect(url_for('profile_page'))
     
+@app.route('/change_riskscore', methods=['GET', 'POST'])
+def change_riskscore():
+    if request.method == 'POST':
+        result = request.form
+        riskscore = result.get('riskscore')
+        person['riskscore'] = riskscore
+        try: 
+            #change username to the firebase realtime database
+            data = {"riskscore": riskscore}
+            db.collection("users").document(person["uid"]).update(data)
+            return redirect(url_for('profile_page'))
+        except Exception as e:
+            print(e)
+            return redirect(url_for('profile_page'))
 
 @app.route('/delete_account')
 def delete_account():

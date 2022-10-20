@@ -1,53 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}
-    Profile
 {% endblock %}
 
 {% block content %}
 <head>
-    <script type="text/javascript">
-        function saveUsername() {
-
-            //get the editable element
-            var editElem = document.getElementById("username");
-
-            //get the edited element content
-            var userVersion = editElem.innerHTML;
-
-            //save the content to local storage
-            localStorage.username = userVersion;
-
-            //write a confirmation to the user
-            document.getElementById("update").innerHTML="Edits saved!";
-
-        }
-
-        function saveRiskScore() {
-
-            //get the editable element
-            var editElem = document.getElementById("riskScore");
-
-            //get the edited element content
-            var userVersion = editElem.innerHTML;
-
-            //save the content to local storage
-            localStorage.riskscore = userVersion;
-
-            //write a confirmation to the user
-            document.getElementById("updateRiskScore").innerHTML="Edits saved!";
-
-        }
-
-        function checkEdits() {
-            //find out if the user has previously saved edits
-            if(localStorage.username!=null)
-                document.getElementById("username").innerHTML = localStorage.username;
-            if(localStorage.riskScore!=null)
-                document.getElementById("riskScore").innerHTML = localStorage.riskScore;
-        }
-    </script>
 </head>
-<body onload="checkEdits()">
+<body>
     <div class="container-xl px-4 mt-4">
         <div class="row">
             <div class="col-lg-8">
@@ -55,18 +13,18 @@
                 <div class="card">
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
-                        <form>
+                        <form action="{{ url_for('change_username') }}" method="POST">
                             <!-- Form Row-->
                             <div class="row gx-3 mb-3">
                                 <!-- Form Group (username)-->
-                                <form action="http://127.0.0.1:5000/change_username" method="POST">
-                                    <label class="small mb-1" for="inputUsername">Username (Can be edited)</label>
-                                    <input class="form-control" id="username" name="username" contenteditable="true">{{username}}</input>
-                                </form>
-                                <!-- Save changes button-->
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="inputUsername" id="update">Edit and click to save your username.</label><br>
-                                    <button class="btn btn-primary btn-sm" type="submit" onclick="saveUsername()">Save changes</button>
+                                    <label class="small mb-1" for="username">Username (Current)</label>
+                                    <div class="form-control" id="username" type="text" name="username">{{username}}</div>
+                                </div>
+                                <!-- Form Group (email)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                    <div class="form-control" id="inputEmailAddress" type="email">{{email}}</div>
                                 </div>
                             </div>
                             <!-- Form Row-->
@@ -95,10 +53,19 @@
                                     <div class="form-control" id="inputBirthday" type="text" name="birthday">{{dob}}</div>
                                 </div>
                             </div>
-                            <!-- Form Group (email)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                <div class="form-control" id="inputEmailAddress" type="email">{{email}}</div>
+                            <hr class="mt-0 mb-4">
+                            <div class="medium mb-1"> If you want to edit your username, you can change it here: </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="username">Username (To be edited)</label>
+                                    <input id="updatedUsername" name="username" class="form-control">
+                                </div>
+                                <!-- Save changes button-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputUsername" id="updateRiskScore">Click below to save the new username:</label><br>
+                                    <button class="btn btn-primary btn-sm" type="submit" onclick="saveUsername()">Save changes</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -110,7 +77,7 @@
                     <div class="card-header">Change Password</div>
                     <div class="card-body">
                         <form>
-                            <!-- Form Group (current password)-->
+                            <!-- Form Group (risk score)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="currentPassword">Current Password</label>
                                 <input class="form-control" id="currentPassword" type="password" placeholder="Enter current password">
@@ -139,19 +106,28 @@
                 <div class="card mb-4">
                     <div class="card-header">Risk Score Goal</div>
                     <div class="card-body">
-                        <!-- Risk score options-->
-                        <p class="small text-muted">Please set the goal for your risk score with a value between 0-100</p>
-                        <div class="row gx-3 mb-3">
-                            <form class="col-md-6">
-                                <label for="riskScore" class="small mb-1">New Risk Score Goal</label>
-                                <div type="text" class="form-control" id="riskScore" contenteditable="true" name="riskScore">4</div>
-                            </form>
-                            <!-- Save changes button-->
-                            <div class="col-md-6">
-                                <label class="small mb-1" for="inputUsername" id="updateRiskScore">Edit and click below to save your goal.</label><br>
-                                <button class="btn btn-primary btn-sm" type="button" onclick="saveRiskScore()">Save changes</button>
+                        <form action="{{ url_for('change_riskscore') }}" method="POST">
+                            <!-- Form Row-->
+                            <div class="md-3">
+                                <label class="small mb-1">Risk Score (Current)</label>
+                                <div class="form-control" type="text">{{riskscore}}</div>
                             </div>
-                        </div>
+                            <!-- Risk score options-->
+                            <hr class="mt-0 mb-4">
+                            <div class="medium mb-1"> If you want to edit your risk score, you can change it here (value of 0-100): </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="riskScore">Risk Score (To be edited)</label>
+                                    <input name="riskscore" class="form-control">
+                                </div>
+                                <!-- Save changes button-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputRiskScore">Click below to save the new risk score:</label><br>
+                                    <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <!-- Security preferences card-->
@@ -187,7 +163,7 @@
                     <div class="card-header">Delete Account</div>
                     <div class="card-body">
                         <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your account, select the button below.</p>
-                        <a class="btn btn-danger-soft text-danger" type="button" href="{{ url_for('delete_account') }}"">I understand, delete my account</a>
+                        <a class="btn btn-danger-soft text-danger" type="button" href="{{ url_for('delete_account') }}">I understand, delete my account</a>
                     </div>
                 </div>
             </div>
@@ -199,6 +175,12 @@
         margin-top:20px;
         background-color:#f2f6fc;
         color:#69707a;
+    }
+
+    button{
+        margin-top: 2px;
+        position: relative;
+        display: center
     }
     .img-account-profile {
         height: 10rem;

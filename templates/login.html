@@ -11,7 +11,7 @@
     <h1> Welcome to Retimark! <h1>
     <div id="outer-box">
         <div id="inner-box">
-            <form action="http://127.0.0.1:5000/login_user" method="POST">
+            <form action="{{ url_for('login_user') }}" method="POST">
                 <div class="input-wrapper">
                     <label for="exampleInputEmail1" class="form-label">Email address</label>
                     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
