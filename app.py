@@ -411,8 +411,10 @@ def report_page():
         print(f'{report.id} => {report.to_dict()}')
     print(report_list_random)
     report_list_sorted = sorted(report_list_random, key=lambda x: x.get('diagnosis_time'))
-    length = len(report_list_sorted)
-    return render_template('report.html', past_reports = report_list_sorted, length = length)
+    for report in report_list_sorted:
+        report['diagnosis_time'] = report['diagnosis_time'].strftime("%Y-%m-%d %H:%M:%S")
+        print(report['diagnosis_time'])
+    return render_template('report.html', past_reports = report_list_sorted)
     
 
 @app.route('/report_detail', methods=['POST', 'GET'])
@@ -440,19 +442,22 @@ def diagnosis_report_page():
 
 #take in an array of selected feature values, ordered by importance (follow order of featureName will do) 
 #return top 3 most important features with values exceeding diabetic level
+featureValue = [23, 112, 58, 22, 100, 23, 55, 13, 22, 50, 133, 1, 0, 0, 1, 0, 2]
 def top_advice(featureValue):
     diabeticValue = [30, 90, 55, 18, 112, 30, 70, 10, 25, 55, 152, 2, 1, 0, 0, 1, 0] #ordered by importance
-    featureName = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""] #ordered by importance
-    adviceList = [] #same or der
+    featureName = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"] #ordered by importance
+    adviceList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q"] #same order
+    topAdvice = []
     count = 0
     for i in range(len(featureValue)):
         if count == 3:
             break
         if  featureValue[i] > diabeticValue[i]:
-            adviceList.append(featureName[i])
+            topAdvice.append(adviceList[i])
             count += 1
-    return adviceList
-
+    return topAdvice
+resultList = top_advice(featureValue)
+print(resultList)
 @app.route('/appointment')
 def appointment_page():
     return render_template('appointment.html')
