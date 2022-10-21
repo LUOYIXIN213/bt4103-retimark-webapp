@@ -189,6 +189,8 @@ def diagnosis_user():
         DI4_dg = float(result.get('DI4_dg'))
         HE_DMfh = float(result.get('HE_DMfh'))
         DE1_3 = float(result.get('DE1_3'))
+        DI1_2 = float(result.get('DI1_2'))
+        DI2_2 = float(result.get('DI2_2'))
         DE1_31 = result.get('DE1_31')
         if DE1_31 is not None:
             DE1_31 = float(DE1_31)
@@ -201,17 +203,52 @@ def diagnosis_user():
         else:
             DE1_32 = None
 
+        #preproccessing for HE_HP
+        HE_HP = None
+        if bloodtest == 1:
+            if 0< HE_sbp < 120 and 0 < HE_dbp < 80:
+                HE_HP = 1
+            elif 120 <= HE_sbp < 140 or 80 <= HE_dbp < 90:
+                HE_HP = 2
+            elif 140 <= HE_sbp or 90 <= HE_dbp or DI1_2 == 1:
+                HE_HP = 3
+            else:
+                HE_HP = None
+        elif DI1_2 == 1:
+            HE_HP = 3
+        else:
+            HE_HP = None
+
+        #preprocessing for HE_HCHOL
+        HE_HCHOL = 0
+        if bloodtest == 1:
+            if HE_chol >= 240 or DI2_2 == 1:
+                HE_HCHO = 1
+        elif DI2_2 == 1:
+            HE_HCHOL = 0
+        else:
+            HE_HCHOL = 0
+
+        #preprocessign for HE_HTG
+        HE_HTG = 0
+        if bloodtest == 1:
+            if HE_TG >= 200:
+                HE_HTG = 1
+        else:
+            HE_HTG = 0
+
         print(result.to_dict())
         try:
             # Get the name of the user
             past_report_ref = db.collection("users").document(person["uid"]).collection('past_reports').document()
             global diagnosis_report
-            diagnosis_report = { "diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc), "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
+            diagnosis_report = {"diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc), "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
                                 "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol, "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
                                 "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
                                 "dr_month": dr_month, "dr_high": dr_high, "sm_presnt": sm_presnt, "mh_stress": mh_stress, "pa_vig_tm": pa_vig_tm,
                                 "pa_mod_tm": pa_mod_tm, "pa_walk": pa_walk, "pa_aerobic": pa_aerobic,
-                                "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DE1_31": DE1_31, "DE1_32": DE1_32}
+                                "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DI1_2": DI1_2,
+                                "DI2_2": DI2_2, "DE1_31": DE1_31, "DE1_32": DE1_32, "HE_HP": HE_HP, "HE_HCHOL": HE_HCHOL, "HE_HTG": HE_HTG}
             past_report_ref.set(diagnosis_report)
             global report_id
             report_id = past_report_ref.id
@@ -298,29 +335,62 @@ def simulation_user():
         DI4_dg = float(result.get('DI4_dg'))
         HE_DMfh = float(result.get('HE_DMfh'))
         DE1_3 = float(result.get('DE1_3'))
+        DI1_2 = float(result.get('DI1_2'))
+        DI2_2 = float(result.get('DI2_2'))
         DE1_31 = result.get('DE1_31')
         if DE1_31 is not None:
             DE1_31 = float(DE1_31)
         else:
             DE1_31 = None
 
-        DE1_32 = result.get('DE1_32')
-        if DE1_32 is not None:
-            DE1_32 = float(DE1_32)
+        #preproccessing for HE_HP
+        HE_HP = None
+        if bloodtest == 1:
+            if 0< HE_sbp < 120 and 0 < HE_dbp < 80:
+                HE_HP = 1
+            elif 120 <= HE_sbp < 140 or 80 <= HE_dbp < 90:
+                HE_HP = 2
+            elif 140 <= HE_sbp or 90 <= HE_dbp or DI1_2 == 1:
+                HE_HP = 3
+            else:
+                HE_HP = None
+        elif DI1_2 == 1:
+            HE_HP = 3
         else:
-            DE1_32 = None
+            HE_HP = None
+
+        #preprocessing for HE_HCHOL
+        HE_HCHOL = 0
+        if bloodtest == 1:
+            if HE_chol >= 240 or DI2_2 == 1:
+                HE_HCHO = 1
+        elif DI2_2 == 1:
+            HE_HCHOL = 0
+        else:
+            HE_HCHOL = 0
+
+        #preprocessign for HE_HTG
+        HE_HTG = 0
+        if bloodtest == 1:
+            if HE_TG >= 200:
+                HE_HTG = 1
+        else:
+            HE_HTG = 0
 
         print(result.to_dict())
         try:
             # Get the name of the user
             simulation_ref = db.collection("users").document(person["uid"]).collection('past_simulations').document()
             global simulation_report
-            simulation_report = {"simulated_time": datetime.datetime.now(tz=datetime.timezone.utc), "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
-                                "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol, "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
-                                "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
-                                "dr_month": dr_month, "dr_high": dr_high, "sm_presnt": sm_presnt, "mh_stress": mh_stress, "pa_vig_tm": pa_vig_tm,
-                                "pa_mod_tm": pa_mod_tm, "pa_walk": pa_walk, "pa_aerobic": pa_aerobic,
-                                "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DE1_31": DE1_31, "DE1_32": DE1_32}
+            simulation_report = {"simulated_time": datetime.datetime.now(tz=datetime.timezone.utc), "sex": sex,
+                                 "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
+                                 "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol,
+                                 "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
+                                 "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
+                                 "dr_month": dr_month, "dr_high": dr_high, "sm_presnt": sm_presnt, "mh_stress": mh_stress, "pa_vig_tm": pa_vig_tm,
+                                 "pa_mod_tm": pa_mod_tm, "pa_walk": pa_walk, "pa_aerobic": pa_aerobic,
+                                 "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DI1_2": DI1_2,
+                                 "DI2_2": DI2_2, "DE1_31": DE1_31, "DE1_32": DE1_32, "HE_HP": HE_HP, "HE_HCHOL": HE_HCHOL, "HE_HTG": HE_HTG}
             simulation_ref.set(simulation_report)
             global simulation_id
             simulation_id = simulation_ref.id
