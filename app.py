@@ -415,9 +415,43 @@ def report_page():
     return render_template('report.html', past_reports = report_list_sorted, length = length)
     
 
-@app.route('/report_detail')
+@app.route('/report_detail', methods=['POST', 'GET'])
 def report_detail_page():
-    return render_template('report_detail.html')
+    if request.method == 'POST':
+        result = request.form
+        #print(result.to_dict())
+        #store the report time when view the report button is clicked, convert to right format
+        report_time = result.get('report_time')[:-6]
+        report_date_time = datetime.datetime.strptime(report_time, '%Y-%m-%d %H:%M:%S.%f')
+        print(report_date_time)
+        #get the report values specicfic to the report time
+        past_reports = db.collection("users").document(person["uid"]).collection("past_reports").stream()
+        report = {}
+        for doc in past_reports:
+            print(doc.get("diagnosis_time"))
+            if doc.get("diagnosis_time").replace(tzinfo=None) == report_date_time:
+                report = doc.to_dict()
+        print(report)
+        return  render_template('report_detail.html', report = report)
+
+@app.route('/diagnosis_report')
+def diagnosis_report_page():
+    return render_template('report_detail.html', report = diagnosis_report)
+
+#take in an array of selected feature values, ordered by importance (follow order of featureName will do) 
+#return top 3 most important features with values exceeding diabetic level
+def top_advice(featureValue):
+    diabeticValue = [30, 90, 55, 18, 112, 30, 70, 10, 25, 55, 152, 2, 1, 0, 0, 1, 0] #ordered by importance
+    featureName = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""] #ordered by importance
+    adviceList = [] #same or der
+    count = 0
+    for i in range(len(featureValue)):
+        if count == 3:
+            break
+        if  featureValue[i] > diabeticValue[i]:
+            adviceList.append(featureName[i])
+            count += 1
+    return adviceList
 
 @app.route('/appointment')
 def appointment_page():

@@ -15,8 +15,9 @@
     <div class="accordion" id="accordionExample">
       {% for report in past_reports %}
         <div class="card">
+          <form action={{ url_for('report_detail_page') }} method="POST">
           <div class="card-header" id="heading{{i}}">
-            <h2 class="mb-0">
+            <h2 class="mb-0"> 
               <button class="btn btn-link btn-block text-left" data-toggle="collapse" data-target="#{{i}}" aria-expanded="true" aria-controls="{{i}}" style="color: #ee6617">
                 Report on {{report.diagnosis_time}}
               </button>
@@ -114,11 +115,14 @@
                   <li class="list-item">{{ report.DE1_32 }}</li>
                 </ul>
               </div>
+              <input type="text" class="form-control" id="inputReportTime" name="report_time" value="{{ report.diagnosis_time }}" style="display: none;" required >
               <div class="view-Report">
-                <a class="btn btn-outline-warning" type="button" href="{{ url_for('report_detail_page') }}" style=" margin-bottom: 10px;">View full report</a>
+                <button type="submit" class="btn btn-warning" role="button" style="margin-bottom: 10px" >View full report</button>
+                <!--<a class="btn btn-outline-warning" type="button" href="{{ url_for('report_detail_page') }}" style=" margin-bottom: 10px;">View full report</a>-->
               </div>
               </div>
-          </div>  
+          </div>
+          </form>  
         </div> 
       {% endfor %}
     </div>

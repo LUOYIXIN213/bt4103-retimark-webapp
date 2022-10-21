@@ -7,7 +7,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Getting Started with Chart JS with www.chartjs3.com</title>
     <style>
       * {
         margin: 0;
@@ -43,7 +42,7 @@
         box-shadow: 5px 5px 5px #aaaaaa;
         border-radius: 5px;
         background: antiquewhite;
-        margin-bottom: auto;
+        /*margin-bottom: auto;*/
       }
       #risk-score {
         margin-top: 10px;
@@ -115,26 +114,111 @@
         <div class="indivChart">
           <canvas id="myChart14"></canvas>   
         </div>
+        <div class="indivChart">
+          <canvas id="myChart15"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart16"></canvas>   
+        </div>
+        <div class="indivChart">
+          <canvas id="myChart17"></canvas>   
+        </div>
       </div>
     </div>
     <div class="chartCard">
         <div class="textBox">
             <h3 id="advice">Advices</h3>
             <ol>
-                <li>Drinking pattern: </li>
-                <li>Physical activity: </li>
-                <li>Smoking pattern: </li>
-                <li>Hba1c: </li>
+                <li id="adviceOne">Drinking pattern: </li>
+                <li id="adviceTwo">Physical activity: </li>
+                <li id="adviceThree">Smoking pattern: </li>
             </ol>
         </div>
     </div>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+      
+    /*
+    Selected features are ['HE_wc', 'HE_BMI', 'HE_sbp', 'HE_dbp',
+       'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2', 'HE_TG', 'age',
+       'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe', 'HE_HP', 'HE_HCHOL', 'HE_HTG']
+    ############# Discrete Variables ############# 7
+    DI3_dg
+    Mode of DI3_dg  for group normal is 0.0
+    Mode of DI3_dg  for group diabetes is 0.0
+    DI4_dg
+    Mode of DI4_dg  for group normal is 0.0
+    Mode of DI4_dg  for group diabetes is 0.0
+    HE_DMfh
+    Mode of HE_DMfh  for group normal is 0.0
+    Mode of HE_DMfh  for group diabetes is 0.0
+    HE_obe
+    Mode of HE_obe  for group normal is 2.0
+    Mode of HE_obe  for group diabetes is 4.0
+    HE_HP
+    Mode of HE_HP  for group normal is 1.0
+    Mode of HE_HP  for group diabetes is 3.0
+    HE_HCHOL
+    Mode of HE_HCHOL  for group normal is 0.0
+    Mode of HE_HCHOL  for group diabetes is 0.0
+    HE_HTG
+    Mode of HE_HTG  for group normal is 0.0
+    Mode of HE_HTG  for group diabetes is 0.0
+    ############# Continuous Variables ############# 10
+    HE_wc
+    Mean of HE_wc  for group normal is 81.2
+    Mean of HE_wc  for group diabetes is 93.3
+    HE_BMI
+    Mean of HE_BMI  for group normal is 24.058272632674292
+    Mean of HE_BMI  for group diabetes is 22.51743409515439
+    HE_sbp
+    Mean of HE_sbp  for group normal is 110.0
+    Mean of HE_sbp  for group diabetes is 128.0
+    HE_dbp
+    Mean of HE_dbp  for group normal is 75.0
+    Mean of HE_dbp  for group diabetes is 72.0
+    HE_HbA1c
+    Mean of HE_HbA1c  for group normal is 5.6
+    Mean of HE_HbA1c  for group diabetes is 6.5
+    HE_BUN
+    Mean of HE_BUN  for group normal is 14.0
+    Mean of HE_BUN  for group diabetes is 15.0
+    HE_crea
+    Mean of HE_crea  for group normal is 0.72
+    Mean of HE_crea  for group diabetes is 0.76
+    HE_HDL_st2
+    Mean of HE_HDL_st2  for group normal is 48.0
+    Mean of HE_HDL_st2  for group diabetes is 42.0
+    HE_TG
+    Mean of HE_TG  for group normal is 100.0
+    Mean of HE_TG  for group diabetes is 69.0
+    age
+    Mean of age  for group normal is 54.0
+    Mean of age  for group diabetes is 74.0 */
     // setup block
-    const featureValue = [38, 112, 58, 22, 100, 23, 55, 13, 22, 50, 133, 1, 0, 0]
-    const diabeticValue = [30, 90, 55, 18, 112, 30, 70, 10, 25, 55, 152, 2, 1, 0]
-    const normalValue = [27, 70, 52, 14, 90, 25, 60, 5, 18, 35, 147, 0, 0, 0]
+    const DI3_dg = '{{ report.DI3_dg }}';
+    const DI4_dg = '{{ report.DI4_dg }}';
+    const HE_DMfh = '{{ report.HE_DMfh }}';
+    const HE_obe = '{{ report.HE_obe }}';
+    const HE_HP = '{{ report.HE_HCHOL }}';
+    const HE_HCHOL = '{{ report.HE_HCHOL }}';
+    const HE_HTG = '{{ report.HE_HTG }}';
+    const HE_wc = '{{ report.HE_wc }}';
+    const HE_BMI = '{{ report.HE_BMI }}';
+    const HE_sbp = '{{ report.HE_sbp }}';
+    const HE_dbp = '{{ report.HE_dbp }}';
+    const HE_HbA1c = '{{ report.HE_HbA1c }}';
+    const HE_BUN = '{{ report.HE_BUN }}';
+    const HE_crea = '{{ report.HE_crea }}';
+    const HE_HDL_st2 = '{{ report.HE_HDL_st2 }}';
+    const HE_TG = '{{ report.HE_TG }}';
+    const age = '{{ report.age }}';
+    const featureValue = [age, 112, 58, 22, 100, 23, 55, 13, 22, 50, 133, 1, 0, 0, , , ]
+    const diabeticValue = [30, 90, 55, 18, 112, 30, 70, 10, 25, 55, 152, 2, 1, 0, , , ]
+    const normalValue = [27, 70, 52, 14, 90, 25, 60, 5, 18, 35, 147, 0, 0, 0, , , ]
+    const featureName = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+  
     secondLayer = []
     const firstLayerBackground =[];
     const firstLayerBorder = [];
@@ -155,91 +239,7 @@
         secondLayerBorder.push('rgb(201, 203, 207)')
       }
     }
-    // display the levels as stacked bar chart
-    //const thirdLayer = []
-    //const secondLayer = []
-    //const firstLayer = []
-    /*
-    for (i=0; i<featureValue.length; i++) {
-        if(featureValue[i]<diabeticValue[i] && featureValue[i]<normalValue[i]) {           
-            firstLayer.push(featureValue[i])
-            secondLayer.push(normalValue[i]-featureValue[i])
-            thirdLayer.push(diabeticValue[i]-normalValue[i])
-        }
-        else if(featureValue[i]>normalValue[i] && featureValue[i]<diabeticValue[i]) {
-            firstLayer.push(normalValue[i])
-            secondLayer.push(featureValue[i]-normalValue[i])
-            thirdLayer.push(diabeticValue[i]-featureValue[i])
-        }
-        else {
-            firstLayer.push(normalValue[i])
-            secondLayer.push(diabeticValue[i]-normalValue[i])
-            thirdLayer.push(featureValue[i]-diabeticValue[i])
-        }
-    }
-    // change backgroundColor and borderColor of bar according to value
-    const firstLayerBackground =[];
-    const firstLayerBorder = [];
-    const secondLayerBackground =[];
-    const secondLayerBorder = [];
-    const thirdLayerBackground =[];
-    const thirdLayerBorder = [];
-    for(i=0; i<featureValue.length; i++) {
-        if(featureValue[i]<diabeticValue[i] && featureValue[i]<normalValue[i]){
-            firstLayerBackground.push('rgba(75, 192, 192, 0.2)')
-            firstLayerBorder.push('rgb(75, 192, 192)')
-            secondLayerBackground.push('rgba(201, 203, 207, 0.2)')
-            secondLayerBorder.push('rgb(75, 192, 192)')
-            thirdLayerBackground.push('rgba(201, 203, 207, 0.2)')
-            thirdLayerBorder.push('rgb(201, 203, 207)')
-        }
-        else if(featureValue[i]>normalValue[i] && featureValue[i]<diabeticValue[i]) {
-            firstLayerBackground.push('rgba(75, 192, 192, 0.2)')
-            firstLayerBorder.push('rgb(75, 192, 192)')
-            secondLayerBackground.push('rgba(75, 192, 192, 0.2)')
-            secondLayerBorder.push('rgb(75, 192, 192)')
-            thirdLayerBackground.push('rgba(201, 203, 207, 0.2)')
-            thirdLayerBorder.push('rgb(255, 99, 132)')
-        }
-        else{
-            firstLayerBackground.push('rgba(255, 99, 132, 0.2)')
-            firstLayerBorder.push('rgb(255, 99, 132)')
-            secondLayerBackground.push('rgba(255, 99, 132, 0.2)')
-            secondLayerBorder.push('rgb(255, 99, 132)')
-            thirdLayerBackground.push('rgba(255, 99, 132, 0.2)')
-            thirdLayerBorder.push('rgb(255, 99, 132)')
-        }
-    }
-    */
-    /*
-    const data = {
-      labels: ["Glucose","","","","","",""],
-      datasets: [{
-        label: 'Glucose value',
-        data: firstLayer,
-        backgroundColor: firstLayerBackground,
-        borderColor: firstLayerBorder,
-        borderWidth: 1,
-        barPercentage: 0.6
-      },
-      {
-        label: 'Glucose value',
-        data: secondLayer,
-        backgroundColor: secondLayerBackground,
-        borderColor: secondLayerBorder,
-        borderWidth: 1,
-        barPercentage: 0.6
-      },
-      {
-        label: 'Exceed Diabetic level by',
-        data: thirdLayer,
-        backgroundColor: thirdLayerBackground,
-        borderColor: thirdLayerBorder,
-        borderWidth: 1,
-        barPercentage: 0.6,
-      }]
-    };
-    */
+    
     // first variable
     const data1 = {
       labels: ["Feature 1"],
@@ -543,6 +543,72 @@
         data: [secondLayer[13]],
         backgroundColor: secondLayerBackground[13],
         borderColor: secondLayerBorder[13],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //fifteenth variable
+    const data15 = {
+      labels: ["Feature 15"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[14]],
+        backgroundColor: firstLayerBackground[14],
+        borderColor: firstLayerBorder[14],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[14]],
+        backgroundColor: secondLayerBackground[14],
+        borderColor: secondLayerBorder[14],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //sixteenth variable
+    const data16 = {
+      labels: ["Feature 16"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[15]],
+        backgroundColor: firstLayerBackground[15],
+        borderColor: firstLayerBorder[15],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[15]],
+        backgroundColor: secondLayerBackground[15],
+        borderColor: secondLayerBorder[15],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      }]
+    };
+    //seventeenth variable
+    const data17 = {
+      labels: ["Feature 17"],
+      datasets: [{
+        label: 'Feature value',
+        data: [featureValue[16]],
+        backgroundColor: firstLayerBackground[16],
+        borderColor: firstLayerBorder[16],
+        borderWidth: 1,
+        barPercentage: 0.6,
+        barThickness: 23
+      },
+      {
+        label: 'Exceed value',
+        data: [secondLayer[16]],
+        backgroundColor: secondLayerBackground[16],
+        borderColor: secondLayerBorder[16],
         borderWidth: 1,
         barPercentage: 0.6,
         barThickness: 23
@@ -854,6 +920,72 @@
         ctx.save();
         ctx.strokeStyle = 'green';
         ctx.strokeRect(x.getPixelForValue(normalValue[13]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine15 = {
+      id: "diabeticLine15",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[14]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine15 = {
+      id: "normalLine15",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[14]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine16 = {
+      id: "diabeticLine16",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[15]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine16 = {
+      id: "normalLine16",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[15]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const diabeticLine17 = {
+      id: "diabeticLine17",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(x.getPixelForValue(diabeticValue[16]), top, 0, bottom);
+        ctx.restore();
+      }
+    };
+    const normalLine17 = {
+      id: "normalLine17",
+      beforeDraw(chart, args, options) {
+        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
+          {x, y} } = chart;
+        ctx.save();
+        ctx.strokeStyle = 'green';
+        ctx.strokeRect(x.getPixelForValue(normalValue[16]), top, 0, bottom);
         ctx.restore();
       }
     };
@@ -1306,6 +1438,102 @@
         },
         plugins: [diabeticLine14, normalLine14]
     };
+    const config15 = {
+      type: 'bar',
+        data: data15,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine15, normalLine15]
+    };
+    const config16 = {
+      type: 'bar',
+        data: data16,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine16, normalLine16]
+    };
+    const config17 = {
+      type: 'bar',
+        data: data17,
+        options: {
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: { 
+                    stacked: true,
+                    grid : {
+                      drawOnChartArea: false,
+                    },
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true,
+                    grid : {
+                        drawOnChartArea: false
+                    }
+                }
+            },
+        },
+        plugins: [diabeticLine17, normalLine17]
+    };
     
     // render init block
     const myChart1 = new Chart(
@@ -1363,6 +1591,18 @@
     const myChart14 = new Chart(
       document.getElementById('myChart14'),
       config14
+    );
+    const myChart15 = new Chart(
+      document.getElementById('myChart15'),
+      config15
+    );
+    const myChart16 = new Chart(
+      document.getElementById('myChart16'),
+      config16
+    );
+    const myChart17 = new Chart(
+      document.getElementById('myChart17'),
+      config17
     );
     </script>
 
