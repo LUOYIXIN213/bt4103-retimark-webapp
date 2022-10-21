@@ -8,6 +8,19 @@ import firebase_admin
 import pyrebase
 import json
 from firebase_admin import credentials, auth, firestore
+import numpy as np
+import pickle
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, LabelEncoder
+from sklearn.compose import ColumnTransformer
+import sklearn
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from sklearn import metrics
+from sklearn.ensemble import RandomForestClassifier
 
 app = Flask(__name__)
 
@@ -27,6 +40,9 @@ report_id = ""
 #initialze id for simulation
 simulation_report = {}
 simulation_id = ""
+
+#load machine learning model
+modle = pickle.load(open("finalized_model.pkl", 'rb'))
 
 @app.route('/')
 
@@ -175,6 +191,9 @@ def diagnosis_user():
             HE_crea = None
 
         #get lifestyles
+        N_PROT = float(result.get('N_PROT'))
+        N_FAT = float(result.get('N_FAT'))
+        N_CHO = float(result.get('N_CHO'))
         dr_month = float(result.get('dr_month'))
         dr_high = float(result.get('dr_high'))
         sm_presnt = float(result.get('sm_presnt'))
@@ -242,9 +261,33 @@ def diagnosis_user():
             # Get the name of the user
             past_report_ref = db.collection("users").document(person["uid"]).collection('past_reports').document()
             global diagnosis_report
-            diagnosis_report = {"diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc), "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
+
+            #Run machine learning model to generate risk score
+            # ['HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO', 'N_FAT', 'HE_sbp', 'HE_dbp',
+            #        'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2', 'HE_TG', 'age',
+            #        'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe', 'HE_HP', 'HE_HCHOL',
+            #        'HE_HTG', 'sex']
+            t = pd.DataFrame(np.array(
+                [HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, HE_sbp, HE_dbp, HE_HbA1c, HE_BUN, HE_crea,
+                 HE_HDL_st2, HE_TG, age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, HE_HP, HE_HCHOL,
+                 HE_HTG, sm_presnt, sex]).reshape(-1, 22), columns=['HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO', 'N_FAT', 'HE_sbp',
+                                                         'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+                                                         'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
+                                                         'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
+            diagnosed_class = modle.predict(t)
+            predicted_class = diagnosed_class[0]
+            risk_score = modle.predict_proba(t)[0][1]
+            rounded_risk_score = round(risk_score*100)
+            print(predicted_class)
+            print(rounded_risk_score)
+
+            #store all data in dic and upload to database
+            diagnosis_report = {"diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc), "diagnosed_class": float(predicted_class),
+                                "risk_score": float(rounded_risk_score),
+                                "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
                                 "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol, "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
                                 "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
+                                "N_PROT": N_PROT, "N_FAT": N_FAT, "N_CHO": N_CHO,
                                 "dr_month": dr_month, "dr_high": dr_high, "sm_presnt": sm_presnt, "mh_stress": mh_stress, "pa_vig_tm": pa_vig_tm,
                                 "pa_mod_tm": pa_mod_tm, "pa_walk": pa_walk, "pa_aerobic": pa_aerobic,
                                 "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DI1_2": DI1_2,
@@ -254,7 +297,7 @@ def diagnosis_user():
             report_id = past_report_ref.id
             print(report_id)
             print(diagnosis_report)
-            return render_template('report_detail.html')
+            return render_template('report_detail.html', report = diagnosis_report)
         except Exception as e:
             print(e)
             return render_template('diagnosis.html')
@@ -321,6 +364,9 @@ def simulation_user():
             HE_crea = None
 
         #get lifestyles
+        N_PROT = float(result.get('N_PROT'))
+        N_FAT = float(result.get('N_FAT'))
+        N_CHO = float(result.get('N_CHO'))
         dr_month = float(result.get('dr_month'))
         dr_high = float(result.get('dr_high'))
         sm_presnt = float(result.get('sm_presnt'))
@@ -343,10 +389,16 @@ def simulation_user():
         else:
             DE1_31 = None
 
-        #preproccessing for HE_HP
+        DE1_32 = result.get('DE1_32')
+        if DE1_32 is not None:
+            DE1_32 = float(DE1_32)
+        else:
+            DE1_32 = None
+
+        # preproccessing for HE_HP
         HE_HP = None
         if bloodtest == 1:
-            if 0< HE_sbp < 120 and 0 < HE_dbp < 80:
+            if 0 < HE_sbp < 120 and 0 < HE_dbp < 80:
                 HE_HP = 1
             elif 120 <= HE_sbp < 140 or 80 <= HE_dbp < 90:
                 HE_HP = 2
@@ -359,7 +411,7 @@ def simulation_user():
         else:
             HE_HP = None
 
-        #preprocessing for HE_HCHOL
+        # preprocessing for HE_HCHOL
         HE_HCHOL = 0
         if bloodtest == 1:
             if HE_chol >= 240 or DI2_2 == 1:
@@ -369,7 +421,7 @@ def simulation_user():
         else:
             HE_HCHOL = 0
 
-        #preprocessign for HE_HTG
+        # preprocessign for HE_HTG
         HE_HTG = 0
         if bloodtest == 1:
             if HE_TG >= 200:
@@ -387,6 +439,7 @@ def simulation_user():
                                  "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol,
                                  "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
                                  "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
+                                 "N_PROT": N_PROT, "N_FAT": N_FAT, "N_CHO": N_CHO,
                                  "dr_month": dr_month, "dr_high": dr_high, "sm_presnt": sm_presnt, "mh_stress": mh_stress, "pa_vig_tm": pa_vig_tm,
                                  "pa_mod_tm": pa_mod_tm, "pa_walk": pa_walk, "pa_aerobic": pa_aerobic,
                                  "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DI1_2": DI1_2,
