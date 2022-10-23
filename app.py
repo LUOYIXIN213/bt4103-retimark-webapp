@@ -31,7 +31,7 @@ pb = pyrebase.initialize_app(json.load(open('fbconfig.json')))
 db = firestore.client()
 
 #Initialze person as dictionary
-person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": "", "riskscore": "Not set yet"}
+person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": "", "risk_score_goal": "Not set yet"}
 
 #initalize report_id for diagnosis
 diagnosis_report = {}
@@ -58,7 +58,6 @@ def register_page():
 def login_user():
     if request.method == 'POST':
         result = request.form
-        print(result.to_dict())
         email = result.get('email')
         password = result.get('password')
         try:
@@ -123,7 +122,9 @@ def register_user():
 @app.route('/home')
 def home_page():
     if person["is_logged_in"] == True:
-        return render_template("home.html", name = person["username"])
+        data = db.collection("users").document(person["uid"]).get().to_dict()
+        riskscore = data['risk_score_goal']
+        return render_template("home.html", riskscore = riskscore, name = person["username"])
     else:
         return redirect(url_for('login'))
 
@@ -533,7 +534,9 @@ def contact_page():
 
 @app.route('/profile')
 def profile_page():
-    return render_template('profile.html', username = person["username"], fname = person["fname"], lname = person["lname"], email = person["email"], gender = person["gender"], dob = person["dob"], riskscore = person['riskscore'])
+    data = db.collection("users").document(person["uid"]).get().to_dict()
+    risk_score_goal = data['risk_score_goal']
+    return render_template('profile.html', risk_score_goal = risk_score_goal, username = person["username"], fname = person["fname"], lname = person["lname"], email = person["email"], gender = person["gender"], dob = person["dob"])
 
 @app.route('/change_username', methods=['GET', 'POST'])
 def change_username():
@@ -554,11 +557,11 @@ def change_username():
 def change_riskscore():
     if request.method == 'POST':
         result = request.form
-        riskscore = result.get('riskscore')
-        person['riskscore'] = riskscore
+        risk_score_goal = result.get('risk_score_goal')
+        person['risk_score_goal'] = risk_score_goal
         try: 
             #change username to the firebase realtime database
-            data = {"riskscore": riskscore}
+            data = {"risk_score_goal": risk_score_goal}
             db.collection("users").document(person["uid"]).update(data)
             return redirect(url_for('profile_page'))
         except Exception as e:

@@ -7,40 +7,335 @@
     <head>
         <title>Welcome</title>
     </head>
-    <body>
-    <div class="main">
-        <h1 class="name">Welcome Back, {{name}}!</h1>
-    </div>
-    <div class="container-xl px-4 mt-4">
-        <div class="row">
-            <div class="col-lg-8">
-                <!-- Account details card-->
-                <div class="card">
-                    <div class="card-header">Your Risk Score Trend</div>
-                    <div class="card-body">
-                        graph here
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <body onload="getRiskScore()">
+        <div class="main">
+            <h1 class="name">Welcome Back, {{name}}!</h1>
+        </div>
+        <div class="container-xxl px-4 mt-4">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="graph-container">
+                        <div class="graph-title">Your Risk Score Trend</div>
+                        <div>
+                            <canvas id="lineChart" style="margin-left: 30px; margin-right: 30px; width:85%; height: 250px;"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <!-- Change password card-->
-                <div class="card mb-4">
-                    <div class="card-header">Risk Score Goal</div>
-                    <div class="card-body">
-                        goal graph 
+                <div class="col-lg-4">
+                    <div class="graph-container">
+                        <div class="graph-title">Risk Score Goal</div>
+                        <div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="background-color: #F9AD81; width:20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                    75
+                                </div>
+                                <span class="dot"></span>
+                            </div>
+                            <div id="risk-score-goal-label"> goal: 75 </div>
+                        </div>
+                        <br>
+                        <div class="graph-title">Actions to take</div>
+                        <br style="width:5px;">
+                        <div class="advice-container">
+                            <ol>
+                                <li>Drinking pattern: </li>
+                                <li>Physical activity: </li>
+                                <li>Smoking pattern: </li>
+                                <li>Hba1c: </li>
+                            </ol>
+                        </div>
+                        <br>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container-xl px-4 mt-4">
-        <div class="card">
-            <div class="card-header">Your Risk Factors Analysis</div>
-            <div class="card-body">
-                graph here
+        <div class="container-xxl px-4 mt-4">
+            <div class="graph-container">
+                <div class="graph-title">Your Risk Factor Analysis</div>
+                <div style="margin: auto; width: 50%; display: flex; align-items: center; justify-content: center">
+                    <div>
+                        <canvas id="barChart1" style="max-width: 250px; height: 200px;"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="barChart2" style="margin-left: 20px; max-width: 250px; height: 200px;"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="barChart3" style="margin-left: 20px; max-width: 250px; height: 200px;"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="barChart4" style="margin-left: 20px; max-width: 250px; height: 200px;"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="barChart5" style="margin-left: 20px; max-width: 250px; height: 200px;"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+        <script>
+            function getRiskScore() {    
+                //get the editable element
+                var editElem = document.getElementsByClassName('progress-bar').item(0);
+                var dot = document.getElementsByClassName('dot').item(0);
+                var label = document.getElementById('risk-score-goal-label')
+
+                //get the edited element content
+                var userVersion = editElem.innerHTML;
+                var riskscore = userVersion;
+                var dotPosition = Number(riskscore)*(85-12)/100 + 12;
+                var labelPosition = Number(riskscore)*(79-8)/100 + 8;
+                editElem.setAttribute('aria-valuenow', Number(riskscore));
+                editElem.setAttribute('style','background-color: #F9AD81; width:'+ Number(riskscore) + '%');     
+                dot.setAttribute('style','height: 15px; width: 15px; background-color: red; border-radius: 50%; display: inline-block; position: absolute; top: 20%; left:'+Number(dotPosition)+'%');
+                label.setAttribute('style','position: absolute; top: 26%; left:'+Number(labelPosition)+'%');
+            }
+        </script>
+
+        <script>
+            const data = {
+                labels: ["Jan","Feb","Mar",'Apr'],
+                datasets: [{
+                    label: "individual risk score",
+                    data: [50,60,75,77],
+                    borderWidth: 2,
+                    borderColor: "black",
+                    pointBackgroundColor: "black",
+                    pointHoverBackgroundColor: "red",
+                    datalabels: {
+                        color: "black",
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 5
+                    }
+                }]
+            };
+
+            const data1 = {
+                labels: ["Jan","Feb","Mar"],
+                datasets: [{
+                    label: "feature 1",
+                    data: [50,60,75],
+                    borderWidth: 2,
+                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    barPercentage: 0.6,
+                    barThickness: 23,
+                    datalabels: {
+                        color: "black",
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 2
+                    }
+                }]
+            };
+
+            const data2 = {
+                labels: ["Jan","Feb","Mar"],
+                datasets: [{
+                    label: "feature 2",
+                    data: [50,60,75],
+                    borderWidth: 2,
+                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    barPercentage: 0.6,
+                    barThickness: 23,
+                    datalabels: {
+                        color: "black",
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 2
+                    }
+                }]
+            };
+
+            const data3 = {
+                labels: ["Jan","Feb","Mar"],
+                datasets: [{
+                    label: "feature 3",
+                    data: [50,60,75],
+                    borderWidth: 2,
+                    barPercentage: 0.6,
+                    barThickness: 23,
+                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    datalabels: {
+                        color: "black",
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 2
+                    }
+                }]
+            };
+
+            const data4 = {
+                labels: ["Jan","Feb","Mar"],
+                datasets: [{
+                    label: "feature 4",
+                    data: [50,60,75],
+                    borderWidth: 2,
+                    barPercentage: 0.6,
+                    barThickness: 23,
+                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    datalabels: {
+                        color: "black",
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 2
+                    }
+                }]
+            };
+
+            const data5 = {
+                labels: ["Jan","Feb","Mar"],
+                datasets: [{
+                    label: "feature 5",
+                    data: [50,60,75],
+                    borderWidth: 2,
+                    barPercentage: 0.6,
+                    barThickness: 23,
+                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    datalabels: {
+                        color: "black",
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 2
+                    }
+                }]
+            };
+
+            const canvasBackgroundColor = {
+                id: 'canvasBackgroundColor',
+                beforeDraw(chart, args, pluginOptions) {
+                    const { ctx, chartArea: {top, bottom, left, right, width}, scales: {x,y} } = chart;
+                    ctx.save();
+
+                    bgColors(50, 100, 'rgba(194,41,41,0.2)')
+                    bgColors(0, 50,'rgba(67,161,69,0.2)')
+
+                    function bgColors(low, high, color) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(left, y.getPixelForValue(high), width, y.getPixelForValue(low) - y.getPixelForValue(high));
+                        ctx.restore();
+                    }
+                }
+            };
+
+            // config 
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            max: 100,
+                            min: 0,
+                        }
+                    }
+                },
+                plugins: [canvasBackgroundColor, ChartDataLabels]
+            };
+
+            const config1 = {
+                type: 'bar',
+                data: data1,
+                options: {
+                    scales: {
+                        y: {
+                            max: 100,
+                            min: 0,
+                        }
+                    }
+                },
+                plugins: [canvasBackgroundColor, ChartDataLabels]
+            };
+
+            const config2 = {
+                type: 'bar',
+                data: data2,
+                options: {
+                    scales: {
+                        y: {
+                            max: 100,
+                            min: 0,
+                        }
+                    }
+                },
+                plugins: [canvasBackgroundColor, ChartDataLabels]
+            };
+
+            const config3 = {
+                type: 'bar',
+                data: data3,
+                options: {
+                    scales: {
+                        y: {
+                            max: 100,
+                            min: 0,
+                        }
+                    }
+                },
+                plugins: [canvasBackgroundColor, ChartDataLabels]
+            };
+
+            const config4 = {
+                type: 'bar',
+                data: data4,
+                options: {
+                    scales: {
+                        y: {
+                            max: 100,
+                            min: 0,
+                        }
+                    }
+                },
+                plugins: [canvasBackgroundColor, ChartDataLabels]
+            };
+
+            const config5 = {
+                type: 'bar',
+                data: data5,
+                options: {
+                    scales: {
+                        y: {
+                            max: 100,
+                            min: 0,
+                        }
+                    }
+                },
+                plugins: [canvasBackgroundColor, ChartDataLabels]
+            };
+
+            // render init block
+            const myChart = new Chart(
+                document.getElementById('lineChart'),
+                config
+            );
+
+            const barChart1 = new Chart(
+                document.getElementById('barChart1'),
+                config1
+            );
+
+            const barChart2 = new Chart(
+                document.getElementById('barChart2'),
+                config2
+            );
+
+            const barChart3 = new Chart(
+                document.getElementById('barChart3'),
+                config3
+            );
+
+            const barChart4 = new Chart(
+                document.getElementById('barChart4'),
+                config4
+            );
+
+            const barChart5 = new Chart(
+                document.getElementById('barChart5'),
+                config5
+            );
+
+        </script>
     </body>
 
     <style>
@@ -49,6 +344,37 @@
             margin-left: 100px;
             font-family: Georgia, 'Times New Roman', Times, serif;
         }
+        .graph-container {
+            background-color: white;
+            box-shadow: 5px 5px 5px #aaaaaa;
+            border-radius: 20px;
+        }
+        .graph-title {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            text-align: center;
+            font-size: x-large;
+            padding-left: 20px;
+            padding-top: 5px;
+            margin-top: 10px;
+        }
+        .progress {
+            width: 80%;
+            margin: auto;
+            height: 30px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .advice-container {
+            padding-top: 5px;
+            margin: auto;
+            border-color: #F9AD81;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 10px;
+            width: 80%;
+            height: 60%;
+        }
     </style>
+
 </html>
 {% endblock %}
