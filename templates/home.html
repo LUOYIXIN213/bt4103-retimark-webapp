@@ -33,7 +33,7 @@
                                 </div>
                                 <span class="dot"></span>
                             </div>
-                            <div id="risk-score-goal-label"> goal: 75 </div>
+                            <div id="risk-score-goal-label"> goal: 60 </div>
                         </div>
                         <br>
                         <div class="graph-title">Actions to take</div>
@@ -84,8 +84,8 @@
                 //get the edited element content
                 var userVersion = editElem.innerHTML;
                 var riskscore = userVersion;
-                var dotPosition = Number(riskscore)*(85-12)/100 + 12;
-                var labelPosition = Number(riskscore)*(79-8)/100 + 8;
+                var dotPosition = 60*(85-12)/100 + 12;
+                var labelPosition = 60*(79-8)/100 + 8;
                 editElem.setAttribute('aria-valuenow', Number(riskscore));
                 editElem.setAttribute('style','background-color: #F9AD81; width:'+ Number(riskscore) + '%');     
                 dot.setAttribute('style','height: 15px; width: 15px; background-color: red; border-radius: 50%; display: inline-block; position: absolute; top: 20%; left:'+Number(dotPosition)+'%');
