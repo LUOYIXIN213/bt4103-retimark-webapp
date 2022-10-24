@@ -312,7 +312,6 @@ def diagnosis_user():
 
 
 
-
 @app.route('/simulation', methods=['POST', 'GET'])
 def simulation_page():
     latest_report = {}
@@ -488,13 +487,15 @@ def report_detail_page():
         #store the report time when view the report button is clicked, convert to right format
         report_time = result.get('report_time')
         report_date_time = datetime.datetime.strptime(report_time, '%Y-%m-%d %H:%M:%S') - timedelta(hours=8)
-        print(report_date_time)
+        print("desired report time in date fromat: ", report_date_time)
         #get the report values specicfic to the report time
         past_reports = db.collection("users").document(person["uid"]).collection("past_reports").stream()
         report = {}
         for doc in past_reports:
-            print(doc.get("diagnosis_time"))
-            if doc.get("diagnosis_time").replace(tzinfo=None) == report_date_time:
+            to_str = doc.get("diagnosis_time").strftime("%Y-%m-%d %H:%M:%S")
+            to_date = datetime.datetime.strptime(to_str, '%Y-%m-%d %H:%M:%S')
+            print("each doc time in date fromat: ", to_date)
+            if to_date == report_date_time:
                 report = doc.to_dict()
         print(report)
         return render_template('report_detail.html', report = report)
@@ -521,6 +522,7 @@ def top_advice(featureValue):
     return topAdvice
 resultList = top_advice(featureValue)
 print(resultList)
+
 @app.route('/appointment')
 def appointment_page():
     return render_template('appointment.html')
