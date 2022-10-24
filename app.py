@@ -132,17 +132,21 @@ def home_page():
 @app.route('/diagnosis', methods=['POST', 'GET'])
 def diagnosis_page():
     if person["is_logged_in"] == True:
+        latest_report = []
+        diagnosis_str = ''
         past_reports_ref = db.collection("users").document(person["uid"]).collection("past_reports")
         query = past_reports_ref.order_by("diagnosis_time", direction=firestore.Query.DESCENDING).limit(1)
         results = query.stream()
         report_list = []
         for doc in results:
             report_list.append(doc.to_dict())
-        latest_report = report_list[0]
-        date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
-        print(report_list[0])
+        if len(report_list) != 0:
+            latest_report = report_list[0]
+            date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
+            diagnosis_str = date_time_str.strftime("%Y-%m-%d %H:%M:%S")
+            print(report_list[0])
         return render_template('diagnosis.html', latest_report=latest_report,
-                               diagnosis_date=date_time_str.strftime("%Y-%m-%d %H:%M:%S"))
+                               diagnosis_date= diagnosis_str)
     else:
         return redirect(url_for('login'))
 
@@ -309,6 +313,8 @@ def diagnosis_user():
 
 @app.route('/simulation', methods=['POST', 'GET'])
 def simulation_page():
+    latest_report = {}
+    diagnosis_str = ''
     past_reports_ref = db.collection("users").document(person["uid"]).collection("past_reports")
     query = past_reports_ref.order_by("diagnosis_time", direction=firestore.Query.DESCENDING).limit(1)
     results = query.stream()
@@ -317,8 +323,9 @@ def simulation_page():
         report_list.append(doc.to_dict())
     latest_report = report_list[0]
     date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
+    diagnosis_str = date_time_str.strftime("%Y-%m-%d %H:%M:%S")
     print(report_list[0])
-    return render_template('simulation.html', latest_report = latest_report, diagnosis_date = date_time_str.strftime("%Y-%m-%d %H:%M:%S"))
+    return render_template('simulation.html', latest_report = latest_report, diagnosis_date = diagnosis_str)
 
 @app.route('/simulation_user', methods=['POST', 'GET'])
 def simulation_user():
