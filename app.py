@@ -466,7 +466,7 @@ def report_page():
     print(report_list_random)
     report_list_sorted = sorted(report_list_random, key=lambda x: x.get('diagnosis_time'))
     for report in report_list_sorted:
-        report['diagnosis_time'] = report['diagnosis_time'].strftime("%Y-%m-%d %H:%M:%S")
+        report['diagnosis_time'] = (report['diagnosis_time'] + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
         print(report['diagnosis_time'])
     return render_template('report.html', past_reports = report_list_sorted)
     
@@ -477,8 +477,8 @@ def report_detail_page():
         result = request.form
         #print(result.to_dict())
         #store the report time when view the report button is clicked, convert to right format
-        report_time = result.get('report_time')[:-6]
-        report_date_time = datetime.datetime.strptime(report_time, '%Y-%m-%d %H:%M:%S.%f')
+        report_time = result.get('report_time')
+        report_date_time = datetime.datetime.strptime(report_time, '%Y-%m-%d %H:%M:%S') - timedelta(hours=8)
         print(report_date_time)
         #get the report values specicfic to the report time
         past_reports = db.collection("users").document(person["uid"]).collection("past_reports").stream()
@@ -488,7 +488,7 @@ def report_detail_page():
             if doc.get("diagnosis_time").replace(tzinfo=None) == report_date_time:
                 report = doc.to_dict()
         print(report)
-        return  render_template('report_detail.html', report = report)
+        return render_template('report_detail.html', report = report)
 
 @app.route('/diagnosis_report')
 def diagnosis_report_page():
