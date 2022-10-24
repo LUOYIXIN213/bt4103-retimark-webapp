@@ -31,7 +31,7 @@ pb = pyrebase.initialize_app(json.load(open('fbconfig.json')))
 db = firestore.client()
 
 #Initialze person as dictionary
-person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": "", "risk_score_goal": "Not set yet"}
+person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": "", "risk_score_goal": ""}
 
 #initalize report_id for diagnosis
 diagnosis_report = {}
@@ -74,6 +74,7 @@ def login_user():
             person["lname"] = data["lname"]
             person['dob'] = data["dob"]
             person['gender'] = data["gender"]
+            person["risk_score_goal"] = data["risk_score_goal"]
             #Redirect to home page
             return redirect(url_for('home_page'))
         except Exception as e:
@@ -105,9 +106,10 @@ def register_user():
             person["username"] = username
             person['dob'] = dob
             person['gender'] = gender
+            person["risk_score_goal"] = 40
             pb.auth().send_email_verification(user['idToken'])
             #Append data to the firebase realtime database
-            data = {"fname": fname, "lname": lname, "username": username, "email": email, "password": password, 'dob': dob, "gender": gender}
+            data = {"fname": fname, "lname": lname, "username": username, "email": email, "password": password, 'dob': dob, "gender": gender, "risk_score_goal":40}
             db.collection("users").document(person["uid"]).set(data)
             #Go to home page
             return redirect(url_for('home_page'))
