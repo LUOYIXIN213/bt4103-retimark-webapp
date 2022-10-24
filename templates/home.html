@@ -136,7 +136,7 @@
                     label: "feature 2",
                     data: [40,60,78],
                     borderWidth: 2,
-                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    backgroundColor: ["rgb(254, 233, 220, 0.7)","rgb(251, 208, 182, 0.7)","rgb(250, 180, 139, 0.7)"],
                     barPercentage: 0.6,
                     barThickness: 23,
                     datalabels: {
@@ -156,7 +156,7 @@
                     borderWidth: 2,
                     barPercentage: 0.6,
                     barThickness: 23,
-                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    backgroundColor: ["rgb(254, 233, 220, 0.7)","rgb(251, 208, 182, 0.7)","rgb(250, 180, 139, 0.7)"],
                     datalabels: {
                         color: "black",
                         anchor: 'end',
@@ -174,7 +174,7 @@
                     borderWidth: 2,
                     barPercentage: 0.6,
                     barThickness: 23,
-                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    backgroundColor: ["rgb(254, 233, 220, 0.7)","rgb(251, 208, 182, 0.7)","rgb(250, 180, 139, 0.7)"],
                     datalabels: {
                         color: "black",
                         anchor: 'end',
@@ -192,7 +192,7 @@
                     borderWidth: 2,
                     barPercentage: 0.6,
                     barThickness: 23,
-                    backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
+                    backgroundColor: ["rgb(254, 233, 220, 0.7)","rgb(251, 208, 182, 0.7)","rgb(250, 180, 139, 0.7)"],
                     datalabels: {
                         color: "black",
                         anchor: 'end',
@@ -219,11 +219,38 @@
                 }
             };
 
+            const diabeticLabel = {
+                id: 'diabeticLabel',
+                beforeDraw(chart, args, pluginOptions) {
+                    const { ctx, chartArea: {top, bottom, left, right, width}, scales: {x,y} } = chart;
+                    ctx.save();
+
+                    // diabetic label
+                    ctx.font = '80px Arial';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctx.fillText('Diabetic', width*2/5, y.getPixelForValue(60));
+                    ctx.textAlign = 'left';
+                    ctx.restore();
+
+                    // normal label
+                    ctx.font = '80px Arial';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctx.fillText('Normal', width*2/5, y.getPixelForValue(10));
+                    ctx.textAlign = 'left';
+                    ctx.restore();
+                }
+            };
+
             // config 
             const config = {
                 type: 'line',
                 data: data,
                 options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
                     scales: {
                         y: {
                             max: 100,
@@ -231,7 +258,7 @@
                         }
                     }
                 },
-                plugins: [canvasBackgroundColor, ChartDataLabels]
+                plugins: [canvasBackgroundColor, ChartDataLabels, diabeticLabel]
             };
 
             const config1 = {
