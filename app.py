@@ -125,8 +125,71 @@ def register_user():
 def home_page():
     if person["is_logged_in"] == True:
         data = db.collection("users").document(person["uid"]).get().to_dict()
-        riskscore = data['risk_score_goal']
-        return render_template("home.html", riskscore = riskscore, name = person["username"])
+        risk_score_goal = data['risk_score_goal']
+        past_reports_ref = db.collection("users").document(person["uid"]).collection("past_reports")
+        query = past_reports_ref.order_by("diagnosis_time", direction=firestore.Query.DESCENDING).limit(5)
+        results = query.stream()
+        report_list = []
+        latest_report = []
+        second_latest_report = []
+        third_latest_report = []
+        fourth_latest_report = []
+        fifth_latest_report = []
+        latest_diagnosis_date = ''
+        second_diagnosis_date = ''
+        third_diagnosis_date = ''
+        fourth_diagnosis_date = ''
+        fifth_diagnosis_date = ''
+        for doc in results:
+            report_list.append(doc.to_dict())
+        if len(report_list) != 0:
+            latest_report = report_list[0]
+            date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
+            latest_diagnosis_date = date_time_str.strftime("%Y-%m-%d")
+            print(report_list[0])
+            print(len(report_list))
+            if len(report_list) >= 2:
+                #print(report_list[1])
+                second_latest_report = report_list[1]
+                second_date_time_str = second_latest_report['diagnosis_time'] + timedelta(hours=8)
+                second_diagnosis_date = second_date_time_str.strftime("%Y-%m-%d")
+                if len(report_list) >= 3:
+                    #print(report_list[2])
+                    third_latest_report = report_list[2]
+                    third_date_time_str = third_latest_report['diagnosis_time'] + timedelta(hours=8)
+                    third_diagnosis_date = third_date_time_str.strftime("%Y-%m-%d")
+                    if len(report_list) >= 4:
+                        #print(report_list[2])
+                        fourth_latest_report = report_list[3]
+                        fourth_date_time_str = fourth_latest_report['diagnosis_time'] + timedelta(hours=8)
+                        fourth_diagnosis_date = fourth_date_time_str.strftime("%Y-%m-%d")
+                        if len(report_list) == 5:
+                            #print(report_list[2])
+                            fifth_latest_report = report_list[4]
+                            fifth_date_time_str = fifth_latest_report['diagnosis_time'] + timedelta(hours=8)
+                            fifth_diagnosis_date = fifth_date_time_str.strftime("%Y-%m-%d")
+                        else:
+                            fifth_diagnosis_date = "NA"
+                    else:
+                        fourth_diagnosis_date = 'NA'
+                        fifth_diagnosis_date = 'NA'
+                else:
+                    third_diagnosis_date = 'NA'
+                    fourth_diagnosis_date = 'NA'
+                    fifth_diagnosis_date = 'NA'
+            else:
+                second_diagnosis_date = 'NA'
+                third_diagnosis_date = 'NA'
+                fourth_diagnosis_date = 'NA'
+                fifth_diagnosis_date = 'NA'
+        else:
+            fifth_diagnosis_date = 'You have not done any diagnosis yet, head to the diagnosis page to do one now'
+        return render_template("home.html", risk_score_goal = int(risk_score_goal), name = person["username"], latest_report=latest_report,
+                               latest_diagnosis_date=latest_diagnosis_date, second_latest_report=second_latest_report,
+                               second_diagnosis_date=second_diagnosis_date, third_latest_report=third_latest_report,
+                               third_diagnosis_date=third_diagnosis_date, fourth_latest_report=fourth_latest_report,
+                               fourth_diagnosis_date=fourth_diagnosis_date, fifth_latest_report=fifth_latest_report,
+                               fifth_diagnosis_date=fifth_diagnosis_date)
     else:
         return redirect(url_for('login'))
 
