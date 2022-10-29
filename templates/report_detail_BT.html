@@ -23,7 +23,7 @@
         justify-content: center;
       }
       .chartBox {
-        width: 70%;
+        width: 80%;
         padding: 20px;
         border-radius: 20px;
         box-shadow: 5px 5px 5px #aaaaaa;
@@ -36,7 +36,7 @@
         height: 100px;
       }
       .textBox {
-        width: 70%;
+        width: 80%;
         padding: 20px;
         border-radius: 20px;
         box-shadow: 5px 5px 5px #aaaaaa;
@@ -44,8 +44,7 @@
         background: antiquewhite;
         /*margin-bottom: auto;*/
       }
-      #risk-score {
-        margin-top: 10px;
+      .diabetes-risk {
         text-align: center;
         font-size: 150%;
         font-weight: bold;
@@ -57,11 +56,12 @@
   </head>
 
   <body>
-    <div class="card mb-3" style="width: 70%; max-height: 500px; margin: auto;">
+    <div class="card mb-3" style="width: 80%; max-height: 500px; margin: auto;">
       <img src="/static/PIC/report.png" class="card-img-top" alt="..."
           style="width: 300px; height: 182px; margin: auto;">
-          <p id="risk-score">Your risk score is {{ report.risk_score }}</p>
-          <p id="risk-score">You have a high risk of developing diabetes</p>
+          <div class="diabetes-risk">
+            <p id="risk-score">Your risk score is {{ report.risk_score }}</p>
+          </div>
     </div>
     <div class="chartCard">
         <div class="textBox">
@@ -117,12 +117,6 @@
         <div class="indivChart">
           <canvas id="myChart15"></canvas>   
         </div>
-        <div class="indivChart">
-          <canvas id="myChart16"></canvas>   
-        </div>
-        <div class="indivChart">
-          <canvas id="myChart17"></canvas>   
-        </div>
       </div>
     </div>
     <div class="chartCard">
@@ -135,89 +129,101 @@
             </ol>
         </div>
     </div>
+    <div class="chartCard">
+      <div class="inline">
+        <a href="{{ url_for('appointment_page') }}" type="button" class="btn btn-outline-warning"
+        style="margin-bottom: 10px; margin-left: auto; margin-right: auto;">Make Appointment</a>
+      </div>
+    </div>
+
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
       
-    /*
-    Selected features are ['HE_wc', 'HE_BMI', 'HE_sbp', 'HE_dbp',
-       'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2', 'HE_TG', 'age',
-       'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe', 'HE_HP', 'HE_HCHOL', 'HE_HTG']
-    ############# Discrete Variables ############# 7
-    DI3_dg
-    Mode of DI3_dg  for group normal is 0.0
-    Mode of DI3_dg  for group diabetes is 0.0
-    DI4_dg
-    Mode of DI4_dg  for group normal is 0.0
-    Mode of DI4_dg  for group diabetes is 0.0
-    HE_DMfh
-    Mode of HE_DMfh  for group normal is 0.0
-    Mode of HE_DMfh  for group diabetes is 0.0
-    HE_obe
-    Mode of HE_obe  for group normal is 2.0
-    Mode of HE_obe  for group diabetes is 4.0
-    HE_HP
-    Mode of HE_HP  for group normal is 1.0
-    Mode of HE_HP  for group diabetes is 3.0
-    HE_HCHOL
-    Mode of HE_HCHOL  for group normal is 0.0
-    Mode of HE_HCHOL  for group diabetes is 0.0
-    HE_HTG
-    Mode of HE_HTG  for group normal is 0.0
-    Mode of HE_HTG  for group diabetes is 0.0
-    ############# Continuous Variables ############# 10
-    HE_wc
-    Mean of HE_wc  for group normal is 81.2
-    Mean of HE_wc  for group diabetes is 93.3
-    HE_BMI
-    Mean of HE_BMI  for group normal is 24.058272632674292
-    Mean of HE_BMI  for group diabetes is 22.51743409515439
-    HE_sbp
-    Mean of HE_sbp  for group normal is 110.0
-    Mean of HE_sbp  for group diabetes is 128.0
-    HE_dbp
-    Mean of HE_dbp  for group normal is 75.0
-    Mean of HE_dbp  for group diabetes is 72.0
-    HE_HbA1c
-    Mean of HE_HbA1c  for group normal is 5.6
-    Mean of HE_HbA1c  for group diabetes is 6.5
-    HE_BUN
-    Mean of HE_BUN  for group normal is 14.0
-    Mean of HE_BUN  for group diabetes is 15.0
-    HE_crea
-    Mean of HE_crea  for group normal is 0.72
-    Mean of HE_crea  for group diabetes is 0.76
-    HE_HDL_st2
-    Mean of HE_HDL_st2  for group normal is 48.0
-    Mean of HE_HDL_st2  for group diabetes is 42.0
-    HE_TG
-    Mean of HE_TG  for group normal is 100.0
-    Mean of HE_TG  for group diabetes is 69.0
-    age
-    Mean of age  for group normal is 54.0
-    Mean of age  for group diabetes is 74.0 */
+      /*23 independent variables arranged in descending order of feature importance:
+      ['HE_HbA1c', hemoglobin_A1c (%)
+      'HE_DMfh', diabetes family history
+      'HE_wc', waist circumference (cm)
+      'HE_TG', triglycerides (mg/dL)
+      'HE_HP', hypertension status (by test)
+      'N_FAT', daily intake of fat (g)
+      'pa_totMET', total MET-min/week
+      'HE_HDL_st2', HDL cholesterol (mg/dL)
+      'HE_HTG', hyper triglycerides status
+      'HE_dbp', diastolic_blood_pressure (mmHg)
+      'DI3_dg', stroke diagnosis
+      'N_PROT', daily intake of protein (g)
+      'HE_sbp', systolic_blood_pressure (mmHg)
+      'N_CHO', daily intake of carbohydrate (g)
+      'DI4_dg', myocardial infarction or angina diagnosis status
+      'HE_BUN', blood urea nitrogen (mg/dL)
+      'sm_presnt', current smoking status
+      'HE_crea', blood serum creatinine (mg/dL)
+      'HE_obe', obesity status
+      'HE_HCHOL', hyperlipidemia status
+      'sex', 
+      'HE_BMI', body mass index (kg/m2)
+      'age']
+    */
     // setup block
-    const DI3_dg = '{{ report.DI3_dg }}';
-    const DI4_dg = '{{ report.DI4_dg }}';
-    const HE_DMfh = '{{ report.HE_DMfh }}';
-    const HE_obe = '{{ report.HE_obe }}';
-    const HE_HP = '{{ report.HE_HCHOL }}';
-    const HE_HCHOL = '{{ report.HE_HCHOL }}';
-    const HE_HTG = '{{ report.HE_HTG }}';
-    const HE_wc = '{{ report.HE_wc }}';
-    const HE_BMI = '{{ report.HE_BMI }}';
-    const HE_sbp = '{{ report.HE_sbp }}';
-    const HE_dbp = '{{ report.HE_dbp }}';
     const HE_HbA1c = '{{ report.HE_HbA1c }}';
-    const HE_BUN = '{{ report.HE_BUN }}';
-    const HE_crea = '{{ report.HE_crea }}';
-    const HE_HDL_st2 = '{{ report.HE_HDL_st2 }}';
+    const HE_DMfh = '{{ report.HE_DMfh }}';
+    const HE_wc = '{{ report.HE_wc }}';
     const HE_TG = '{{ report.HE_TG }}';
-    const age = '{{ report.age }}';
-    const featureValue = [23, 112, 58, 22, 100, 23, 55, 13, 22, 50, 133, 1, 0, 0, 0, 0, 0]
-    const diabeticValue = [30, 90, 55, 18, 112, 30, 70, 10, 25, 55, 152, 2, 1, 0, 1, 1, 2]
-    const normalValue = [27, 70, 52, 14, 90, 25, 60, 5, 18, 35, 147, 0, 0, 0, 0, 0, 0]
-    const featureName = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+    const HE_HP = '{{ report.HE_HP }}';
+    const pa_totMET = '{{ report.pa_totMET }}';
+    const HE_HDL_st2 = '{{ report.HE_HDL_st2 }}';
+    const HE_HTG = '{{ report.HE_HTG }}';
+    const HE_dbp = '{{ report.HE_dbp }}';
+    const DI3_dg = '{{ report.DI3_dg }}';
+    const HE_sbp = '{{ report.HE_sbp }}';
+    const DI4_dg = '{{ report.DI4_dg }}';
+    const HE_BUN = '{{ report.HE_BUN }}';
+    const sm_presnt = '{{ report.sm_presnt }}';
+    const HE_crea = '{{ report.HE_crea }}';
+
+    const HE_HbA1c_diabetic = 7.248061389337642;
+    const HE_DMfh_diabetic = 0;
+    const HE_wc_diabetic = 87.8986268174475;
+    const HE_TG_diabetic = 170.07108239095314;
+    const HE_HP_diabetic = 3.0;
+    const pa_totMET_diabetic = 1533.4665589660744;
+    const HE_HDL_st2_diabetic = 46.02331156378242;
+    const HE_HTG_diabetic = 0;
+    const HE_dbp_diabetic = 74.6373182552504;
+    const DI3_dg_diabetic = 0;
+    const HE_sbp_diabetic = 126.7011308562197;
+    const DI4_dg_diabetic = 0;
+    const HE_BUN_diabetic = 17.04604200323102;
+    const sm_presnt_diabetic = 0;
+    const HE_crea_diabetic = 0.8868659127625202; 
+
+    const HE_HbA1c_normal = 5.6238456955615135;
+    const HE_DMfh_normal  = 0;
+    const HE_wc_normal  = 82.05558534405719;
+    const HE_TG_normal  = 133.24337205838546;
+    const HE_HP_normal  = 1;
+    const pa_totMET_normal  = 1729.2093535895146;
+    const HE_HDL_st2_normal  = 50.920450758467354;
+    const HE_HTG_normal  = 0;
+    const HE_dbp_normal  = 76.6131963062258;
+    const DI3_dg_normal  = 0;
+    const HE_sbp_normal  = 121.27256478999107;
+    const DI4_dg_normal  = 0;
+    const HE_BUN_normal  =  15.61423890378314;
+    const sm_presnt_normal  = 0;
+    const HE_crea_normal  = 0.8107819481680072;
+
+    const featureValue = [HE_HbA1c, HE_DMfh, HE_wc, HE_TG, HE_HP, pa_totMET, HE_HDL_st2, HE_HTG, HE_dbp, DI3_dg, HE_sbp, DI4_dg, HE_BUN, sm_presnt, HE_crea]
+    const diabeticValue = [HE_HbA1c_diabetic, HE_DMfh_diabetic, HE_wc_diabetic, HE_TG_diabetic, HE_HP_diabetic, pa_totMET_diabetic, HE_HDL_st2_diabetic, 
+                          HE_HTG_diabetic, HE_dbp_diabetic, DI3_dg_diabetic, HE_sbp_diabetic, DI4_dg_diabetic, HE_BUN_diabetic, sm_presnt_diabetic,HE_crea_diabetic]
+    const normalValue = [HE_HbA1c_normal, HE_DMfh_normal, HE_wc_normal, HE_TG_normal, HE_HP_normal, pa_totMET_normal, HE_HDL_st2_normal, HE_HTG_normal, HE_dbp_normal, DI3_dg_normal, HE_sbp_normal, DI4_dg_normal, HE_BUN_normal, sm_presnt_normal,HE_crea_normal]
+    const featureName = ["               Hemoglobin_A1c (%)", "            Diabetes family history", "         Waist circumference (cm)", 
+                         "               Triglycerides (mg/dL)", "                 Hypertension status", "                Total MET (min/week)", 
+                         "           HDL cholesterol (mg/dL)", "          Hyper triglycerides status", "Diastolic blood pressure (mmHg)", 
+                         "                        Stroke diagnosis", "Systolic blood pressure (mmHg)", "              Cardiovascular disease", 
+                         "       Blood urea nitrogen (mg/dL)", "              Current smoking status", " Blood serum creatinine (mg/dL)"]
   
     secondLayer = []
     const firstLayerBackground =[];
@@ -225,24 +231,52 @@
     const secondLayerBackground =[];
     const secondLayerBorder = [];
     for (i=0; i<featureValue.length; i++) {
-      if(featureValue[i]>diabeticValue[i] && featureValue[i]>normalValue[i]) {
-        secondLayer.push(0);
-        firstLayerBackground.push('rgba(255, 99, 132, 0.2)')
-        firstLayerBorder.push('rgb(255, 99, 132)')
-        secondLayerBackground.push('rgba(255, 99, 132, 0.2)')
-        secondLayerBorder.push('rgb(255, 99, 132)')
-      } else {
-        secondLayer.push(diabeticValue[i]-featureValue[i]);
-        firstLayerBackground.push('rgba(75, 192, 192, 0.2)')
-        firstLayerBorder.push('rgb(75, 192, 192)')
-        secondLayerBackground.push('rgba(201, 203, 207, 0.2)')
-        secondLayerBorder.push('rgb(201, 203, 207)')
+      /*for features that diabetic level < normal level*/
+      if (i == 5 || i == 6 || i == 8) {
+        if (featureValue[i]<diabeticValue[i] && featureValue[i]<normalValue[i]) {
+          secondLayer.push(normalValue[i]-featureValue[i]);
+          firstLayerBackground.push('rgba(255, 99, 132, 0.2)')
+          firstLayerBorder.push('rgb(255, 99, 132)')
+          secondLayerBackground.push('rgba(201, 203, 207, 0.2)')
+          secondLayerBorder.push('rgb(201, 203, 207)')
+        }
+        else if (featureValue[i]>diabeticValue[i] && featureValue[i]<normalValue[i]) {
+          secondLayer.push(normalValue[i]-featureValue[i]);
+          firstLayerBackground.push('rgba(75, 192, 192, 0.2)')
+          firstLayerBorder.push('rgb(75, 192, 192)')
+          secondLayerBackground.push('rgba(201, 203, 207, 0.2)')
+          secondLayerBorder.push('rgb(201, 203, 207)')
+        }
+        else {
+          secondLayer.push(0);
+          firstLayerBackground.push('rgba(75, 192, 192, 0.2)')
+          firstLayerBorder.push('rgb(75, 192, 192)')
+          secondLayerBackground.push('rgba(75, 192, 192, 0.2)')
+          secondLayerBorder.push('rgb(75, 192, 192)')
+        }
       }
+      /*for features that diabetic level > normal level*/
+      else {
+        if(featureValue[i]>diabeticValue[i] && featureValue[i]>normalValue[i]) {
+          secondLayer.push(0);
+          firstLayerBackground.push('rgba(255, 99, 132, 0.2)')
+          firstLayerBorder.push('rgb(255, 99, 132)')
+          secondLayerBackground.push('rgba(255, 99, 132, 0.2)')
+          secondLayerBorder.push('rgb(255, 99, 132)')
+      } else {
+          secondLayer.push(diabeticValue[i]-featureValue[i]);
+          firstLayerBackground.push('rgba(75, 192, 192, 0.2)')
+          firstLayerBorder.push('rgb(75, 192, 192)')
+          secondLayerBackground.push('rgba(201, 203, 207, 0.2)')
+          secondLayerBorder.push('rgb(201, 203, 207)')
+      }
+      }
+      
     }
     
     // first variable
     const data1 = {
-      labels: ["Feature 1"],
+      labels: [featureName[0]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[0]],
@@ -264,7 +298,7 @@
     };
     //second variable
     const data2 = {
-      labels: ["Feature 2"],
+      labels: [featureName[1]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[1]],
@@ -286,7 +320,7 @@
     };
     //third variable
     const data3 = {
-      labels: ["Feature 3"],
+      labels: [featureName[2]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[2]],
@@ -308,7 +342,7 @@
     };
     //fourth variable
     const data4 = {
-      labels: ["Feature 4"],
+      labels: [featureName[3]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[3]],
@@ -330,7 +364,7 @@
     };
     //fifth variable
     const data5 = {
-      labels: ["Feature 1"],
+      labels: [featureName[4]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[4]],
@@ -352,7 +386,7 @@
     };
     //sixth variable
     const data6 = {
-      labels: ["Feature 6"],
+      labels: [featureName[5]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[5]],
@@ -374,7 +408,7 @@
     };
     //seventh variable
     const data7 = {
-      labels: ["Feature 7"],
+      labels: [featureName[6]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[6]],
@@ -396,7 +430,7 @@
     };
     //eighth variable
     const data8 = {
-      labels: ["Feature 8"],
+      labels: [featureName[7]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[7]],
@@ -418,7 +452,7 @@
     };
     //nineth variable
     const data9 = {
-      labels: ["Feature 9"],
+      labels: [featureName[8]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[8]],
@@ -440,7 +474,7 @@
     };
     //tenth variable
     const data10 = {
-      labels: ["Feature 10"],
+      labels: [featureName[9]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[9]],
@@ -462,7 +496,7 @@
     };
     //eleventh variable
     const data11 = {
-      labels: ["Feature 11"],
+      labels: [featureName[10]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[10]],
@@ -484,7 +518,7 @@
     };
     //twelfth variable
     const data12 = {
-      labels: ["Feature 12"],
+      labels: [featureName[11]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[11]],
@@ -506,7 +540,7 @@
     };
     //thirteenth variable
     const data13 = {
-      labels: ["Feature 13"],
+      labels: [featureName[12]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[12]],
@@ -528,7 +562,7 @@
     };
     //fourteenth variable
     const data14 = {
-      labels: ["Feature 14"],
+      labels: [featureName[13]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[13]],
@@ -550,7 +584,7 @@
     };
     //fifteenth variable
     const data15 = {
-      labels: ["Feature 15"],
+      labels: [featureName[14]],
       datasets: [{
         label: 'Feature value',
         data: [featureValue[14]],
@@ -570,50 +604,7 @@
         barThickness: 23
       }]
     };
-    //sixteenth variable
-    const data16 = {
-      labels: ["Feature 16"],
-      datasets: [{
-        label: 'Feature value',
-        data: [featureValue[15]],
-        backgroundColor: firstLayerBackground[15],
-        borderColor: firstLayerBorder[15],
-        borderWidth: 1,
-        barPercentage: 0.6,
-        barThickness: 23
-      },
-      {
-        label: 'Exceed value',
-        data: [secondLayer[15]],
-        backgroundColor: secondLayerBackground[15],
-        borderColor: secondLayerBorder[15],
-        borderWidth: 1,
-        barPercentage: 0.6,
-        barThickness: 23
-      }]
-    };
-    //seventeenth variable
-    const data17 = {
-      labels: ["Feature 17"],
-      datasets: [{
-        label: 'Feature value',
-        data: [featureValue[16]],
-        backgroundColor: firstLayerBackground[16],
-        borderColor: firstLayerBorder[16],
-        borderWidth: 1,
-        barPercentage: 0.6,
-        barThickness: 23
-      },
-      {
-        label: 'Exceed value',
-        data: [secondLayer[16]],
-        backgroundColor: secondLayerBackground[16],
-        borderColor: secondLayerBorder[16],
-        borderWidth: 1,
-        barPercentage: 0.6,
-        barThickness: 23
-      }]
-    };
+    
     //Cut off lines
     const diabeticLine1 = {
       id: "diabeticLine1",
@@ -945,50 +936,8 @@
         ctx.restore();
       }
     };
-    const diabeticLine16 = {
-      id: "diabeticLine16",
-      beforeDraw(chart, args, options) {
-        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
-          {x, y} } = chart;
-        ctx.save();
-        ctx.strokeStyle = 'red';
-        ctx.strokeRect(x.getPixelForValue(diabeticValue[15]), top, 0, bottom);
-        ctx.restore();
-      }
-    };
-    const normalLine16 = {
-      id: "normalLine16",
-      beforeDraw(chart, args, options) {
-        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
-          {x, y} } = chart;
-        ctx.save();
-        ctx.strokeStyle = 'green';
-        ctx.strokeRect(x.getPixelForValue(normalValue[15]), top, 0, bottom);
-        ctx.restore();
-      }
-    };
-    const diabeticLine17 = {
-      id: "diabeticLine17",
-      beforeDraw(chart, args, options) {
-        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
-          {x, y} } = chart;
-        ctx.save();
-        ctx.strokeStyle = 'red';
-        ctx.strokeRect(x.getPixelForValue(diabeticValue[16]), top, 0, bottom);
-        ctx.restore();
-      }
-    };
-    const normalLine17 = {
-      id: "normalLine17",
-      beforeDraw(chart, args, options) {
-        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
-          {x, y} } = chart;
-        ctx.save();
-        ctx.strokeStyle = 'green';
-        ctx.strokeRect(x.getPixelForValue(normalValue[16]), top, 0, bottom);
-        ctx.restore();
-      }
-    };
+    
+    
     //config block
     const config1 = {
       type: 'bar',
@@ -1425,64 +1374,7 @@
         },
         plugins: [diabeticLine15, normalLine15]
     };
-    const config16 = {
-      type: 'bar',
-        data: data16,
-        options: {
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            maintainAspectRatio: false,
-            indexAxis: 'y',
-            scales: {
-                x: { 
-                    stacked: true,
-                    grid : {
-                      drawOnChartArea: false,
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    stacked: true,
-                    grid : {
-                        drawOnChartArea: false
-                    }
-                }
-            },
-        },
-        plugins: [diabeticLine16, normalLine16]
-    };
-    const config17 = {
-      type: 'bar',
-        data: data17,
-        options: {
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            maintainAspectRatio: false,
-            indexAxis: 'y',
-            scales: {
-                x: { 
-                    stacked: true,
-                    grid : {
-                      drawOnChartArea: false,
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    stacked: true,
-                    grid : {
-                        drawOnChartArea: false
-                    }
-                }
-            },
-        },
-        plugins: [diabeticLine17, normalLine17]
-    };
+    
     
     // render init block
     const myChart1 = new Chart(
@@ -1545,14 +1437,7 @@
       document.getElementById('myChart15'),
       config15
     );
-    const myChart16 = new Chart(
-      document.getElementById('myChart16'),
-      config16
-    );
-    const myChart17 = new Chart(
-      document.getElementById('myChart17'),
-      config17
-    );
+    
     </script>
 
   </body>

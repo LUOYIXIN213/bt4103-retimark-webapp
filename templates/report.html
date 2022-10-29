@@ -75,16 +75,22 @@
               <p class="Subheader">Lifestyle Records</p>
               <div class="report-detail" style="display: flex; align-items: center; justify-content: center;">
                 <ul class="list-name">
+                  <li class="list-item">Daily Intake of Protein (g):</li>
+                  <li class="list-item">Daily Intake of Fat (g):</li>
+                  <li class="list-item">Daily Intake of Carbohydrate (g):</li>
                   <li class="list-item">Do you drink more than once a month?</li>
                   <li class="list-item">Do you have high risk drinking?</li>
                   <li class="list-item">Do you smoke now?</li>
                   <li class="list-item">Do you often get stressed?</li>
                   <li class="list-item">Duration of Vigorous Activity During a Week (min):</li>
                   <li class="list-item">Duration of Moderate Activity During a Week (min):</li>
-                  <li class="list-item">Do you have regular walking exercise in a week?</li>
+                  <li class="list-item">Duration of Walking During a Week (min):</li>
                   <li class="list-item">Do you do aerobic activity?</li>
                 </ul>
                 <ul class="list-value">
+                  <li class="list-item">{{ report.N_PROT }}</li>
+                  <li class="list-item">{{ report.N_FAT }}</li>
+                  <li class="list-item">{{ report.N_CHO }}</li>
                   <li class="list-item">{{ report.dr_month }}</li>
                   <li class="list-item">{{ report.dr_high }}</li>
                   <li class="list-item">{{ report.sm_presnt }}</li>
@@ -102,17 +108,17 @@
                   <li class="list-item">Have you been diagnosed stroke?</li>
                   <li class="list-item">Have you been diagnosed cardiovascular disease?</li>
                   <li class="list-item">Do you have diabetes family history?</li>
+                  <li class="list-item">Do you have hypertension medication use?</li>
+                  <li class="list-item">Do you have dyslipidemia medication use?</li>
                   <li class="list-item">Do you have diabetes treatment?</li>
-                  <li class="list-item">Diabetes Treatment with Insulin Injection： </li>
-                  <li class="list-item">Diabetes Treatment with Oral Medication： </li>
                 </ul>
                 <ul class="list-value">
                   <li class="list-item">{{ report.DI3_dg }}</li>
                   <li class="list-item">{{ report.DI4_dg }}</li>
                   <li class="list-item">{{ report.HE_DMfh }}</li>
+                  <li class="list-item">{{ report.DI1_2 }}</li>
+                  <li class="list-item">{{ report.DI2_2 }}</li>
                   <li class="list-item">{{ report.DE1_3 }}</li>
-                  <li class="list-item">{{ report.DE1_31 }}</li>
-                  <li class="list-item">{{ report.DE1_32 }}</li>
                 </ul>
               </div>
               <input type="text" class="form-control" id="inputReportTime" name="report_time" value="{{ report.diagnosis_time }}" style="display: none;" required >

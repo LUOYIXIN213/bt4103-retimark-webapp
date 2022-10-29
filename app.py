@@ -486,7 +486,10 @@ def diagnosis_user():
             report_id = past_report_ref.id
             print(report_id)
             print(diagnosis_report)
-            return render_template('report_detail.html', report = diagnosis_report)
+            if 'bloodtest' == 1:
+                return render_template('report_detail_BT.html', report = diagnosis_report)
+            else :
+                return render_template('report_detail_noBT.html', report = diagnosis_report)
         except Exception as e:
             print(e)
             return render_template('diagnosis.html')
@@ -648,17 +651,18 @@ def simulation_user():
 
 @app.route('/report')
 def report_page():
-    past_reports = db.collection("users").document(person["uid"]).collection("past_reports").stream()
-    report_list_random = []
+    past_reports_ref = db.collection("users").document(person["uid"]).collection("past_reports")
+    query = past_reports_ref.order_by("diagnosis_time", direction=firestore.Query.DESCENDING)
+    past_reports = query.stream()
+    report_list = []
     for report in past_reports:
-        report_list_random.append(report.to_dict())
+        report_list.append(report.to_dict())
         print(f'{report.id} => {report.to_dict()}')
-    print(report_list_random)
-    report_list_sorted = sorted(report_list_random, key=lambda x: x.get('diagnosis_time'))
-    for report in report_list_sorted:
+    #print(report_list)
+    for report in report_list:
         report['diagnosis_time'] = (report['diagnosis_time'] + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
         print(report['diagnosis_time'])
-    return render_template('report.html', past_reports = report_list_sorted)
+    return render_template('report.html', past_reports = report_list)
     
 
 @app.route('/report_detail', methods=['POST', 'GET'])
@@ -669,41 +673,88 @@ def report_detail_page():
         #store the report time when view the report button is clicked, convert to right format
         report_time = result.get('report_time')
         report_date_time = datetime.datetime.strptime(report_time, '%Y-%m-%d %H:%M:%S') - timedelta(hours=8)
-        print("desired report time in date fromat: ", report_date_time)
+        #print("desired report time in date fromat: ", report_date_time)
         #get the report values specicfic to the report time
         past_reports = db.collection("users").document(person["uid"]).collection("past_reports").stream()
         report = {}
         for doc in past_reports:
             to_str = doc.get("diagnosis_time").strftime("%Y-%m-%d %H:%M:%S")
             to_date = datetime.datetime.strptime(to_str, '%Y-%m-%d %H:%M:%S')
-            print("each doc time in date fromat: ", to_date)
+            #print("each doc time in date fromat: ", to_date)
             if to_date == report_date_time:
                 report = doc.to_dict()
-        print(report)
-        return render_template('report_detail.html', report = report)
+        #print(report)
+        if report['bloodtest'] == 1:
+            print(report['bloodtest'])
+            return render_template('report_detail_BT.html', report = report)
+        else :
+            print(report['bloodtest'])
+            return render_template('report_detail_noBT.html', report = report)
 
-@app.route('/diagnosis_report')
-def diagnosis_report_page():
-    return render_template('report_detail.html', report = diagnosis_report)
+#@app.route('/diagnosis_report')
+#def diagnosis_report_page():
+#    return render_template('report_detail.html', report = diagnosis_report)
 
 #take in an array of selected feature values, ordered by importance (follow order of featureName will do) 
 #return top 3 most important features with values exceeding diabetic level
-featureValue = [23, 112, 58, 22, 100, 23, 55, 13, 22, 50, 133, 1, 0, 0, 1, 0, 2]
+featureValue = [23, 171, 4, 22, 100, 23, 55, 13, 22, 50, 133]
 def top_advice(featureValue):
-    diabeticValue = [30, 90, 55, 18, 112, 30, 70, 10, 25, 55, 152, 2, 1, 0, 0, 1, 0] #ordered by importance
-    featureName = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"] #ordered by importance
-    adviceList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q"] #same order
+    if len(featureValue) == 11:
+        HE_HbA1c_diabetic = 7.248061389337642
+        #HE_DMfh_diabetic = 0
+        #HE_wc_diabetic = 87.8986268174475
+        HE_TG_diabetic = 170.07108239095314
+        HE_HP_diabetic = 3.0
+        pa_totMET_diabetic = 1533.4665589660744
+        HE_HDL_st2_diabetic = 46.02331156378242
+        HE_HTG_diabetic = 0
+        HE_dbp_diabetic = 74.6373182552504
+        #DI3_dg_diabetic = 0
+        HE_sbp_diabetic = 126.7011308562197
+        #DI4_dg_diabetic = 0
+        HE_BUN_diabetic = 17.04604200323102
+        sm_presnt_diabetic = 0
+        HE_crea_diabetic = 0.8868659127625202 
+        diabeticValue = [HE_HbA1c_diabetic, HE_TG_diabetic, HE_HP_diabetic, pa_totMET_diabetic, HE_HDL_st2_diabetic, 
+                        HE_HTG_diabetic, HE_dbp_diabetic, HE_sbp_diabetic, HE_BUN_diabetic, sm_presnt_diabetic,HE_crea_diabetic] #ordered by importance
+        featureName = ["Hemoglobin_A1c (%)", "Triglycerides (mg/dL)", "Hypertension status",
+                       "Total MET (min/week)", "HDL cholesterol (mg/dL)", "Hyper triglycerides status", "Diastolic blood pressure (mmHg)", 
+                        "Systolic blood pressure (mmHg)", "Blood urea nitrogen (mg/dL)", "Current smoking status", 
+                        "Blood serum creatinine (mg/dL)"] #ordered by importance
+        adviceList = ["Reduce Hemoglobin_A1c", "Reduce Triglycerides", "About hypertension"] #same order
+        adviceLink = ["https://www.everydayhealth.com/type-2-diabetes/treatment/ways-lower-your-a1c/",
+                     "https://www.webmd.com/cholesterol-management/lowering-triglyceride-levels",
+                     "https://www.medicalnewstoday.com/articles/150109#diet"]
+    else:
+        #HE_DMfh_diabetic = 0
+        #HE_wc_diabetic = 87.8986268174475
+        HE_HP_diabetic = 3.0
+        pa_totMET_diabetic = 1533.4665589660744
+        HE_HTG_diabetic = 0
+        #DI3_dg_diabetic = 0
+        #DI4_dg_diabetic = 0
+        sm_presnt_diabetic = 0
+        HE_obe_diabetic = 4
+        HE_HCHOL_diabetic = 0
+        HE_BMI_diabetic = 25.21610630227172
+        diabeticValue = [HE_HP_diabetic, pa_totMET_diabetic, HE_HTG_diabetic, sm_presnt_diabetic, HE_obe_diabetic, HE_HCHOL_diabetic, HE_BMI_diabetic]
+        featureName = ["Hypertension status", "Total MET (min/week)", "Hyper triglycerides status", "Current smoking status", 
+                       "Obesity status", "Hyperlipidemia status", "Body mass index (kg/m2)"]
+        adviceList = ["About hypertension"] #same order
+        adviceLink = ["https://www.medicalnewstoday.com/articles/150109#diet"]
     topAdvice = []
+    topAdviceLink = []
     count = 0
     for i in range(len(featureValue)):
         if count == 3:
             break
         if  featureValue[i] > diabeticValue[i]:
             topAdvice.append(adviceList[i])
+            topAdviceLink.append(adviceLink[i])            
             count += 1
-    return topAdvice
-resultList = top_advice(featureValue)
-print(resultList)
+    return topAdvice, topAdviceLink
+
+print(top_advice(featureValue))
 
 @app.route('/appointment')
 def appointment_page():
