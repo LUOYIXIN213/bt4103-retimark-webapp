@@ -350,26 +350,122 @@ def diagnosis_user():
             # 'HE_sbp', 'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
             # 'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'sm_presnt',
             # 'HE_obe', 'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sex']
-            t = pd.DataFrame(np.array(
-                [pa_totMET, HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, HE_sbp, HE_dbp, HE_HbA1c, HE_BUN, HE_crea,
-                 HE_HDL_st2, HE_TG, age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, HE_HP, HE_HCHOL,
-                 HE_HTG, sm_presnt, sex]).reshape(-1, 23), columns=['pa_totMET','HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO',
-                                                                    'N_FAT', 'HE_sbp',
-                                                                    'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
-                                                                    'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
-                                                                    'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
 
-            diagnosed_class = model.predict(t)
-            predicted_class = diagnosed_class[0]
-            risk_score = model.predict_proba(t)[0][1]
-            rounded_risk_score = round(risk_score*100)
-            print(predicted_class)
-            print(rounded_risk_score)
+            #risk score prediction for with blood test
+            rounded_risk_score = None
+            risk_score_glucose_25 = None
+            risk_score_glucose_50 = None
+            risk_score_glucose_75 = None
+            risk_score_glucose_100 = None
+
+            #predicted diabetes class
+            predicted_class = None
+            predicted_class_glucose_25 = None
+            predicted_class_glucose_50 = None
+            predicted_class_glucose_75 = None
+            predicted_class_glucose_100 = None
+
+            if bloodtest == 1:
+                t = pd.DataFrame(np.array(
+                    [pa_totMET, HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, HE_sbp, HE_dbp, HE_HbA1c, HE_BUN, HE_crea,
+                     HE_HDL_st2, HE_TG, age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, HE_HP, HE_HCHOL,
+                     HE_HTG, sm_presnt, sex]).reshape(-1, 23), columns=['pa_totMET','HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO',
+                                                                        'N_FAT', 'HE_sbp',
+                                                                        'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+                                                                        'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
+                                                                        'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
+                diagnosed_class = model.predict(t)
+                predicted_class = float(diagnosed_class[0])
+                risk_score = model.predict_proba(t)[0][1]
+                rounded_risk_score = float(round(risk_score*100))
+                print(predicted_class)
+                print(rounded_risk_score)
+
+            #risk score prediction for without blood test in confidence interval
+            else:
+                #generate risk score if HE_glu being in the 0 th percentile to 25 th percentile
+                t_25 = pd.DataFrame(np.array(
+                    [pa_totMET, HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, 117.41880341880342, 74.85919928025191,
+                     5.491408007197482, 15.269005847953217, 0.7982501124606389, 52.62156937907271, 115.519118308592,
+                     age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, 1.0, 0,
+                     0, sm_presnt, sex]).reshape(-1, 23), columns=['pa_totMET','HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO',
+                                                                        'N_FAT', 'HE_sbp',
+                                                                        'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+                                                                        'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
+                                                                        'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
+
+                diagnosed_class_25 = model.predict(t_25)
+                predicted_class_glucose_25 = float(diagnosed_class_25[0])
+                risk_score_25 = model.predict_proba(t_25)[0][1]
+                risk_score_glucose_25 = float(round(risk_score_25*100))
+                print(predicted_class_glucose_25)
+                print(risk_score_glucose_25)
+
+                #generate risk score if HE_glu being in the 25 th percentile to 50 th percentile
+                t_50 = pd.DataFrame(np.array(
+                    [pa_totMET, HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, 120.78805194805194, 76.36675324675325,
+                     5.584675324675325, 15.613506493506494, 0.8022701298701298, 50.89999223103178, 129.25194805194806,
+                     age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, 1, 0,
+                     0, sm_presnt, sex]).reshape(-1, 23), columns=['pa_totMET','HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO',
+                                                                        'N_FAT', 'HE_sbp',
+                                                                        'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+                                                                        'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
+                                                                        'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
+
+                diagnosed_class_50 = model.predict(t_50)
+                predicted_class_glucose_50 = float(diagnosed_class_50[0])
+                risk_score_50 = model.predict_proba(t_50)[0][1]
+                risk_score_glucose_50 = float(round(risk_score_50*100))
+                print(predicted_class_glucose_50)
+                print(risk_score_glucose_50)
+
+                #generate risk score if HE_glu being in the 50 th percentile to 75 th percentile
+                t_75 = pd.DataFrame(np.array(
+                    [pa_totMET, HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, 124.16230366492147, 77.2324607329843,
+                     5.739895287958115, 16.05759162303665, 0.8326178010471204, 49.74235817995025, 142.69476439790577,
+                     age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, 3, 0,
+                     0, sm_presnt, sex]).reshape(-1, 23), columns=['pa_totMET','HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO',
+                                                                        'N_FAT', 'HE_sbp',
+                                                                        'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+                                                                        'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
+                                                                        'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
+
+                diagnosed_class_75 = model.predict(t_75)
+                predicted_class_glucose_75 = float(diagnosed_class_75[0])
+                risk_score_75 = model.predict_proba(t_75)[0][1]
+                risk_score_glucose_75 = float(round(risk_score_75*100))
+                print(predicted_class_glucose_75)
+                print(risk_score_glucose_75)
+
+                #generate risk score if HE_glu being in the 75 th percentile to 100th percentile
+                t_100 = pd.DataFrame(np.array(
+                    [pa_totMET, HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, 126.92238648363252, 77.0063357972545,
+                     6.763727560718057, 16.50897571277719, 0.8618532206969378, 46.931693880777516, 172.6441393875396,
+                     age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, 3, 0,
+                     0, sm_presnt, sex]).reshape(-1, 23), columns=['pa_totMET','HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO',
+                                                                        'N_FAT', 'HE_sbp',
+                                                                        'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+                                                                        'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
+                                                                        'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
+
+                diagnosed_class_100 = model.predict(t_100)
+                predicted_class_glucose_100 = float(diagnosed_class_100[0])
+                risk_score_100 = model.predict_proba(t_100)[0][1]
+                risk_score_glucose_100 = float(round(risk_score_100*100))
+                print(predicted_class_glucose_100)
+                print(risk_score_glucose_100)
+
+                rounded_risk_score = round((risk_score_glucose_25 + risk_score_glucose_50 + risk_score_glucose_75 +risk_score_glucose_100) / 4)
+
 
             #store all data in dic and upload to database
-
-            diagnosis_report = {"diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc), "diagnosed_class": float(predicted_class),
-                                "risk_score": float(rounded_risk_score),
+            diagnosis_report = {"diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc),
+                                "diagnosed_class": predicted_class, "risk_score": rounded_risk_score,
+                                "risk_score_glucose_25": risk_score_glucose_25, "predicted_class_glucose_25": predicted_class_glucose_25,
+                                "risk_score_glucose_50": risk_score_glucose_50, "predicted_class_glucose_50": predicted_class_glucose_50,
+                                "risk_score_glucose_75": risk_score_glucose_75, "predicted_class_glucose_75": predicted_class_glucose_75,
+                                "risk_score_glucose_100": risk_score_glucose_100,
+                                "predicted_class_glucose_100": predicted_class_glucose_100,
                                 "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
                                 "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol, "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
                                 "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
