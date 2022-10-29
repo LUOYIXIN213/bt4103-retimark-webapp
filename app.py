@@ -42,7 +42,9 @@ simulation_report = {}
 simulation_id = ""
 
 #load machine learning model
-modle = pickle.load(open("finalized_model.pkl", 'rb'))
+model = pickle.load(open("finalized_model.pkl", 'rb'))
+
+
 
 @app.route('/')
 
@@ -270,8 +272,13 @@ def diagnosis_user():
         mh_stress = float(result.get('mh_stress'))
         pa_vig_tm = float(result.get('pa_vig_tm'))
         pa_mod_tm = float(result.get('pa_mod_tm'))
-        pa_walk = float(result.get('pa_walk'))
+        pa_walkMET = float(result.get('pa_walkMET')) * 3.3
         pa_aerobic = float(result.get('pa_aerobic'))
+
+        #preprocess for physical activity
+        pa_vigMET = 8 * pa_vig_tm
+        pa_modMET = 4 * pa_mod_tm
+        pa_totMET = pa_walkMET + pa_modMET + pa_vigMET
 
         #get history disease
         DI3_dg = float(result.get('DI3_dg'))
@@ -333,25 +340,29 @@ def diagnosis_user():
             global diagnosis_report
 
             #Run machine learning model to generate risk score
-            # ['HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO', 'N_FAT', 'HE_sbp', 'HE_dbp',
-            #        'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2', 'HE_TG', 'age',
-            #        'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe', 'HE_HP', 'HE_HCHOL',
-            #        'HE_HTG', 'sex']
+            # 23 independent variables to input in the model
+            #['pa_totMET', 'N_PROT', 'N_CHO', 'N_FAT', 'HE_wc', 'HE_BMI',
+            # 'HE_sbp', 'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+            # 'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'sm_presnt',
+            # 'HE_obe', 'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sex']
             t = pd.DataFrame(np.array(
-                [HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, HE_sbp, HE_dbp, HE_HbA1c, HE_BUN, HE_crea,
+                [pa_totMET, HE_wc, HE_BMI, N_PROT, N_CHO, N_FAT, HE_sbp, HE_dbp, HE_HbA1c, HE_BUN, HE_crea,
                  HE_HDL_st2, HE_TG, age, DI3_dg, DI4_dg, HE_DMfh, HE_obe, HE_HP, HE_HCHOL,
-                 HE_HTG, sm_presnt, sex]).reshape(-1, 22), columns=['HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO', 'N_FAT', 'HE_sbp',
-                                                         'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
-                                                         'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
-                                                         'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
-            diagnosed_class = modle.predict(t)
+                 HE_HTG, sm_presnt, sex]).reshape(-1, 23), columns=['pa_totMET','HE_wc', 'HE_BMI', 'N_PROT', 'N_CHO',
+                                                                    'N_FAT', 'HE_sbp',
+                                                                    'HE_dbp', 'HE_HbA1c', 'HE_BUN', 'HE_crea', 'HE_HDL_st2',
+                                                                    'HE_TG', 'age', 'DI3_dg', 'DI4_dg', 'HE_DMfh', 'HE_obe',
+                                                                    'HE_HP', 'HE_HCHOL', 'HE_HTG', 'sm_presnt', 'sex'])
+
+            diagnosed_class = model.predict(t)
             predicted_class = diagnosed_class[0]
-            risk_score = modle.predict_proba(t)[0][1]
+            risk_score = model.predict_proba(t)[0][1]
             rounded_risk_score = round(risk_score*100)
             print(predicted_class)
             print(rounded_risk_score)
 
             #store all data in dic and upload to database
+
             diagnosis_report = {"diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc), "diagnosed_class": float(predicted_class),
                                 "risk_score": float(rounded_risk_score),
                                 "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
@@ -359,7 +370,8 @@ def diagnosis_user():
                                 "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
                                 "N_PROT": N_PROT, "N_FAT": N_FAT, "N_CHO": N_CHO,
                                 "dr_month": dr_month, "dr_high": dr_high, "sm_presnt": sm_presnt, "mh_stress": mh_stress, "pa_vig_tm": pa_vig_tm,
-                                "pa_mod_tm": pa_mod_tm, "pa_walk": pa_walk, "pa_aerobic": pa_aerobic,
+                                "pa_mod_tm": pa_mod_tm, "pa_walkMET": pa_walkMET, "pa_aerobic": pa_aerobic,
+                                "pa_vigMET": pa_vigMET, "pa_modMET": pa_modMET, "pa_totMET": pa_totMET,
                                 "DI3_dg": DI3_dg, "DI4_dg": DI4_dg, "HE_DMfh": HE_DMfh, "DE1_3": DE1_3, "DI1_2": DI1_2,
                                 "DI2_2": DI2_2, "DE1_31": DE1_31, "DE1_32": DE1_32, "HE_HP": HE_HP, "HE_HCHOL": HE_HCHOL, "HE_HTG": HE_HTG}
             past_report_ref.set(diagnosis_report)
