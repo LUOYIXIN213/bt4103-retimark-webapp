@@ -1,6 +1,7 @@
 import time
 import datetime
 from datetime import date,timedelta
+from forms import RegistrationForm, LoginForm
 
 from flask import Flask, render_template, url_for, session, request, redirect
 import requests
@@ -23,6 +24,7 @@ from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba240'
 
 #initialize firebase
 cred = credentials.Certificate('fbAdminConfig.json')
@@ -31,7 +33,7 @@ pb = pyrebase.initialize_app(json.load(open('fbconfig.json')))
 db = firestore.client()
 
 #Initialze person as dictionary
-person = {"is_logged_in": False, "username": "", "fname": "", "lname": "", "email": "", "uid": "", "gender": "", "dob": "", "risk_score_goal": ""}
+person = {"is_logged_in": False, "username": "", "fullname": "", "email": "", "uid": "", "dob": "", "risk_score_goal": ""}
 
 #initalize report_id for diagnosis
 diagnosis_report = {}
@@ -50,77 +52,81 @@ model = pickle.load(open("finalized_model.pkl", 'rb'))
 
 @app.route('/login', methods=['POST', 'GET'])
 def login_page():
-    return render_template('login.html')
+    form = LoginForm()
+    return render_template('login.html', title='Login', form=form)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register_page():
-    return render_template('register.html')
+    form = RegistrationForm()
+    return render_template('register.html', title='Register', form=form)
 
 @app.route('/login_user', methods=['POST', 'GET'])
 def login_user():
-    if request.method == 'POST':
-        result = request.form
-        email = result.get('email')
-        password = result.get('password')
-        try:
-            user = pb.auth().sign_in_with_email_and_password(email, password)
-            #Insert the user data in the global person
-            global person
-            person["is_logged_in"] = True
-            person["email"] = email
-            person["uid"] = user['localId']
-            #Get the name of the user
-            data = db.collection("users").document(person["uid"]).get().to_dict()
-            person["username"] = data["username"]
-            person["fname"] = data["fname"]
-            person["lname"] = data["lname"]
-            person['dob'] = data["dob"]
-            person['gender'] = data["gender"]
-            person["risk_score_goal"] = data["risk_score_goal"]
-            #Redirect to home page
-            return redirect(url_for('home_page'))
-        except Exception as e:
-            print(e)
-            return redirect(url_for('login_page'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        if request.method == 'POST':
+            result = request.form
+            email = result.get('email')
+            password = result.get('password')
+            try:
+                user = pb.auth().sign_in_with_email_and_password(email, password)
+                #Insert the user data in the global person
+                global person
+                person["is_logged_in"] = True
+                person["email"] = email
+                person["uid"] = user['localId']
+                #Get the name of the user
+                data = db.collection("users").document(person["uid"]).get().to_dict()
+                person["username"] = data["username"]
+                person["fullname"] = data["fullname"]
+                person['dob'] = data["dob"]
+                person["risk_score_goal"] = data["risk_score_goal"]
+                #Redirect to home page
+                return redirect(url_for('home_page'))
+            except Exception as e:
+                print(e)
+                return redirect(url_for('login_page'))
+    else:
+        return render_template('login.html', title='Login', form=form)
 
 @app.route('/register_user', methods=['POST', 'GET'])
 def register_user():
-    if request.method == 'POST':
-        result = request.form
-        email = result.get('email')
-        password = result.get('password')
-        fname = result.get('fname')
-        lname = result.get('lname')
-        username = result.get('username')
-        dob = result.get('dob')
-        gender = result.get('gender')
-        try:
-            #Try creating the user account using the provided data
-            auth.create_user(email=email, password=password)
-            user = pb.auth().sign_in_with_email_and_password(email, password)
-            #Add data to global person
-            global person
-            person["is_logged_in"] = True
-            person["email"] = email
-            person["uid"] = user['localId']
-            person["fname"] = fname
-            person["lname"] = lname
-            person["username"] = username
-            person['dob'] = dob
-            person['gender'] = gender
-            person["risk_score_goal"] = 40
-            pb.auth().send_email_verification(user['idToken'])
-            #Append data to the firebase realtime database
-            data = {"fname": fname, "lname": lname, "username": username, "email": email, "password": password, 'dob': dob, "gender": gender, "risk_score_goal":40}
-            db.collection("users").document(person["uid"]).set(data)
-            #Go to home page
-            return redirect(url_for('home_page'))
-        # if the email is registered, redirect to the login page
-        except firebase_admin._auth_utils.EmailAlreadyExistsError as e:
-            return redirect(url_for('login_page'))
-        except Exception as e:
-            print(e)
-            return redirect(url_for('register_page'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        if request.method == 'POST':
+            result = request.form
+            email = result.get('email')
+            password = result.get('password')
+            fullname = result.get('fullname')
+            username = result.get('username')
+            dob = result.get('birthday')
+            try:
+                #Try creating the user account using the provided data
+                auth.create_user(email=email, password=password)
+                user = pb.auth().sign_in_with_email_and_password(email, password)
+                #Add data to global person
+                global person
+                person["is_logged_in"] = True
+                person["email"] = email
+                person["uid"] = user['localId']
+                person["fullname"] = fullname
+                person["username"] = username
+                person['dob'] = dob
+                person["risk_score_goal"] = 40
+                pb.auth().send_email_verification(user['idToken'])
+                #Append data to the firebase realtime database
+                data = {"fullname": fullname, "username": username, "email": email, "password": password, 'dob': dob, "risk_score_goal":40}
+                db.collection("users").document(person["uid"]).set(data)
+                #Go to home page
+                return redirect(url_for('home_page'))
+            # if the email is registered, redirect to the login page
+            except firebase_admin._auth_utils.EmailAlreadyExistsError as e:
+                return redirect(url_for('login_page'))
+            except Exception as e:
+                print(e)
+                return redirect(url_for('register_page'))
+    return render_template('register.html', title='Register', form=form)
+    
 
 
 @app.route('/home')
@@ -627,7 +633,7 @@ def contact_page():
 def profile_page():
     data = db.collection("users").document(person["uid"]).get().to_dict()
     risk_score_goal = data['risk_score_goal']
-    return render_template('profile.html', risk_score_goal = risk_score_goal, username = person["username"], fname = person["fname"], lname = person["lname"], email = person["email"], gender = person["gender"], dob = person["dob"])
+    return render_template('profile.html', risk_score_goal = risk_score_goal, username = person["username"], fullname = person["fullname"], email = person["email"], dob = person["dob"])
 
 @app.route('/change_username', methods=['GET', 'POST'])
 def change_username():
