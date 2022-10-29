@@ -147,45 +147,50 @@ def home_page():
         if len(report_list) != 0:
             latest_report = report_list[0]
             date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
-            latest_diagnosis_date = date_time_str.strftime("%Y-%m-%d")
-            print(report_list[0])
-            print(len(report_list))
+            latest_diagnosis_date = date_time_str.strftime("%Y-%m-%d %H:%M")
+            #print(report_list[0])
+            #print(len(report_list))
             if len(report_list) >= 2:
                 #print(report_list[1])
                 second_latest_report = report_list[1]
                 second_date_time_str = second_latest_report['diagnosis_time'] + timedelta(hours=8)
-                second_diagnosis_date = second_date_time_str.strftime("%Y-%m-%d")
+                second_diagnosis_date = second_date_time_str.strftime("%Y-%m-%d %H:%M")
                 if len(report_list) >= 3:
                     #print(report_list[2])
                     third_latest_report = report_list[2]
                     third_date_time_str = third_latest_report['diagnosis_time'] + timedelta(hours=8)
-                    third_diagnosis_date = third_date_time_str.strftime("%Y-%m-%d")
+                    third_diagnosis_date = third_date_time_str.strftime("%Y-%m-%d %H:%M")
                     if len(report_list) >= 4:
                         #print(report_list[2])
                         fourth_latest_report = report_list[3]
                         fourth_date_time_str = fourth_latest_report['diagnosis_time'] + timedelta(hours=8)
-                        fourth_diagnosis_date = fourth_date_time_str.strftime("%Y-%m-%d")
+                        fourth_diagnosis_date = fourth_date_time_str.strftime("%Y-%m-%d %H:%M")
                         if len(report_list) == 5:
                             #print(report_list[2])
                             fifth_latest_report = report_list[4]
                             fifth_date_time_str = fifth_latest_report['diagnosis_time'] + timedelta(hours=8)
-                            fifth_diagnosis_date = fifth_date_time_str.strftime("%Y-%m-%d")
+                            fifth_diagnosis_date = fifth_date_time_str.strftime("%Y-%m-%d %H:%M")
                         else:
                             fifth_diagnosis_date = "NA"
                     else:
-                        fourth_diagnosis_date = 'NA'
-                        fifth_diagnosis_date = 'NA'
+                        fourth_diagnosis_date = "NA"
+                        fifth_diagnosis_date = "NA"
                 else:
-                    third_diagnosis_date = 'NA'
-                    fourth_diagnosis_date = 'NA'
-                    fifth_diagnosis_date = 'NA'
+                    third_diagnosis_date = "NA"
+                    fourth_diagnosis_date = "NA"
+                    fifth_diagnosis_date = "NA"
             else:
-                second_diagnosis_date = 'NA'
-                third_diagnosis_date = 'NA'
-                fourth_diagnosis_date = 'NA'
-                fifth_diagnosis_date = 'NA'
+                second_diagnosis_date = "NA"
+                third_diagnosis_date = "NA"
+                fourth_diagnosis_date = "NA"
+                fifth_diagnosis_date = "NA"
         else:
-            fifth_diagnosis_date = 'You have not done any diagnosis yet, head to the diagnosis page to do one now'
+            latest_diagnosis_date = 'NA'
+            second_diagnosis_date = "NA"
+            third_diagnosis_date = "NA"
+            fourth_diagnosis_date = "NA"
+            fifth_diagnosis_date = "NA"
+            latest_report = {"risk_score": "not diagnosed yet"}
         return render_template("home.html", risk_score_goal = int(risk_score_goal), name = person["username"], latest_report=latest_report,
                                latest_diagnosis_date=latest_diagnosis_date, second_latest_report=second_latest_report,
                                second_diagnosis_date=second_diagnosis_date, third_latest_report=third_latest_report,

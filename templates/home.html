@@ -16,44 +16,44 @@
         <div class="container-xxl px-4 mt-4">
             <div class="row">
                 <div class="col-lg-8">
-                    <div class="graph-container">
-                        <div class="graph-title">Your Risk Score Trend (5 most recent diagnosis result)</div>
+                    <div class="graph-container" style="padding-bottom: 5px;">
+                        <div class="graph-title">Your Risk Score Trend (5 most recent diagnosis results*)</div>
                         <div>
                             <canvas id="lineChart" style="margin-left: 30px; margin-right: 30px; width:85%; height: 280px;"></canvas>
                         </div>
+                        <div style="margin-top: 10px; margin-left: 4%; font-size: 11px; font-style: italic; color: grey;">*If you do not have enough (i.e. 5) diagnosis results, the earlier report(s) will be shown as not available</div>
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="graph-container">
+                    <div class="graph-container" style="padding-bottom: 20px;">
                         <div class="graph-title">Risk Score Goal</div>
                         <br>
                         <div>
-                            <div id="risk-score-label"> current: {{ latest_report.risk_score }} </div>
+                            <div id="risk-score-label"> Current: {{ latest_report.risk_score }} </div>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" style="background-color: #F9AD81; width:20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                                 <span class="dot"></span>
                             </div>
-                            <div id="risk-score-goal-label"> goal: {{risk_score_goal}} </div>
+                            <div id="risk-score-goal-label"> Goal: {{risk_score_goal}} </div>
                         </div>
                         <br>
                         <div class="graph-title">Actions to take</div>
-                        <br style="width:5px;">
+                        <br style="width:2px;">
                         <div class="advice-container">
                             <ol>
-                                <li>Drinking pattern: </li>
+                                <li style="padding-top: 10px;">Drinking pattern: </li>
                                 <li>Physical activity: </li>
                                 <li>Smoking pattern: </li>
                                 <li>Hba1c: </li>
                             </ol>
                         </div>
-                        <br>
                     </div>
                 </div>
             </div>
         </div>
         <div class="container-xxl px-4 mt-4">
-            <div class="graph-container">
-                <div class="graph-title">Your Risk Factor Analysis</div>
+            <div class="graph-container" style="padding-bottom: 5px;">
+                <div class="graph-title" style="padding-top: 5px; padding-bottom: 5px;">Your Risk Factor Analysis (From 3 Most Recent Diagnosis Report*)</div>
                 <div style="margin: auto; width: 50%; display: flex; align-items: center; justify-content: center">
                     <div>
                         <canvas id="barChart1" style="max-width: 250px; height: 200px;"></canvas>
@@ -71,6 +71,8 @@
                         <canvas id="barChart5" style="margin-left: 20px; max-width: 250px; height: 200px;"></canvas>
                     </div>
                 </div>
+                <div style="margin-top: 10px; margin-left: 3%; font-size: 11px; font-style: italic; color: grey;">*The orange line and label in the graph represent the average value of a diabetic person. For Hypertension status, 1 means normal, 2 means prehypertension, and 3 means hypertension</div>
+                <div style="margin-left: 3%; font-size: 11px; font-style: italic; color: grey;">*If you do not have enough (i.e. 3) diagnosis result, the value for earlier report(s) will not be shown. If you did not input blood test result, some graph(s) will not have a value</div>
             </div>
         </div>
 
@@ -90,20 +92,48 @@
                 var currentLabelPosition = current_risk*(79-8)/100 + 8;
                 progress_bar.setAttribute('aria-valuenow', Number(current_risk));
                 progress_bar.setAttribute('style','background-color: #F9AD81; width:'+ Number(current_risk) + '%');     
-                dot.setAttribute('style','height: 15px; width: 15px; background-color: red; border-radius: 50%; display: inline-block; position: absolute; top: 26%; left:'+Number(dotPosition)+'%');
-                label.setAttribute('style','position: absolute; top: 32%; left:'+Number(labelPosition)+'%');
+                dot.setAttribute('style','height: 15px; width: 15px; background-color: red; border-radius: 50%; display: inline-block; position: absolute; top: 24%; left:'+Number(dotPosition)+'%');
+                label.setAttribute('style','position: absolute; top: 30%; left:'+Number(labelPosition)+'%');
                 current_label.setAttribute('style','position: absolute; top: 16%; left:'+Number(currentLabelPosition)+'%');
             }
         </script>
 
         <script>
+            function replaceWithNull(x) {
+                if (x == 0) {
+                    return null
+                } else {
+                    return x
+                }
+            } 
+
+            function replaceWithNotAvailable(x) {
+                if (x == 'NA') {
+                    return "Not Available"
+                } else {
+                    return x
+                }
+            } 
+
+            function replaceWithHour(x) {
+                if (x != "NA") {
+                    x = x.slice(0,10)
+                    return x
+                } else {
+                    return 
+                }
+            }
+
             latest_diagnosis_date = '{{latest_diagnosis_date}}'
             second_latest_diagnosis_date = '{{second_diagnosis_date}}'
             third_latest_diagnosis_date = '{{third_diagnosis_date}}'
             fourth_latest_diagnosis_date = '{{fourth_diagnosis_date}}'
             fifth_latest_diagnosis_date = '{{fifth_diagnosis_date}}'
             trend_date_labels = [fifth_latest_diagnosis_date, fourth_latest_diagnosis_date, third_latest_diagnosis_date, second_latest_diagnosis_date, latest_diagnosis_date]
-            console.log(trend_date_labels)
+            for (var i = 0; i < trend_date_labels.length; i++ )  {
+                trend_date_labels[i] = replaceWithNotAvailable(trend_date_labels[i])
+            }
+            //console.log(trend_date_labels)
 
             latest_risk_score = Number('{{latest_report.risk_score}}')
             second_latest_risk_score = Number('{{second_latest_report.risk_score}}')
@@ -111,8 +141,11 @@
             fourth_latest_risk_score = Number('{{fourth_latest_report.risk_score}}')
             fifth_latest_risk_score = Number('{{fifth_latest_report.risk_score}}')
             risk_scores_data = [fifth_latest_risk_score, fourth_latest_risk_score, third_latest_risk_score, second_latest_risk_score, latest_risk_score]
-            console.log(risk_scores_data)
-            console.log(typeof(latest_risk_score))
+            for (var i = 0; i < risk_scores_data.length; i++ )  {
+                risk_scores_data[i] = replaceWithNull(risk_scores_data[i])
+            }
+            //console.log(risk_scores_data)
+            //console.log(latest_risk_score)
             const data = {
                 labels: trend_date_labels,
                 datasets: [{
@@ -126,21 +159,29 @@
                         color: "black",
                         anchor: 'end',
                         align: 'end',
-                        offset: 5
+                        offset: 2
                     }
                 }]
             };
 
             date_labels = [third_latest_diagnosis_date, second_latest_diagnosis_date, latest_diagnosis_date]
+            console.log(date_labels)
+            for (var i = 0; i < date_labels.length; i++ )  {
+                date_labels[i] = replaceWithHour(date_labels[i])
+            }
+            console.log(date_labels)
             latest_he = Number('{{latest_report.HE_HbA1c}}')
             second_he = Number('{{second_latest_report.HE_HbA1c}}')
             third_he = Number('{{third_latest_report.HE_HbA1c}}')
             he_data = [third_he, second_he, latest_he]
+            for (var i = 0; i < he_data.length; i++ )  {
+                he_data[i] = replaceWithNull(he_data[i])
+            }
             console.log(he_data)
             const data1 = {
                 labels: date_labels,
                 datasets: [{
-                    label: "Hemoglobin_A1c(%)",
+                    label: "Hemoglobin_A1c(%)*",
                     data: he_data,
                     borderWidth: 2,
                     backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
@@ -150,7 +191,7 @@
                         color: "black",
                         anchor: 'end',
                         align: 'end',
-                        offset: 2
+                        offset: 1
                     }
             }]
             };
@@ -159,6 +200,9 @@
             second_wc = Number('{{second_latest_report.HE_wc}}')
             third_wc = Number('{{third_latest_report.HE_wc}}')
             wc_data = [third_wc, second_wc, latest_wc]
+            for (var i = 0; i < wc_data.length; i++ )  {
+                wc_data[i] = replaceWithNull(wc_data[i])
+            }
             console.log(wc_data)
             const data2 = {
                 labels: date_labels,
@@ -173,7 +217,7 @@
                         color: "black",
                         anchor: 'end',
                         align: 'end',
-                        offset: 2
+                        offset: 1
                     }
                 }]
             };
@@ -182,11 +226,14 @@
             second_tg = Number('{{second_latest_report.HE_TG}}')
             third_tg = Number('{{third_latest_report.HE_TG}}')
             tg_data = [third_tg, second_tg, latest_tg]
+            for (var i = 0; i < tg_data.length; i++ )  {
+                tg_data[i] = replaceWithNull(tg_data[i])
+            }
             console.log(tg_data)
             const data3 = {
                 labels: date_labels,
                 datasets: [{
-                    label: "Triglycerides (mg/dL)",
+                    label: "Triglycerides (mg/dL)*",
                     data: tg_data,
                     borderWidth: 2,
                     barPercentage: 0.6,
@@ -196,7 +243,7 @@
                         color: "black",
                         anchor: 'end',
                         align: 'end',
-                        offset: 2
+                        offset: 1
                     }
                 }]
             };
@@ -205,11 +252,14 @@
             second_HP = Number('{{second_latest_report.HE_HP}}')
             third_HP = Number('{{third_latest_report.HE_HP}}')
             HP_data = [third_HP, second_HP, latest_HP]
+            for (var i = 0; i < HP_data.length; i++ )  {
+                HP_data[i] = replaceWithNull(HP_data[i])
+            }
             console.log(HP_data)
             const data4 = {
                 labels: date_labels,
                 datasets: [{
-                    label: "Hypertension Status (by test)",
+                    label: "Hypertension Status* (by test)",
                     data: HP_data,
                     borderWidth: 2,
                     barPercentage: 0.6,
@@ -217,9 +267,7 @@
                     backgroundColor: ["rgb(254, 233, 220)","rgb(251, 208, 182)","rgb(250, 180, 139)"],
                     datalabels: {
                         color: "black",
-                        anchor: 'end',
-                        align: 'end',
-                        offset: 2
+                        anchor: 'center',
                     }
                 }]
             };
@@ -228,6 +276,9 @@
             second_fat = Number('{{second_latest_report.N_FAT}}')
             third_fat = Number('{{third_latest_report.N_FAT}}')
             fat_data = [third_fat, second_fat, latest_fat]
+            for (var i = 0; i < fat_data.length; i++ )  {
+                fat_data[i] = replaceWithNull(fat_data[i])
+            }
             console.log(fat_data)
             const data5 = {
                 labels: date_labels,
@@ -242,7 +293,7 @@
                         color: "black",
                         anchor: 'end',
                         align: 'end',
-                        offset: 2
+                        offset: 1
                     }
                 }]
             };
@@ -383,9 +434,9 @@
                     ctx.restore();
 
                     // diabetic label
-                    ctx.font = '12px Arial';
+                    ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('6.5', width*1.16, y.getPixelForValue(7.2));
+                    ctx.fillText('6.5', width*1.15, y.getPixelForValue(7.2));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -405,9 +456,9 @@
                     ctx.restore();
 
                     // diabetic label
-                    ctx.font = '12px Arial';
+                    ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('88', width*1.13, y.getPixelForValue(95));
+                    ctx.fillText('88', width*1.14, y.getPixelForValue(95));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -427,9 +478,9 @@
                     ctx.restore();
 
                     // diabetic label
-                    ctx.font = '12px Arial';
+                    ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('150', width*1.15, y.getPixelForValue(175));
+                    ctx.fillText('150', width*1.14, y.getPixelForValue(175));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -449,9 +500,9 @@
                     ctx.restore();
 
                     // diabetic label
-                    ctx.font = '12px Arial';
+                    ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('3', width*1.1, y.getPixelForValue(3.2));
+                    ctx.fillText('3', width*1.11, y.getPixelForValue(2.8));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -471,9 +522,9 @@
                     ctx.restore();
 
                     // diabetic label
-                    ctx.font = '12px Arial';
+                    ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('32', width*1.13, y.getPixelForValue(45));
+                    ctx.fillText('32', width*1.14, y.getPixelForValue(45));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -549,7 +600,7 @@
                 options: {
                     scales: {
                         y: {
-                            max: 4,
+                            max: 3,
                             min: 0,
                         }
                     }
