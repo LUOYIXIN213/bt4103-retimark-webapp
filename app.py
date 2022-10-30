@@ -465,6 +465,10 @@ def diagnosis_user():
 
 
             #store all data in dic and upload to database
+            advice_list = []
+            advice_link_list = []
+            advice_list, advice_link_list = top_advice(bloodtest,HE_HbA1c,HE_TG,HE_HP,pa_totMET,HE_HDL_st2,HE_HTG,HE_dbp,HE_sbp,HE_BUN,sm_presnt,HE_crea,HE_obe,HE_HCHOL,HE_BMI)
+            
             diagnosis_report = {"diagnosis_time": datetime.datetime.now(tz=datetime.timezone.utc),
                                 "diagnosed_class": predicted_class, "risk_score": rounded_risk_score,
                                 "risk_score_glucose_25": risk_score_glucose_25, "predicted_class_glucose_25": predicted_class_glucose_25,
@@ -472,6 +476,7 @@ def diagnosis_user():
                                 "risk_score_glucose_75": risk_score_glucose_75, "predicted_class_glucose_75": predicted_class_glucose_75,
                                 "risk_score_glucose_100": risk_score_glucose_100,
                                 "predicted_class_glucose_100": predicted_class_glucose_100,
+                                "advice_list": advice_list, "advice_link_list": advice_link_list,
                                 "sex": sex, "age": age, "HE_ht": HE_ht, "HE_wt": HE_wt, "HE_wc": HE_wc, "HE_BMI": HE_BMI, "HE_obe": HE_obe,
                                 "bloodtest": bloodtest, "HE_sbp": HE_sbp, "HE_dbp": HE_dbp, "HE_chol": HE_chol, "HE_HDL_st2": HE_HDL_st2, "HE_TG": HE_TG,
                                 "HE_glu": HE_glu, "HE_HbA1c": HE_HbA1c, "HE_BUN": HE_BUN, "HE_crea": HE_crea,
@@ -486,7 +491,7 @@ def diagnosis_user():
             report_id = past_report_ref.id
             print(report_id)
             print(diagnosis_report)
-            if 'bloodtest' == 1:
+            if bloodtest == 1:
                 return render_template('report_detail_BT.html', report = diagnosis_report)
             else :
                 return render_template('report_detail_noBT.html', report = diagnosis_report)
@@ -799,11 +804,11 @@ def report_page():
     report_list = []
     for report in past_reports:
         report_list.append(report.to_dict())
-        print(f'{report.id} => {report.to_dict()}')
+        #print(f'{report.id} => {report.to_dict()}')
     #print(report_list)
     for report in report_list:
         report['diagnosis_time'] = (report['diagnosis_time'] + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
-        print(report['diagnosis_time'])
+        #print(report['diagnosis_time'])
     return render_template('report.html', past_reports = report_list)
     
 
@@ -827,76 +832,105 @@ def report_detail_page():
                 report = doc.to_dict()
         #print(report)
         if report['bloodtest'] == 1:
-            print(report['bloodtest'])
+            #print(report['bloodtest'])
+            #print(report['advice_list'][1], report['advice_link_list'][1])
             return render_template('report_detail_BT.html', report = report)
         else :
-            print(report['bloodtest'])
+            #print(report['bloodtest'])
+            #print(report['advice_list'][1], report['advice_link_list'][1])
             return render_template('report_detail_noBT.html', report = report)
 
 #@app.route('/diagnosis_report')
 #def diagnosis_report_page():
 #    return render_template('report_detail.html', report = diagnosis_report)
 
-#take in an array of selected feature values, ordered by importance (follow order of featureName will do) 
+#take in  feature values
 #return top 3 most important features with values exceeding diabetic level
-featureValue = [23, 171, 4, 22, 100, 23, 55, 13, 22, 50, 133]
-def top_advice(featureValue):
-    if len(featureValue) == 11:
-        HE_HbA1c_diabetic = 7.248061389337642
-        #HE_DMfh_diabetic = 0
-        #HE_wc_diabetic = 87.8986268174475
-        HE_TG_diabetic = 170.07108239095314
-        HE_HP_diabetic = 3.0
-        pa_totMET_diabetic = 1533.4665589660744
-        HE_HDL_st2_diabetic = 46.02331156378242
-        HE_HTG_diabetic = 0
-        HE_dbp_diabetic = 74.6373182552504
-        #DI3_dg_diabetic = 0
-        HE_sbp_diabetic = 126.7011308562197
-        #DI4_dg_diabetic = 0
-        HE_BUN_diabetic = 17.04604200323102
-        sm_presnt_diabetic = 0
-        HE_crea_diabetic = 0.8868659127625202 
-        diabeticValue = [HE_HbA1c_diabetic, HE_TG_diabetic, HE_HP_diabetic, pa_totMET_diabetic, HE_HDL_st2_diabetic, 
-                        HE_HTG_diabetic, HE_dbp_diabetic, HE_sbp_diabetic, HE_BUN_diabetic, sm_presnt_diabetic,HE_crea_diabetic] #ordered by importance
+#test
+# bloodtest = 0
+# HE_HbA1c = 7
+# HE_TG = 170
+# HE_HP = 4
+# pa_totMET = 1534
+# HE_HDL_st2 = 47
+# HE_HTG = 0
+# HE_dbp = 74.6373182552504
+# HE_sbp = 126.7011308562197
+# HE_BUN = 17.04604200323102
+# sm_presnt = 1
+# HE_crea = 0.8868659127625202 
+# HE_obe = 4
+# HE_HCHOL = 0
+# HE_BMI = 26
+def top_advice(bloodtest,HE_HbA1c,HE_TG,HE_HP,pa_totMET,HE_HDL_st2,HE_HTG,HE_dbp,HE_sbp,HE_BUN,sm_presnt,HE_crea,HE_obe,HE_HCHOL,HE_BMI):
+    featureValue = []
+    if bloodtest == 1:
+        featureValue = [HE_HbA1c,HE_TG,HE_HP,pa_totMET,HE_HDL_st2,HE_HTG,HE_dbp,HE_sbp,HE_BUN,sm_presnt,HE_crea]
+
+        HE_HbA1c_normal = 5.6238456955615135
+        HE_TG_normal  = 133.24337205838546
+        HE_HP_normal  = 1
+        pa_totMET_normal  = 1729.2093535895146
+        HE_HDL_st2_normal  = 50.920450758467354
+        HE_HTG_normal  = 0
+        HE_dbp_normal  = 76.6131963062258
+        HE_sbp_normal  = 121.27256478999107
+        HE_BUN_normal  =  15.61423890378314
+        sm_presnt_normal  = 0
+        HE_crea_normal  = 0.8107819481680072
+        normalValue = [HE_HbA1c_normal, HE_TG_normal, HE_HP_normal, pa_totMET_normal, HE_HDL_st2_normal, 
+                        HE_HTG_normal, HE_dbp_normal, HE_sbp_normal, HE_BUN_normal, sm_presnt_normal,HE_crea_normal] #ordered by importance
         featureName = ["Hemoglobin_A1c (%)", "Triglycerides (mg/dL)", "Hypertension status",
                        "Total MET (min/week)", "HDL cholesterol (mg/dL)", "Hyper triglycerides status", "Diastolic blood pressure (mmHg)", 
                         "Systolic blood pressure (mmHg)", "Blood urea nitrogen (mg/dL)", "Current smoking status", 
                         "Blood serum creatinine (mg/dL)"] #ordered by importance
-        adviceList = ["Reduce Hemoglobin_A1c", "Reduce Triglycerides", "About hypertension"] #same order
+        adviceList = ["Reduce Hemoglobin_A1c:", "Reduce Triglycerides:", "About hypertension:","Physical activity and diabetes:",
+                      "Cholesteral and diabetes:", "Reduce hypertriglycerides:", "Diastolic blood pressure:",
+                      "Systolic blood pressure:", "About blood urea nitrogen", "Smoking and diabetes:", "About blood serum creatinine"] #same order
         adviceLink = ["https://www.everydayhealth.com/type-2-diabetes/treatment/ways-lower-your-a1c/",
                      "https://www.webmd.com/cholesterol-management/lowering-triglyceride-levels",
-                     "https://www.medicalnewstoday.com/articles/150109#diet"]
+                     "https://www.medicalnewstoday.com/articles/150109#diet",
+                     "https://www.cdc.gov/diabetes/managing/active.html#:~:text=If%20you%20have%20diabetes%2C%20being,heart%20disease%20and%20nerve%20damage.",
+                     "https://www.heart.org/en/health-topics/diabetes/diabetes-complications-and-risks/cholesterol-abnormalities--diabetes",
+                     "https://my.clevelandclinic.org/health/diseases/23942-hypertriglyceridemia#:~:text=A%20normal%20triglyceride%20level%20in,150%20mg%2FdL%20or%20higher.",
+                     "https://www.uab.edu/news/research/item/10393-diastolic-blood-pressure-how-low-is-too-low",
+                     "https://www.cdc.gov/bloodpressure/about.htm",
+                     "https://labs.selfdecode.com/blog/causes-of-high-or-low-blood-urea-nitrogen-bun/",
+                     "https://www.cdc.gov/tobacco/campaign/tips/diseases/diabetes.html#:~:text=We%20now%20know%20that%20smoking%20is%20one%20cause%20of%20type%202%20diabetes.&text=In%20fact%2C%20people%20who%20smoke,people%20who%20don't%20smoke.&text=People%20with%20diabetes%20who%20smoke,and%20with%20managing%20their%20condition.",
+                     "https://www.medicalnewstoday.com/articles/322380"]
     else:
-        #HE_DMfh_diabetic = 0
-        #HE_wc_diabetic = 87.8986268174475
-        HE_HP_diabetic = 3.0
-        pa_totMET_diabetic = 1533.4665589660744
-        HE_HTG_diabetic = 0
-        #DI3_dg_diabetic = 0
-        #DI4_dg_diabetic = 0
-        sm_presnt_diabetic = 0
-        HE_obe_diabetic = 4
-        HE_HCHOL_diabetic = 0
-        HE_BMI_diabetic = 25.21610630227172
-        diabeticValue = [HE_HP_diabetic, pa_totMET_diabetic, HE_HTG_diabetic, sm_presnt_diabetic, HE_obe_diabetic, HE_HCHOL_diabetic, HE_BMI_diabetic]
-        featureName = ["Hypertension status", "Total MET (min/week)", "Hyper triglycerides status", "Current smoking status", 
+        featureValue = [pa_totMET,HE_HTG,sm_presnt,HE_obe,HE_HCHOL,HE_BMI]
+        pa_totMET_normal  = 1729.2093535895146
+        HE_HTG_normal  = 0
+        sm_presnt_normal  = 0
+        HE_obe_normal = 2
+        HE_HCHOL_normal = 0
+        HE_BMI_normal = 23.879052007717448
+        normalValue = [pa_totMET_normal, HE_HTG_normal, sm_presnt_normal, HE_obe_normal, HE_HCHOL_normal, HE_BMI_normal]
+        featureName = ["Total MET (min/week)", "Hyper triglycerides status", "Current smoking status", 
                        "Obesity status", "Hyperlipidemia status", "Body mass index (kg/m2)"]
-        adviceList = ["About hypertension"] #same order
-        adviceLink = ["https://www.medicalnewstoday.com/articles/150109#diet"]
+        adviceList = ["Physical activity and diabetes:", "Reduce hypertriglycerides:", "Smoking and diabetes:", 
+                     "Obesity and diabetes:","About hyperlipidemia:", "BMI as a risk factor of diabetes:"] #same order
+        adviceLink = ["https://www.cdc.gov/diabetes/managing/active.html#:~:text=If%20you%20have%20diabetes%2C%20being,heart%20disease%20and%20nerve%20damage.",
+                      "https://my.clevelandclinic.org/health/diseases/23942-hypertriglyceridemia#:~:text=A%20normal%20triglyceride%20level%20in,150%20mg%2FdL%20or%20higher.",
+                      "https://www.cdc.gov/tobacco/campaign/tips/diseases/diabetes.html#:~:text=We%20now%20know%20that%20smoking%20is%20one%20cause%20of%20type%202%20diabetes.&text=In%20fact%2C%20people%20who%20smoke,people%20who%20don't%20smoke.&text=People%20with%20diabetes%20who%20smoke,and%20with%20managing%20their%20condition.",
+                      "https://www.diabetes.co.uk/diabetes-and-obesity.html",
+                      "https://www.healthhub.sg/a-z/diseases-and-conditions/622/hyperlipidemia",
+                      "https://www.escardio.org/The-ESC/Press-Office/Press-releases/Body-mass-index-is-a-more-powerful-risk-factor-for-diabetes-than-genetics#:~:text=The%20highest%20BMI%20group%20had,groups%2C%20regardless%20of%20genetic%20risk."]
     topAdvice = []
     topAdviceLink = []
     count = 0
     for i in range(len(featureValue)):
+        print(featureValue[i])
         if count == 3:
             break
-        if  featureValue[i] > diabeticValue[i]:
+        if  featureValue[i] > normalValue[i]:
             topAdvice.append(adviceList[i])
             topAdviceLink.append(adviceLink[i])            
             count += 1
     return topAdvice, topAdviceLink
 
-print(top_advice(featureValue))
+# print(top_advice(bloodtest,HE_HbA1c,HE_TG,HE_HP,pa_totMET,HE_HDL_st2,HE_HTG,HE_dbp,HE_sbp,HE_BUN,sm_presnt,HE_crea,HE_obe,HE_HCHOL,HE_BMI))
 
 @app.route('/appointment')
 def appointment_page():

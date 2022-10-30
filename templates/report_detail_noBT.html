@@ -48,8 +48,9 @@
         margin-left: 250px;
         font-weight: bold;
       }
-      ol {
-        margin-left: 20px;
+      .inline {
+        display: flex; 
+        margin-left: 30px;
       }
     </style>
   </head>
@@ -104,27 +105,26 @@
         <div class="indivChart">
           <canvas id="myChart10"></canvas>   
         </div>
-        <div class="indivChart">
-          <canvas id="myChart11"></canvas>   
-        </div>
       </div>
     </div>
     <div class="chartCard">
         <div class="textBox">
-            <h3 id="advice">Advices</h3>
-            <ol>
-                <li id="adviceOne">Drinking pattern: </li>
-                <li id="adviceTwo">Physical activity: </li>
-                <li id="adviceThree">Smoking pattern: </li>
-            </ol>
+          <h3 id="advice">Advices</h3>
+          
+          <div class="inline" style="display:flex">
+            <p class="adviceName">{{ report.advice_list.0 }}</p>
+            <a href="{{ report.advice_link_list.0 }}" type="button" style="margin-left: 20px;">Learn more</a>
+          </div>
+          
         </div>
     </div>
     <div class="chartCard">
       <div class="inline">
-        <a href="{{ url_for('appointment_page') }}" type="button" class="btn btn-outline-warning"
+        <a href="{{ url_for('appointment_page') }}" type="button" class="btn btn-warning"
         style="margin-bottom: 10px; margin-left: auto; margin-right: auto;">Make Appointment</a>
       </div>
     </div>
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
@@ -157,7 +157,6 @@
     // setup block
     const HE_DMfh = '{{ report.HE_DMfh }}';
     const HE_wc = '{{ report.HE_wc }}';
-    const HE_HP = '{{ report.HE_HP }}';
     const pa_totMET = '{{ report.pa_totMET }}';
     const HE_HTG = '{{ report.HE_HTG }}';
     const DI3_dg = '{{ report.DI3_dg }}';
@@ -169,7 +168,6 @@
 
     const HE_DMfh_diabetic = 0;
     const HE_wc_diabetic = 87.8986268174475;
-    const HE_HP_diabetic = 3.0;
     const pa_totMET_diabetic = 1533.4665589660744;
     const HE_HTG_diabetic = 0;
     const DI3_dg_diabetic = 0;
@@ -181,7 +179,6 @@
 
     const HE_DMfh_normal  = 0;
     const HE_wc_normal  = 82.05558534405719;
-    const HE_HP_normal  = 1;
     const pa_totMET_normal  = 1729.2093535895146;
     const HE_HTG_normal  = 0;
     const DI3_dg_normal  = 0;
@@ -191,12 +188,12 @@
     const HE_HCHOL_normal = 0;
     const HE_BMI_normal = 23.879052007717448;
 
-    const featureValue = [HE_DMfh, HE_wc, HE_HP, pa_totMET, HE_HTG, DI3_dg, DI4_dg, sm_presnt, HE_obe, HE_HCHOL, HE_BMI]
-    const diabeticValue = [HE_DMfh_diabetic, HE_wc_diabetic, HE_HP_diabetic, pa_totMET_diabetic, HE_HTG_diabetic, 
+    const featureValue = [HE_DMfh, HE_wc, pa_totMET, HE_HTG, DI3_dg, DI4_dg, sm_presnt, HE_obe, HE_HCHOL, HE_BMI]
+    const diabeticValue = [HE_DMfh_diabetic, HE_wc_diabetic, pa_totMET_diabetic, HE_HTG_diabetic, 
                           DI3_dg_diabetic, DI4_dg_diabetic, sm_presnt_diabetic, HE_obe_diabetic, HE_HCHOL_diabetic, HE_BMI_diabetic]
-    const normalValue = [HE_DMfh_normal, HE_wc_normal, HE_HP_normal, pa_totMET_normal, HE_HTG_normal, DI3_dg_normal, DI4_dg_normal, 
+    const normalValue = [HE_DMfh_normal, HE_wc_normal, pa_totMET_normal, HE_HTG_normal, DI3_dg_normal, DI4_dg_normal, 
                         sm_presnt_normal, HE_obe_normal, HE_HCHOL_normal, HE_BMI_normal]
-    const featureName = ["     Diabetes family history", " Waist circumference (cm)", "         Hypertension status", 
+    const featureName = ["     Diabetes family history", " Waist circumference (cm)", 
                          "       Total MET (min/week)", "Hyper triglycerides status", "               Stroke diagnosis", 
                          "    Cardiovascular disease", "    Current smoking status", "                  Obesity status",
                         "      Hyperlipidemia status", "Body mass index (kg/m2)"]
@@ -470,28 +467,7 @@
         barThickness: 23
       }]
     };
-    //eleventh variable
-    const data11 = {
-      labels: [featureName[10]],
-      datasets: [{
-        label: 'Feature value',
-        data: [featureValue[10]],
-        backgroundColor: firstLayerBackground[10],
-        borderColor: firstLayerBorder[10],
-        borderWidth: 1,
-        barPercentage: 0.6,
-        barThickness: 23
-      },
-      {
-        label: 'Exceed value',
-        data: [secondLayer[10]],
-        backgroundColor: secondLayerBackground[10],
-        borderColor: secondLayerBorder[10],
-        borderWidth: 1,
-        barPercentage: 0.6,
-        barThickness: 23
-      }]
-    };
+    
     
     
     //Cut off lines
@@ -712,28 +688,6 @@
         ctx.save();
         ctx.strokeStyle = 'green';
         ctx.strokeRect(x.getPixelForValue(normalValue[9]), top, 0, bottom);
-        ctx.restore();
-      }
-    };
-    const diabeticLine11 = {
-      id: "diabeticLine11",
-      beforeDraw(chart, args, options) {
-        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
-          {x, y} } = chart;
-        ctx.save();
-        ctx.strokeStyle = 'red';
-        ctx.strokeRect(x.getPixelForValue(diabeticValue[10]), top, 0, bottom);
-        ctx.restore();
-      }
-    };
-    const normalLine11 = {
-      id: "normalLine11",
-      beforeDraw(chart, args, options) {
-        const {ctx, chartArea: { top, right, bottom, left, width, height}, scales:
-          {x, y} } = chart;
-        ctx.save();
-        ctx.strokeStyle = 'green';
-        ctx.strokeRect(x.getPixelForValue(normalValue[10]), top, 0, bottom);
         ctx.restore();
       }
     };
@@ -1030,35 +984,7 @@
         },
         plugins: [diabeticLine10, normalLine10]
     };
-    const config11 = {
-      type: 'bar',
-        data: data11,
-        options: {
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
-            maintainAspectRatio: false,
-            indexAxis: 'y',
-            scales: {
-                x: { 
-                    stacked: true,
-                    grid : {
-                      drawOnChartArea: false,
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    stacked: true,
-                    grid : {
-                        drawOnChartArea: false
-                    }
-                }
-            },
-        },
-        plugins: [diabeticLine11, normalLine11]
-    };
+    
     
     
     // render init block
@@ -1101,10 +1027,6 @@
     const myChart10 = new Chart(
       document.getElementById('myChart10'),
       config10
-    );
-    const myChart11 = new Chart(
-      document.getElementById('myChart11'),
-      config11
     );
     
     </script>

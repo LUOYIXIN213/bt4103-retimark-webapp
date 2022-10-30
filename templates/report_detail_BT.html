@@ -49,8 +49,11 @@
         font-size: 150%;
         font-weight: bold;
       }
-      ol {
+      ul {
         margin-left: 20px;
+      }
+      .adviceLink {
+        list-style-type: none;
       }
     </style>
   </head>
@@ -121,21 +124,27 @@
     </div>
     <div class="chartCard">
         <div class="textBox">
-            <h3 id="advice">Advices</h3>
-            <ol>
-                <li id="adviceOne">Drinking pattern: </li>
-                <li id="adviceTwo">Physical activity: </li>
-                <li id="adviceThree">Smoking pattern: </li>
-            </ol>
+          <h3 id="advice">Advices</h3>
+          <div class="inline" style="display:flex">
+            <p class="adviceName">{{ report.advice_list.0 }}</p>
+            <a href="{{ report.advice_link_list.0 }}" type="button" style="margin-left: 20px;">Learn more</a>
+          </div>
+          <div class="inline" style="display:flex">
+            <p class="adviceName">{{ report.advice_list.1 }}</p>
+            <a href="{{ report.advice_link_list.1 }}" type="button" style="margin-left: 20px;">Learn more</a>
+          </div>
+          <div class="inline" style="display:flex">
+            <p class="adviceName">{{ report.advice_list.2 }}</p>
+            <a href="{{ report.advice_link_list.2 }}" type="button" style="margin-left: 20px;">Learn more</a>
+          </div>
         </div>
     </div>
     <div class="chartCard">
       <div class="inline">
-        <a href="{{ url_for('appointment_page') }}" type="button" class="btn btn-outline-warning"
+        <a href="{{ url_for('appointment_page') }}" type="button" class="btn btn-warning"
         style="margin-bottom: 10px; margin-left: auto; margin-right: auto;">Make Appointment</a>
       </div>
     </div>
-
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
