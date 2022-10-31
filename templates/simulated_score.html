@@ -319,7 +319,7 @@
                     const { ctx, chartArea: {top, bottom, left, right, width}, scales: {x,y} } = chart;
                     ctx.save();
 
-                    bgColors(3, 3, 'rgba(194,41,41,0.15)')
+                    bgColors(3, 4, 'rgba(194,41,41,0.15)')
                     bgColors(0, 3,'rgba(67,161,69,0.15)')
 
                     function bgColors(low, high, color) {
@@ -547,7 +547,10 @@
                 options: {
                     scales: {
                         y: {
-                            max: 3,
+                            ticks: {
+                                precision: 0
+                            },
+                            max: 4,
                             min: 0,
                         }
                     }

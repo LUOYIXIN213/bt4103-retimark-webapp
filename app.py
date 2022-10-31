@@ -39,6 +39,7 @@ person = {"is_logged_in": False, "username": "", "fullname": "", "email": "", "u
 diagnosis_report = {}
 latest_diagnosis_date = ''
 report_id = ""
+diagnosis_date_str = ''
 
 #initialze for simulation
 latest_diagnosis = {}
@@ -503,8 +504,15 @@ def diagnosis_user():
 @app.route('/simulation', methods=['POST', 'GET'])
 def simulation_page():
     if person["is_logged_in"] == True:
-        latest_report = {}
+        latest_report = {"age": 0, "HE_ht": 0, "HE_wt": 0, "HE_wc": 0,
+                         "HE_sbp": 0, "HE_dbp": 0, "HE_chol": 0, "HE_HDL_st2": 0, "HE_TG": 0,
+                                "HE_glu": 0, "HE_HbA1c": 0, "HE_BUN": 0, "HE_crea": 0,
+                                "N_PROT": 0, "N_FAT": 0, "N_CHO": 0,
+                                "pa_vig_tm": 0,
+                                "pa_mod_tm": 0, "pa_walkMET": 0, "pa_aerobic": 0,
+                                "pa_vigMET": 0, "pa_modMET": 0, "pa_totMET": 0}
         diagnosis_str = ''
+        diagnosis_date = ''
         past_reports_ref = db.collection("users").document(person["uid"]).collection("past_reports")
         query = past_reports_ref.order_by("diagnosis_time", direction=firestore.Query.DESCENDING).limit(1)
         results = query.stream()
@@ -515,13 +523,16 @@ def simulation_page():
             latest_report = report_list[0]
             date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
             diagnosis_str = date_time_str.strftime("%Y-%m-%d %H:%M:%S")
+            diagnosis_date = date_time_str.strftime("%Y-%m-%d")
             print(report_list[0])
         global latest_diagnosis
         latest_diagnosis = latest_report
         global latest_diagnosis_date
         latest_diagnosis_date = diagnosis_str
-        return render_template('simulation.html', latest_report = latest_report, diagnosis_date = diagnosis_str)
-
+        global diagnosis_date_str
+        diagnosis_date_str = diagnosis_date
+        return render_template('simulation.html', latest_report = latest_report, diagnosis_date = diagnosis_str,
+                               diagnosis_date_str = diagnosis_date_str)
     else:
         return redirect(url_for('login'))
 
@@ -579,13 +590,13 @@ def simulation_user():
         sm_presnt = float(result.get('sm_presnt'))
         pa_vig_tm = float(result.get('pa_vig_tm'))
         pa_mod_tm = float(result.get('pa_mod_tm'))
-        pa_walkMET = float(result.get('pa_walkMET')) * 3.3
+        pa_walkMET = float(result.get('pa_walkMET'))
         pa_aerobic = float(result.get('pa_aerobic'))
 
         # preprocess for physical activity
-        pa_vigMET = 8 * pa_vig_tm
-        pa_modMET = 4 * pa_mod_tm
-        pa_totMET = pa_walkMET + pa_modMET + pa_vigMET
+        pa_vigMET = round(8 * pa_vig_tm, 2)
+        pa_modMET = round(4 * pa_mod_tm, 2)
+        pa_totMET = round(pa_walkMET * 3.3 + pa_modMET + pa_vigMET, 2)
 
         # get history disease
         DI3_dg = float(result.get('DI3_dg'))
@@ -766,7 +777,7 @@ def simulation_user():
                 rounded_risk_score = round((risk_score_glucose_25 + risk_score_glucose_50 + risk_score_glucose_75 + risk_score_glucose_100) / 4)
 
             # store all data in dic
-            simulation_report = {"diagnosis_time": (datetime.datetime.now(tz=datetime.timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S"),
+            simulation_report = {"diagnosis_time": (datetime.datetime.now(tz=datetime.timezone.utc) + timedelta(hours=8)).strftime("%Y-%m-%d"),
                                 "diagnosed_class": predicted_class, "risk_score": rounded_risk_score,
                                 "risk_score_glucose_25": risk_score_glucose_25,
                                 "predicted_class_glucose_25": predicted_class_glucose_25,
@@ -791,7 +802,7 @@ def simulation_user():
                                 "HE_HCHOL": HE_HCHOL, "HE_HTG": HE_HTG}
 
             return render_template('simulated_score.html', simulated_report = simulation_report, latest_report = latest_diagnosis,
-                                   diagnosis_time = latest_diagnosis_date)
+                                   diagnosis_time = diagnosis_date_str)
         except Exception as e:
             print(e)
             return render_template('simulation.html')
