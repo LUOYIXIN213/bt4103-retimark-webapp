@@ -44,9 +44,11 @@
         background: antiquewhite;
         /*margin-bottom: auto;*/
       }
-      #risk-score {
-        margin-left: 250px;
+      .center {
+        display: flex;
         font-weight: bold;
+        align-items: center;
+        justify-content: center;
       }
       .inline {
         display: flex; 
@@ -59,11 +61,13 @@
     <div class="card mb-3" style="width: 80%; max-height: 500px; margin: auto;">
       <img src="/static/PIC/report.png" class="card-img-top" alt="..."
           style="width: 300px; height: 182px; margin-bottom: 10px; margin-left: auto; margin-right: auto; margin-top: 10px;">
-          <div id="risk-score">
-            <p>If your glucose level is between 0 to 25th percentile, Your risk score will be {{ report.risk_score_glucose_25 }}</p>
-            <p>If your glucose level is between 25th to 50th percentile, Your risk score will be {{ report.risk_score_glucose_50 }}</p>
-            <p>If your glucose level is between 50th to 75th percentile, Your risk score will be {{ report.risk_score_glucose_75 }}</p>
-            <p>If your glucose level is between 75th to 100 percentile, Your risk score will be {{ report.risk_score_glucose_100 }}</p>
+          <div class="center">
+            <div id="risk-score">
+              <p>If your glucose level is between 0 to 25th percentile, Your risk score will be {{ report.risk_score_glucose_25 }}</p>
+              <p>If your glucose level is between 25th to 50th percentile, Your risk score will be {{ report.risk_score_glucose_50 }}</p>
+              <p>If your glucose level is between 50th to 75th percentile, Your risk score will be {{ report.risk_score_glucose_75 }}</p>
+              <p>If your glucose level is between 75th to 100 percentile, Your risk score will be {{ report.risk_score_glucose_100 }}</p>
+            </div>
           </div>
     </div>
     <div class="chartCard">
@@ -113,7 +117,11 @@
           
           <div class="inline" style="display:flex">
             <p class="adviceName">{{ report.advice_list.0 }}</p>
-            <a href="{{ report.advice_link_list.0 }}" type="button" style="margin-left: 20px;">Learn more</a>
+            {% if report.advice_list.length == 1 %}
+              <a href="{{ report.advice_link_list.0 }}" type="button" style="margin-left: 20px;">Learn more</a>
+            {% else %}
+              <a>None</a>
+            {% endif %}
           </div>
           
         </div>
