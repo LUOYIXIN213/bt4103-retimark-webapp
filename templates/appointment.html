@@ -4,18 +4,20 @@
 {% endblock %}
 
 {% block content %}
-<head></head>
-<body>
     <h1>Make an Appointment</h1>
     <div class="clinic">
         <div class="text">
             <div class="inline">
-                <img src="/static/PIC/Clinic.png">
+                <img src="/static/PIC/Clinic.png" style="width: 30px;
+                height: 30px;
+                margin-right: 10px;">
                 <p class="name">Partner clinic: &ensp;</p>
                 <p>Asan Medical Center, Seoul, Korea</p>
             </div>
             <div class="inline">
-                <img src="/static/PIC/Address.png">
+                <img src="/static/PIC/Address.png" style="width: 30px;
+                height: 30px;
+                margin-right: 10px;">
                 <p class="name">Address: &ensp;</p>
                 <p>88, OLYMPIC-RO 43-GIL, SONGPA-GU, SEOUL 05505, KOREA</p>
             </div>
@@ -29,12 +31,16 @@
     <div class="clinic">
         <div class="text">
             <div class="inline">
-                <img src="/static/PIC/Clinic.png">
+                <img src="/static/PIC/Clinic.png" style="width: 30px;
+                height: 30px;
+                margin-right: 10px;">
                 <p class="name">Partner clinic: &ensp;</p>
                 <p>Seoul National University Hopsital, Seoul, Korea</p>
             </div>
             <div class="inline">
-                <img src="/static/PIC/Address.png">
+                <img src="/static/PIC/Address.png" style="width: 30px;
+                height: 30px;
+                margin-right: 10px;">
                 <p class="name">Address: &ensp;</p>
                 <p>101, Daehak-ro Jongno-gu, Seoul 03080, Rep. of Korea</p>
             </div>
@@ -48,12 +54,16 @@
     <div class="clinic">
         <div class="text">
             <div class="inline">
-                <img src="/static/PIC/Clinic.png">
+                <img src="/static/PIC/Clinic.png" style="width: 30px;
+                height: 30px;
+                margin-right: 10px;">
                 <p class="name">Partner clinic: &ensp;</p>
                 <p>Seoul National University Bundang Hospital, Seongnam-si, Korea</p>
             </div>
             <div class="inline">
-                <img src="/static/PIC/Address.png">
+                <img src="/static/PIC/Address.png" style="width: 30px;
+                height: 30px;
+                margin-right: 10px;">
                 <p class="name">Address: &ensp;</p>
                 <p>82 Gumi-ro, 173 Beon-gil, Gumi-ro, Bundang-gu, Seongnam-si, Gyeonggi-do, South Korea</p>
             </div>
@@ -65,10 +75,14 @@
     </div>
     <style>
         h1 {
-            text-align: center;
-            margin-top: 50px;
-            margin-bottom: 50px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: xx-large;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
         .clinic {
             width: 800px;
             background-color: white;
@@ -82,19 +96,15 @@
             padding-top: 20px;
             padding-left: 10px;
         }
+
         .inline {
-            display: flex; 
+            display: flex;
             margin-left: 30px;
         }
         .name {
             color: #ee6617;
             display: inline;
         }
-        img {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-        }
+
     </style>
-</body>
 {% endblock %}

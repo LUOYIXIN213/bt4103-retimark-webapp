@@ -937,9 +937,6 @@ def appointment_page():
     return render_template('appointment.html')
 
 
-@app.route('/leaderboard')
-def leaderboard_page():
-    return render_template('leaderboard.html')
 
 
 @app.route('/about')
