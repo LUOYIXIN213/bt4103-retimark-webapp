@@ -73,6 +73,7 @@
     <div class="chartCard">
         <div class="textBox">
           <p>* How to interpret the bar chart below:</p>
+          <p>The features below are ranked by feature importance</p>
           <p>Look for the color of the bar!</p>
           <p>If the bar is red, it means your value has exceed the diabetic average; If the bar is green, it means your value is kept to normal.</p>
         </div>
@@ -117,10 +118,23 @@
           
           <div class="inline" style="display:flex">
             <p class="adviceName">{{ report.advice_list.0 }}</p>
-            {% if report.advice_list.length == 1 %}
-              <a href="{{ report.advice_link_list.0 }}" type="button" style="margin-left: 20px;">Learn more</a>
+            {% if report.advice_link_list.0 != "" %}
+              <a id="link" href="{{ report.advice_link_list.0 }}" style="margin-left: 20px;">Learn more</a>
             {% else %}
-              <a>None</a>
+            {% endif %}
+          </div>
+          <div class="inline" style="display:flex">
+            <p class="adviceName">{{ report.advice_list.1 }}</p>
+            {% if report.advice_link_list.1 != "" %}
+              <a id="link" href="{{ report.advice_link_list.1 }}" style="margin-left: 20px;">Learn more</a>
+            {% else %}
+            {% endif %}
+          </div>
+          <div class="inline" style="display:flex">
+            <p class="adviceName">{{ report.advice_list.2 }}</p>
+            {% if report.advice_link_list.2 != "" %}
+              <a id="link" href="{{ report.advice_link_list.2 }}" style="margin-left: 20px;">Learn more</a>
+            {% else %}
             {% endif %}
           </div>
           
@@ -132,7 +146,7 @@
         style="margin-bottom: 10px; margin-left: auto; margin-right: auto;">Make Appointment</a>
       </div>
     </div>
-
+    
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
@@ -716,6 +730,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -803,6 +820,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -832,6 +852,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -861,6 +884,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -890,6 +916,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -919,6 +948,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 1
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -948,6 +980,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }

@@ -928,6 +928,22 @@ def top_advice(bloodtest,HE_HbA1c,HE_TG,HE_HP,pa_totMET,HE_HDL_st2,HE_HTG,HE_dbp
             topAdvice.append(adviceList[i])
             topAdviceLink.append(adviceLink[i])            
             count += 1
+    if len(topAdvice) == 0:
+        topAdvice.append("")
+        topAdvice.append("")
+        topAdvice.append("")
+        topAdviceLink.append("")
+        topAdviceLink.append("")
+        topAdviceLink.append("")
+    elif len(topAdvice) == 1:
+        topAdvice.append("")
+        topAdvice.append("")
+        topAdviceLink.append("")
+        topAdviceLink.append("")
+    elif len(topAdvice) == 2:
+        topAdvice.append("")
+        topAdviceLink.append("")
+
     return topAdvice, topAdviceLink
 
 # print(top_advice(bloodtest,HE_HbA1c,HE_TG,HE_HP,pa_totMET,HE_HDL_st2,HE_HTG,HE_dbp,HE_sbp,HE_BUN,sm_presnt,HE_crea,HE_obe,HE_HCHOL,HE_BMI))

@@ -69,6 +69,7 @@
     <div class="chartCard">
         <div class="textBox">
           <p>* How to interpret the bar chart below:</p>
+          <p>The features below are ranked by feature importance</p>
           <p>Look for the color of the bar!</p>
           <p>If the bar is red, it means your value has exceed the diabetic average; If the bar is green, it means your value is kept to normal.</p>
         </div>
@@ -125,18 +126,29 @@
     <div class="chartCard">
         <div class="textBox">
           <h3 id="advice">Advices</h3>
+          
           <div class="inline" style="display:flex">
             <p class="adviceName">{{ report.advice_list.0 }}</p>
-            <a href="{{ report.advice_link_list.0 }}" type="button" style="margin-left: 20px;">Learn more</a>
+            {% if report.advice_link_list.0 != "" %}
+              <a id="link" href="{{ report.advice_link_list.0 }}" style="margin-left: 20px;">Learn more</a>
+            {% else %}
+            {% endif %}
           </div>
           <div class="inline" style="display:flex">
             <p class="adviceName">{{ report.advice_list.1 }}</p>
-            <a href="{{ report.advice_link_list.1 }}" type="button" style="margin-left: 20px;">Learn more</a>
+            {% if report.advice_link_list.1 != "" %}
+              <a id="link" href="{{ report.advice_link_list.1 }}" style="margin-left: 20px;">Learn more</a>
+            {% else %}
+            {% endif %}
           </div>
           <div class="inline" style="display:flex">
             <p class="adviceName">{{ report.advice_list.2 }}</p>
-            <a href="{{ report.advice_link_list.2 }}" type="button" style="margin-left: 20px;">Learn more</a>
+            {% if report.advice_link_list.2 != "" %}
+              <a id="link" href="{{ report.advice_link_list.2 }}" style="margin-left: 20px;">Learn more</a>
+            {% else %}
+            {% endif %}
           </div>
+
         </div>
     </div>
     <div class="chartCard">
@@ -991,6 +1003,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -1078,6 +1093,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 1
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -1165,6 +1183,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -1223,6 +1244,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -1281,6 +1305,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
@@ -1339,6 +1366,9 @@
             scales: {
                 x: { 
                     stacked: true,
+                    ticks: {
+                      stepSize: 5
+                    },
                     grid : {
                       drawOnChartArea: false,
                     }
