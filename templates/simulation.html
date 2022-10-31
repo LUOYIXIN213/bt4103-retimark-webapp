@@ -54,7 +54,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 25%;color: black;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 10px;">Note: * is required field. Please input maximum 2 decimal place. Please follow the allowed range.</p>
+             <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <div class="form-group row" >
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Gender*</label>
                 <div class="form-check form-check-inline">
@@ -67,7 +68,8 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" >Age (year)* <i>(Allowed range: 0~150)</i>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" >Age (year)*
+                    <i style="font-size: 13px;">(Allowed range: 0~150)</i>
                     <span id="ageDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
@@ -76,26 +78,29 @@
             </div>
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label">Height (cm)*
+                    <i style="font-size: 13px;">(Allowed range: 0.1~300)</i>
                     <span id="HE_htDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputHE_ht" name="HE_ht" required value="{{ latest_report.HE_ht }}" step=".01" onkeyup="HE_htDiff()">
+                    <input type="number" class="form-control" id="inputHE_ht" name="HE_ht" required value="{{ latest_report.HE_ht }}" step=".01" onkeyup="HE_htDiff()" min="0.1" max="300">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label">Weight (kg)*
+                    <i style="font-size: 13px;">(Allowed range: 0~800)</i>
                     <span id="HE_wtDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputHE_wt" name="HE_wt" required value ="{{ latest_report.HE_wt }}" step=".01" onkeyup="HE_wtDiff()">
+                    <input type="number" class="form-control" id="inputHE_wt" name="HE_wt" required value ="{{ latest_report.HE_wt }}" step=".01" onkeyup="HE_wtDiff()" min="0" max="800">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Waist Circumference (cm)*
+                    <i style="font-size: 13px;">(Allowed range: 0~300)</i>
                 <span id="HE_wcDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputHE_wc" name="HE_wc" required value="{{ latest_report.HE_wc }}" step=".01" onkeyup="HE_wcDiff()">
+                    <input type="number" class="form-control" id="inputHE_wc" name="HE_wc" required value="{{ latest_report.HE_wc }}" step=".01" onkeyup="HE_wcDiff()" min="0" max="300">
                 </div>
             </div>
 
@@ -115,7 +120,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 50%;color: black;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 10px;">Note: * is required field. Please input maximum 2 decimal place. </p>
+            <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Have you done any clinical blood testing?*</label>
                     <div class="form-check form-check-inline">
@@ -133,74 +139,83 @@
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Systolic Blood Pressure (mmHg)
+                        <i style="font-size: 13px;">(Allowed range: 0~300)</i>
                         <span id="HE_sbpDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_sbp" name="HE_sbp" value = "{{ latest_report.HE_sbp }}" step=".01" onkeyup="HE_sbpDiff()">
+                        <input type="number" class="form-control" id="inputHE_sbp" name="HE_sbp" value = "{{ latest_report.HE_sbp }}" step=".01" onkeyup="HE_sbpDiff()" min="0" max="300">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Diastolic Blood Pressure (mmHg)
+                        <i style="font-size: 13px;">(Allowed range: 0~200)</i>
                         <span id="HE_dbpDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_dbp" name="HE_dbp" value = "{{ latest_report.HE_dbp }}" step=".01" onkeyup="HE_dbpDiff()">
+                        <input type="number" class="form-control" id="inputHE_dbp" name="HE_dbp" value = "{{ latest_report.HE_dbp }}" step=".01" onkeyup="HE_dbpDiff()" min="0" max="200">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Total Cholesterol (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~500)</i>
                         <span id="HE_cholDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_chol" name="HE_chol" value="{{ latest_report.HE_chol }}" step=".01" onkeyup="HE_cholDiff()">
+                        <input type="number" class="form-control" id="inputHE_chol" name="HE_chol" value="{{ latest_report.HE_chol }}" step=".01" onkeyup="HE_cholDiff()" min="0" max="500">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">HDL Cholesterol (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~200)</i>
                         <span id="HE_HDL_st2Diff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_HDL_st2" name="HE_HDL_st2" value = "{{ latest_report.HE_HDL_st2 }}" step=".01" onkeyup="HE_HDL_st2Diff()">
+                        <input type="number" class="form-control" id="inputHE_HDL_st2" name="HE_HDL_st2" value = "{{ latest_report.HE_HDL_st2 }}" step=".01" onkeyup="HE_HDL_st2Diff()" min="0" max="200">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Triglycerides (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~3000)</i>
                         <span id="HE_TGDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_TG" name="HE_TG" value ="{{ latest_report.HE_TG }}" step=".01" onkeyup="HE_TGDiff()">
+                        <input type="number" class="form-control" id="inputHE_TG" name="HE_TG" value ="{{ latest_report.HE_TG }}" step=".01" onkeyup="HE_TGDiff()" min="0" max="3000">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Fasting Blood Sugar (mg/dl)
+                        <i style="font-size: 13px;">(Allowed range: 0~500)</i>
                         <span id="HE_gluDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_glu" name="HE_glu" value ="{{ latest_report.HE_glu}}" step=".01" onkeyup="HE_gluDiff()">
+                        <input type="number" class="form-control" id="inputHE_glu" name="HE_glu" value ="{{ latest_report.HE_glu}}" step=".01" onkeyup="HE_gluDiff()" min="0" max="500">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Hemoglobin_A1c (%)
+                        <i style="font-size: 13px;">(Allowed range: 0~20)</i>
                         <span id="HE_HbA1cDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_HbA1c" name="HE_HbA1c" value ="{{ latest_report.HE_HbA1c }}" step=".01" onkeyup="HE_HbA1cDiff()">
+                        <input type="number" class="form-control" id="inputHE_HbA1c" name="HE_HbA1c" value ="{{ latest_report.HE_HbA1c }}" step=".01" onkeyup="HE_HbA1cDiff()" min="0" max="20">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Blood Urea Nitrogen (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~100)</i>
                         <span id="HE_BUNDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_BUN" name="HE_BUN" value ="{{ latest_report.HE_BUN }}" step=".01" onkeyup="HE_BUNDiff()">
+                        <input type="number" class="form-control" id="inputHE_BUN" name="HE_BUN" value ="{{ latest_report.HE_BUN }}" step=".01" onkeyup="HE_BUNDiff()" min="0" max="100">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Blood Serum Creatinine (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~20)</i>
                         <span id="HE_creaDiff" style="color: #ee6617; margin-left: 20px;"></span>
                     </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputHE_crea" name="HE_crea" value ="{{ latest_report.HE_crea }}" step=".01" onkeyup="HE_creaDiff()">
+                        <input type="number" class="form-control" id="inputHE_crea" name="HE_crea" value ="{{ latest_report.HE_crea }}" step=".01" onkeyup="HE_creaDiff()" min="0" max="20">
                     </div>
                 </div>
             </div>
@@ -222,7 +237,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%;color: black;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 20px;">Note: * is required field. Please input maximum 2 decimal place. </p>
+            <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Drinking and Smoking</u></p>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Do you drink more than once a month?*</label>
@@ -263,29 +279,32 @@
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Physical Activity</u></p>
                         <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Vigorous Activity During a Week (min)*
+                    <i style="font-size: 13px;">(Allowed range: 0~6000)</i>
                     <span id="pa_vig_tmDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputpa_vig_tm" name="pa_vig_tm" required value ="{{ latest_report.pa_vig_tm }}" step=".01" onkeyup="pa_vig_tmDiff()">
+                    <input type="number" class="form-control" id="inputpa_vig_tm" name="pa_vig_tm" required value ="{{ latest_report.pa_vig_tm }}" step=".01" onkeyup="pa_vig_tmDiff()" min="0" max="6000">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Moderate Activity During a Week  (min)*
+                    <i style="font-size: 13px;">(Allowed range: 0~7000)</i>
                     <span id="pa_mod_tmDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputpa_mod_tm" name="pa_mod_tm" required value ="{{ latest_report.pa_mod_tm }}" step=".01" onkeyup="pa_mod_tmDiff()">
+                    <input type="number" class="form-control" id="inputpa_mod_tm" name="pa_mod_tm" required value ="{{ latest_report.pa_mod_tm }}" step=".01" onkeyup="pa_mod_tmDiff()" min="0" max="7000">
                 </div>
             </div>
 
 
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Walking During a Week  (min)*
+                    <i style="font-size: 13px;">(Allowed range: 0~10000)</i>
                     <span id="pa_walkMETDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputpa_walkMET" name="pa_walkMET" required value ="{{ latest_report.pa_walkMET }}" step=".01" onkeyup="pa_walkMETDiff()">
+                    <input type="number" class="form-control" id="inputpa_walkMET" name="pa_walkMET" required value ="{{ latest_report.pa_walkMET }}" step=".01" onkeyup="pa_walkMETDiff()" min="0" max="10000">
                 </div>
             </div>
 
@@ -306,28 +325,31 @@
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Dietary</u></p>
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Protein (g)*
+                    <i style="font-size: 13px;">(Allowed range: 0~600)</i>
                     <span id="N_PROTDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputN_PROT" name="N_PROT" required value ="{{ latest_report.N_PROT }}" step=".01" onkeyup="N_PROTDiff()">
+                    <input type="number" class="form-control" id="inputN_PROT" name="N_PROT" required value ="{{ latest_report.N_PROT }}" step=".01" onkeyup="N_PROTDiff()" min="0" max="600">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Fat (g)*
+                    <i style="font-size: 13px;">(Allowed range: 0~300)</i>
                     <span id="N_FATDiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputN_FAT" name="N_FAT" required value ="{{ latest_report.N_FAT }}" step=".01" onkeyup="N_FATDiff()">
+                    <input type="number" class="form-control" id="inputN_FAT" name="N_FAT" required value ="{{ latest_report.N_FAT }}" step=".01" onkeyup="N_FATDiff()" min="0" max="300">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Carbohydrate (g)*
+                    <i style="font-size: 13px;">(Allowed range: 0~2000)</i>
                     <span id="N_CHODiff" style="color: #ee6617; margin-left: 20px;"></span>
                 </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputN_CHO" name="N_CHO" required value ="{{ latest_report.N_CHO }}" step=".01" onkeyup="N_CHODiff()">
+                    <input type="number" class="form-control" id="inputN_CHO" name="N_CHO" required value ="{{ latest_report.N_CHO }}" step=".01" onkeyup="N_CHODiff()" min="0" max="2000">
                 </div>
             </div>
 
@@ -349,7 +371,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 100%; color: black;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 20px;">Note: * is required field. Please input maximum 2 decimal place. </p>
+            <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Diabetes Treatment and Family History</u></p>
                         <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Do you have diabetes treatment?*</label>
@@ -461,7 +484,8 @@
     </form>
     </div>
 
-        <script type="text/javascript">
+    <script type="text/javascript">
+
         function ageDiff() {
             var ageDiff = (document.getElementById("inputAge").value - {{ latest_report.age }}).toFixed(2);
             document.getElementById("ageDiff").innerHTML = ageDiff;
@@ -678,12 +702,26 @@
                  $('#myTab a[href="#otherdisease"]').tab('show');
              });
          });
-
-  </script>
-
-
-
+     </script>
     <style>
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        fieldset {
+            width: 100%;
+            border: 1px solid #333;
+            box-sizing: border-box;
+        }
+
+        input:invalid {
+            box-shadow: 0 0 5px 1px red;
+        }
+
+        input:focus:invalid {
+            box-shadow: none;
+        }
+
         h1 {
             #text-shadow: 1px 1px 5px #BFBFBF;
             font-size: xx-large;

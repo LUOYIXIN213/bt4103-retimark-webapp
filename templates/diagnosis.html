@@ -41,7 +41,7 @@
     </ul>
 
     <div class="tab-content" id="myTabContent">
-    <form action={{ url_for('diagnosis_user') }} method="POST" style="margin-bottom: 20px;">
+    <form action={{ url_for('diagnosis_user') }} method="POST" style="margin-bottom: 20px;" name="myForm">
         <div class="tab-pane fade show active" id="basicinfo" role="tabpanel" aria-labelledby="basicinfo-tab" style=
                 "max-width: 1000px;
                 border-radius: 20px;
@@ -53,7 +53,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 25%;color: black;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 10px;">Note: * is required field. Please input maximum 2 decimal place. </p>
+            <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <div class="form-group row" >
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Gender*</label>
                 <div class="form-check form-check-inline">
@@ -66,27 +67,35 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" >Age (year)* <i>(Allowed range: 0~150)</i></label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" >Age (year)*
+                    <i style="font-size: 13px;">(Allowed range: 0~150)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="age" value="{{ latest_report.age }}" required step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="age" value="{{ latest_report.age }}" required step=".01" min="0" max="150">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label">Height (cm)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label">Height (cm)*
+                    <i style="font-size: 13px;">(Allowed range: 0.1~300)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="HE_ht" required value="{{ latest_report.HE_ht }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="HE_ht" required value="{{ latest_report.HE_ht }}" step=".01" min="0.1" max="300">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label">Weight (kg)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label">Weight (kg)*
+                    <i style="font-size: 13px;">(Allowed range: 0~800)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="HE_wt" required maxlength="3" value ="{{ latest_report.HE_wt }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="HE_wt" required maxlength="3" value ="{{ latest_report.HE_wt }}" step=".01" min="0" max="800">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Waist Circumference (cm)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Waist Circumference (cm)*
+                    <i style="font-size: 13px;">(Allowed range: 0~300)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="HE_wc" required maxlength="3" value="{{ latest_report.HE_wc }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="HE_wc" required maxlength="3" value="{{ latest_report.HE_wc }}" step=".01" min="0" max="300">
                 </div>
             </div>
 
@@ -106,7 +115,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 50%;color: black;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 10px;">Note: * is required field. Please input maximum 2 decimal place. </p>
+            <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Have you done any clinical blood testing?*</label>
                     <div class="form-check form-check-inline">
@@ -123,57 +133,75 @@
                     <label for="exampleFormControlInput1" style="margin-left: 20px;">If yes, please input your most recent blood testing results below.</label>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Systolic Blood Pressure (mmHg)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Systolic Blood Pressure (mmHg)
+                        <i style="font-size: 13px;">(Allowed range: 0~300)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_sbp" value = "{{ latest_report.HE_sbp }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_sbp" value = "{{ latest_report.HE_sbp }}" step=".01" min="0" max="300">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Diastolic Blood Pressure (mmHg)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Diastolic Blood Pressure (mmHg)
+                        <i style="font-size: 13px;">(Allowed range: 0~200)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_dbp" value = "{{ latest_report.HE_dbp }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_dbp" value = "{{ latest_report.HE_dbp }}" step=".01" min="0" max="200">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Total Cholesterol (mg/dL)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Total Cholesterol (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~500)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_chol" value="{{ latest_report.HE_chol }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_chol" value="{{ latest_report.HE_chol }}" step=".01" min="0" max="500">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">HDL Cholesterol (mg/dL)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">HDL Cholesterol (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~200)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_HDL_st2" value = "{{ latest_report.HE_HDL_st2 }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_HDL_st2" value = "{{ latest_report.HE_HDL_st2 }}" step=".01" min="0" max="200">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Triglycerides (mg/dL)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Triglycerides (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~3000)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_TG" value ="{{ latest_report.HE_TG }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_TG" value ="{{ latest_report.HE_TG }}" step=".01" min="0" max="3000">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Fasting Blood Sugar (mg/dl)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Fasting Blood Sugar (mg/dl)
+                        <i style="font-size: 13px;">(Allowed range: 0~500)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_glu" value ="{{ latest_report.HE_glu}}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_glu" value ="{{ latest_report.HE_glu}}" step=".01" min="0" max="500">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Hemoglobin_A1c (%)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Hemoglobin_A1c (%)
+                        <i style="font-size: 13px;">(Allowed range: 0~20)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_HbA1c" value ="{{ latest_report.HE_HbA1c }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_HbA1c" value ="{{ latest_report.HE_HbA1c }}" step=".01" min="0" max="20">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Blood Urea Nitrogen (mg/dL)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Blood Urea Nitrogen (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~100)</i>
+                        </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_BUN" value ="{{ latest_report.HE_BUN }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_BUN" value ="{{ latest_report.HE_BUN }}" step=".01" min="0" max="100">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Blood Serum Creatinine (mg/dL)</label>
+                    <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Blood Serum Creatinine (mg/dL)
+                        <i style="font-size: 13px;">(Allowed range: 0~20)</i>
+                    </label>
                     <div class="col-sm-10" style="max-width: 500px;">
-                        <input type="number" class="form-control" id="inputPassword3" name="HE_crea" value ="{{ latest_report.HE_crea }}" step=".01">
+                        <input type="number" class="form-control" id="inputPassword3" name="HE_crea" value ="{{ latest_report.HE_crea }}" step=".01" min="0" max="20">
                     </div>
                 </div>
             </div>
@@ -195,7 +223,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%;color: black;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 20px;">Note: * is required field. Please input maximum 2 decimal place. </p>
+            <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Drinking and Smoking</u></p>
             <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Do you drink more than once a month?*</label>
@@ -235,24 +264,30 @@
 
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Physical Activity</u></p>
                         <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Vigorous Activity During a Week (min)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Vigorous Activity During a Week (min)*
+                    <i style="font-size: 13px;">(Allowed range: 0~6000)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="pa_vig_tm" required value ="{{ latest_report.pa_vig_tm }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="pa_vig_tm" required value ="{{ latest_report.pa_vig_tm }}" step=".01" min="0" max="6000">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Moderate Activity During a Week  (min)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Moderate Activity During a Week  (min)*
+                    <i>(Allowed range: 0~7000)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="pa_mod_tm" required value ="{{ latest_report.pa_mod_tm }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="pa_mod_tm" required value ="{{ latest_report.pa_mod_tm }}" step=".01" min="0" max="7000">
                 </div>
             </div>
 
 
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Walking During a Week  (min)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Duration of Walking During a Week  (min)*
+                    <i style="font-size: 13px;">(Allowed range: 0~10000)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="pa_walkMET" required value ="{{ latest_report.pa_walkMET }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="pa_walkMET" required value ="{{ latest_report.pa_walkMET }}" step=".01" min="0" max="10000">
                 </div>
             </div>
 
@@ -272,23 +307,29 @@
 
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Dietary</u></p>
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Protein (g)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Protein (g)*
+                    <i style="font-size: 13px;">(Allowed range: 0~600)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="N_PROT" required value ="{{ latest_report.N_PROT }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="N_PROT" required value ="{{ latest_report.N_PROT }}" step=".01" min="0" max="600">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Fat (g)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Fat (g)*
+                    <i style="font-size: 13px;">(Allowed range: 0~300)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="N_FAT" required value ="{{ latest_report.N_FAT }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="N_FAT" required value ="{{ latest_report.N_FAT }}" step=".01" min="0" max="300">
                 </div>
             </div>
 
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Carbohydrate (g)*</label>
+                <label for="inputPassword3" class="col-sm-5 col-form-label" style="width: 500px;">Daily Intake of Carbohydrate (g)*
+                    <i style="font-size: 13px;">(Allowed range: 0~2000)</i>
+                </label>
                 <div class="col-sm-10" style="max-width: 500px;">
-                    <input type="number" class="form-control" id="inputPassword3" name="N_CHO" required value ="{{ latest_report.N_CHO }}" step=".01">
+                    <input type="number" class="form-control" id="inputPassword3" name="N_CHO" required value ="{{ latest_report.N_CHO }}" step=".01" min="0" max="2000">
                 </div>
             </div>
 
@@ -310,7 +351,8 @@
             <div class="progress">
                 <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 100%; color: black;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
             </div>
-            <p style="margin-left: 35px; font-weight: bold; margin-top: 20px;">Note: * is required field. Please input maximum 2 decimal place. </p>
+            <p style="margin-left: 35px; margin-top: 10px; font-size: 12px; max-width: 900px;"><b>Note:</b> * is required field and invalid required field will be highlighted in a red border.
+                Please input maximum 2 decimal place. Please follow the allowed range.</p>
             <p style="margin-left: 35px; margin-top: 10px; font-weight: bold;"><u>Diabetes Treatment and Family History</u></p>
                         <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-5 col-form-label">Do you have diabetes treatment?*</label>
@@ -550,6 +592,24 @@
 
 
     <style>
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        fieldset {
+            width: 100%;
+            border: 1px solid #333;
+            box-sizing: border-box;
+        }
+
+        input:invalid {
+            box-shadow: 0 0 5px 1px red;
+        }
+
+        input:focus:invalid {
+            box-shadow: none;
+        }
+
         h1 {
             #text-shadow: 1px 1px 5px #BFBFBF;
             font-size: xx-large;
