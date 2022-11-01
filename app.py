@@ -1,7 +1,7 @@
 import time
 import datetime
 from datetime import date,timedelta
-from forms import RegistrationForm, LoginForm, RequestResetForm, ResetPasswordForm
+from forms import RegistrationForm, LoginForm
 
 from flask import Flask, render_template, url_for, session, request, redirect
 import requests
