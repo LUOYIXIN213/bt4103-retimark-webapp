@@ -449,7 +449,7 @@
                     // diabetic label
                     ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('3', width*1.11, y.getPixelForValue(2.8));
+                    ctx.fillText('3', width*1.06, y.getPixelForValue(3.2));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -548,7 +548,8 @@
                     scales: {
                         y: {
                             ticks: {
-                                precision: 0
+                                stepSize: 1,
+                                callback: (value, index, values) => (index == (values.length-1)) ? '' : value,
                             },
                             max: 4,
                             min: 0,

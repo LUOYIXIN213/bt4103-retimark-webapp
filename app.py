@@ -1,7 +1,7 @@
 import time
 import datetime
 from datetime import date,timedelta
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, RequestResetForm, ResetPasswordForm
 
 from flask import Flask, render_template, url_for, session, request, redirect
 import requests
@@ -155,29 +155,29 @@ def home_page():
         if len(report_list) != 0:
             latest_report = report_list[0]
             date_time_str = latest_report['diagnosis_time'] + timedelta(hours=8)
-            latest_diagnosis_date = date_time_str.strftime("%Y-%m-%d %H:%M")
+            latest_diagnosis_date = date_time_str.strftime("%Y-%m-%d")
             #print(report_list[0])
             #print(len(report_list))
             if len(report_list) >= 2:
                 #print(report_list[1])
                 second_latest_report = report_list[1]
                 second_date_time_str = second_latest_report['diagnosis_time'] + timedelta(hours=8)
-                second_diagnosis_date = second_date_time_str.strftime("%Y-%m-%d %H:%M")
+                second_diagnosis_date = second_date_time_str.strftime("%Y-%m-%d")
                 if len(report_list) >= 3:
                     #print(report_list[2])
                     third_latest_report = report_list[2]
                     third_date_time_str = third_latest_report['diagnosis_time'] + timedelta(hours=8)
-                    third_diagnosis_date = third_date_time_str.strftime("%Y-%m-%d %H:%M")
+                    third_diagnosis_date = third_date_time_str.strftime("%Y-%m-%d")
                     if len(report_list) >= 4:
                         #print(report_list[2])
                         fourth_latest_report = report_list[3]
                         fourth_date_time_str = fourth_latest_report['diagnosis_time'] + timedelta(hours=8)
-                        fourth_diagnosis_date = fourth_date_time_str.strftime("%Y-%m-%d %H:%M")
+                        fourth_diagnosis_date = fourth_date_time_str.strftime("%Y-%m-%d")
                         if len(report_list) == 5:
                             #print(report_list[2])
                             fifth_latest_report = report_list[4]
                             fifth_date_time_str = fifth_latest_report['diagnosis_time'] + timedelta(hours=8)
-                            fifth_diagnosis_date = fifth_date_time_str.strftime("%Y-%m-%d %H:%M")
+                            fifth_diagnosis_date = fifth_date_time_str.strftime("%Y-%m-%d")
                         else:
                             fifth_diagnosis_date = "NA"
                     else:

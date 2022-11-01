@@ -12,22 +12,22 @@
     <body onload="getRiskScore()">
         <div class="main">
             <h1 class="name">Welcome Back, {{name}}!</h1>
-            <div class="graph-container" style="position: absolute; top: 14%; right: 2%; padding: 5px; padding-left: 15px; padding-right: 15px; font-style: italic;">Head to the Diagnosis page to do your diagnosis now to see a more recent and accurate analysis! </idv>
+            <div class="graph-container" style="position: absolute; top: 13%; right: 10%; padding: 5px; padding-left: 15px; padding-right: 15px; font-style: italic;">Head to the Diagnosis page to do your diagnosis now! </idv>
         </div>
         <div class="container-xxl px-4 mt-4">
-            <div class="row">
+            <div class="row" style="margin:auto; max-height: 40%;">
                 <div class="col-lg-8">
-                    <div class="graph-container" style="padding-bottom: 5px;">
+                    <div class="graph-container" style="padding-bottom: 5px; height: 360px;">
                         <div class="graph-title">Your Risk Score Trend (5 most recent diagnosis results*)</div>
                         <div>
-                            <canvas id="lineChart" style="margin-left: 30px; margin-right: 30px; width:85%; height: 280px;"></canvas>
+                            <canvas id="lineChart" style="margin-left: 30px; margin-right: 30px; width:85%; max-height: 250px;"></canvas>
                         </div>
                         <div style="margin-top: 10px; margin-left: 4%; font-size: 11px; font-style: italic; color: grey;">*If you do not have enough (i.e. 5) diagnosis results, the earlier report(s) will be shown as not available</div>
                         <div style="margin-left: 4%; font-size: 11px; font-style: italic; color: grey;">*When blood test result is not used for diagnosis, the risk score may fluctuate and become less accurate</div>
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <div class="graph-container" style="padding-bottom: 20px;">
+                    <div class="graph-container" style="padding-bottom: 20px; height: 360px;">
                         <div class="graph-title">Risk Score Goal</div>
                         <br>
                         <div>
@@ -38,23 +38,43 @@
                             </div>
                             <div id="risk-score-goal-label"> Goal: {{risk_score_goal}} </div>
                         </div>
-                        <br>
+                        <br style="width: 20px;">
                         <div class="graph-title">Actions to take</div>
-                        <br style="width:2px;">
+                        <br style="width: 1px;">
                         <div class="advice-container">
-                            <ol>
-                                <li style="padding-top: 10px;">Drinking pattern: </li>
-                                <li>Physical activity: </li>
-                                <li>Smoking pattern: </li>
-                                <li>Hba1c: </li>
-                            </ol>
+                            <div class="textBox">
+                                <div class="inline" style="display:flex; padding-left: 10px; padding-top: 10px;">
+                                    {% if latest_report.advice_link_list.0 != "" %}
+                                    <p class="adviceName">1. {{ latest_report.advice_list.0 }}</p>
+                                    <a href="{{ latest_report.advice_link_list.0 }}" type="button" style="margin-left: 20px;">Learn more</a>
+                                    {% else %}
+                                    <p>Your diabetic risk is low and there is currently no advice for you</p>
+                                    {% endif %}
+                                </div>
+                                <div class="inline" style="display:flex; padding-left: 10px;">
+                                    {% if latest_report.advice_link_list.1 != "" %}
+                                    <p class="adviceName">2. {{ latest_report.advice_list.1 }}</p>
+                                    <a href="{{ latest_report.advice_link_list.1 }}" type="button" style="margin-left: 20px;">Learn more</a>
+                                    {% else %}
+                                    <br>
+                                    {% endif %}
+                                </div>
+                                <div class="inline" style="display:flex; padding-left: 10px;">
+                                    {% if latest_report.advice_link_list.2 != "" %}
+                                    <p class="adviceName">3. {{ latest_report.advice_list.2 }}</p>
+                                    <a href="{{ latest_report.advice_link_list.2 }}" type="button" style="margin-left: 20px;">Learn more</a>
+                                    {% else %}
+                                    <br>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container-xxl px-4 mt-4">
-            <div class="graph-container" style="padding-bottom: 5px;">
+        <div class="container-xxl px-4 mt-4" style="margin-bottom: 30px;">
+            <div class="graph-container" style="padding-bottom: 5px; margin: auto">
                 <div class="graph-title" style="padding-top: 5px; padding-bottom: 5px;">Your Risk Factor Analysis (From 3 Most Recent Diagnosis Report*)</div>
                 <div style="margin: auto; width: 50%; display: flex; align-items: center; justify-content: center">
                     <div>
@@ -74,7 +94,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 10px; margin-left: 3%; font-size: 11px; font-style: italic; color: grey;">*The orange line and label in the graph represent the average value of a diabetic person. For Hypertension status, 1 means normal, 2 means prehypertension, and 3 means hypertension</div>
-                <div style="margin-left: 3%; font-size: 11px; font-style: italic; color: grey;">*If you do not have enough (i.e. 3) diagnosis result, the value for earlier report(s) will not be shown. If you did not input blood test result, some graph(s) will not have a value</div>
+                <div style="margin-left: 3%; font-size: 11px; font-style: italic; color: grey;">*If you do not have enough (i.e. 3) diagnosis result, the value for earlier report(s) will not be shown. If you did not input blood test result, some graph(s) will have NaN as the value</div>
             </div>
         </div>
 
@@ -94,9 +114,9 @@
                 var currentLabelPosition = current_risk*(79-8)/100 + 8;
                 progress_bar.setAttribute('aria-valuenow', Number(current_risk));
                 progress_bar.setAttribute('style','background-color: #F9AD81; width:'+ Number(current_risk) + '%');     
-                dot.setAttribute('style','height: 15px; width: 15px; background-color: red; border-radius: 50%; display: inline-block; position: absolute; top: 24%; left:'+Number(dotPosition)+'%');
-                label.setAttribute('style','position: absolute; top: 30%; left:'+Number(labelPosition)+'%');
-                current_label.setAttribute('style','position: absolute; top: 16%; left:'+Number(currentLabelPosition)+'%');
+                dot.setAttribute('style','height: 15px; width: 15px; background-color: red; border-radius: 50%; display: inline-block; position: absolute; top: 25%; left:'+Number(dotPosition)+'%');
+                label.setAttribute('style','position: absolute; top: 30.5%; left:'+Number(labelPosition)+'%');
+                current_label.setAttribute('style','position: absolute; top: 15%; left:'+Number(currentLabelPosition)+'%');
             }
         </script>
 
@@ -374,7 +394,7 @@
                     const { ctx, chartArea: {top, bottom, left, right, width}, scales: {x,y} } = chart;
                     ctx.save();
 
-                    bgColors(3, 3, 'rgba(194,41,41,0.15)')
+                    bgColors(3, 4, 'rgba(194,41,41,0.15)')
                     bgColors(0, 3,'rgba(67,161,69,0.15)')
 
                     function bgColors(low, high, color) {
@@ -482,7 +502,7 @@
                     // diabetic label
                     ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('150', width*1.14, y.getPixelForValue(175));
+                    ctx.fillText('150', width*1.15, y.getPixelForValue(175));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -504,7 +524,7 @@
                     // diabetic label
                     ctx.font = 'bold 12px Arial';
                     ctx.fillStyle = 'rgb(249, 173, 129)';
-                    ctx.fillText('3', width*1.11, y.getPixelForValue(2.8));
+                    ctx.fillText('3', width*1.06, y.getPixelForValue(3.2));
                     ctx.textAlign = 'right';
                     ctx.restore();
 
@@ -563,7 +583,7 @@
                             max: 15.5,
                             min: 0,
                         }
-                    }
+                    },
                 },
                 plugins: [canvasBackgroundColor1, ChartDataLabels, diabeticLine1]
             };
@@ -577,7 +597,7 @@
                             max: 140,
                             min: 0,
                         }
-                    }
+                    },
                 },
                 plugins: [canvasBackgroundColor2, ChartDataLabels, diabeticLine2]
             };
@@ -591,7 +611,7 @@
                             max: 500,
                             min: 0,
                         }
-                    }
+                    },
                 },
                 plugins: [canvasBackgroundColor3, ChartDataLabels, diabeticLine3]
             };
@@ -602,10 +622,14 @@
                 options: {
                     scales: {
                         y: {
-                            max: 3,
+                            max: 4,
                             min: 0,
-                        }
-                    }
+                            ticks: {
+                                stepSize: 1,
+                                callback: (value, index, values) => (index == (values.length-1)) ? '' : value,
+                            }
+                        },
+                    },
                 },
                 plugins: [canvasBackgroundColor4, ChartDataLabels, diabeticLine4]
             };
@@ -619,7 +643,7 @@
                             max: 250,
                             min: 0,
                         }
-                    }
+                    },
                 },
                 plugins: [canvasBackgroundColor5, ChartDataLabels, diabeticLine5]
             };
@@ -691,8 +715,7 @@
             border-width: 2px;
             border-style: solid;
             border-radius: 10px;
-            width: 80%;
-            height: 60%;
+            width: 90%;
         }
     </style>
 

@@ -60,28 +60,12 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <!-- Change password card-->
+                <!-- Log Out card-->
                 <div class="card mb-4">
-                    <div class="card-header">Change Password</div>
+                    <div class="card-header">Log Out</div>
                     <div class="card-body">
-                        <form>
-                            <!-- Form Group (risk score)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="currentPassword">Current Password</label>
-                                <input class="form-control" id="currentPassword" type="password" placeholder="Enter current password">
-                            </div>
-                            <!-- Form Group (new password)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="newPassword">New Password</label>
-                                <input class="form-control" id="newPassword" type="password" placeholder="Enter new password">
-                            </div>
-                            <!-- Form Group (confirm password)-->
-                            <div class="mb-3">
-                                <label class="small mb-1" for="confirmPassword">Confirm Password</label>
-                                <input class="form-control" id="confirmPassword" type="password" placeholder="Confirm new password">
-                            </div>
-                            <button class="btn btn-primary" type="button">Save</button>
-                        </form>
+                        <p>You will be logged out of your current account.</p>
+                        <a class="btn btn-primary" type="button" href="{{ url_for('login_page') }}">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -120,14 +104,6 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <!-- Log Out card-->
-                <div class="card mb-4">
-                    <div class="card-header">Log Out</div>
-                    <div class="card-body">
-                        <p>You will be logged out of your current account.</p>
-                        <a class="btn btn-primary" type="button" href="{{ url_for('login_page') }}">Log Out</a>
-                    </div>
-                </div>
                 <!-- Delete account card-->
                 <div class="card mb-4">
                     <div class="card-header">Delete Account</div>
