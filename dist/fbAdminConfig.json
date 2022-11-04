@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "bt4103-retimark",
+  "private_key_id": "85ef16a0fdb4ae88a68e119953623ec1f6e9a9a8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDutPPqKqcP7yau\nIAD4o1PlJv6swmVMjhRiFzf84ot8Wd1PvsY0VFZRpxy3/oh4XxxiD69xlRuVNE5Q\ns1ki7AMo3soJnBq5RZQgyUxa87Bgd4p1DDXiDR/NFRu45ZBfRCRINirH6yC3io8Z\n6mdIfY4tRP5XzozG6J5VtAhlFxVNTHIkZeioDt8OWOlAp9Uz7lsEUFPkXJZPKUhh\nWwIu/JIm8n05yKWy522VLaZLzQsuto0OYkXRz9dqjq+TTUTyYDxN1qJsxrqetvpL\n9YDA4uyVr5SYX0K3jyoonka425MHoHzsiS9tV4FbAbYGLV08I2ejw2pdi/jy9Mh2\n6/PRZXpDAgMBAAECggEAFJ0cyTaIucgJu5S48L/OAWZ2LL4W2F8WpIfjxltb90+d\nXIMZg7Baye9X/A2nhFmWTmOTX4gkWySqtK5gPrNJ7JAcu2q3JhO7oH8xsFMGArag\nBs6Yop5GhkPR4ow0hP2R8oh29k+4QhFdnTvQUoLBMeiY3EVSg+TXs4f6B5zQMp4C\nMnatJeKjjGOBGtx/zac5BJ/rQjJqi1tYUzzr+AOG0YnzsXt5+qbf9anuEk46O5DB\ng5hDbJ1wBuIdmxgHIrzSuiDrr1Hncpo8wunk83t1ZhdH46yC7iWQKyPOAt/HJMwG\nZKcjVKnrWFHKLMcjpnQ417Xd2MtOfRw/xyitjvqRcQKBgQD8+JVfWHZ8JNBtbnI0\n6zR07U5FgETaqOh6/d5miVx6exzMxBdqgllck8QqSOoc7kZV1xZcld1ReC35n3lc\nBHHW8EDrOb/q1LskdJ5vItAdByDt/MAZBoZq3dErhlB/lwsjAzDihPEKHgfHojyD\nnGIyoRjWbGq9VlaY2xydMYGRkQKBgQDxkKVscvR8MlWYmIglwwOlAWlroo1xVzwi\nj1RiyolHl+WlcsRd5pT1oyw0axdgnKAGKrWCG1zcdtxbhValvtJ9BmPmL6zgAUYG\nUykG7N/n2FkMv2IpGKox0I7yxebJUi3B6xXDLiOnvZHNtLyQLtWpcei59Bu5Y0YC\nCjRnN96kkwKBgQCyfS7fzEolg9AwNkqMvhwQGFQuw7dRVPZbuX5PeMHwhacnb4Ba\nHUiyAmzZrQLKkPC9pnpXr0IuNo6x32zAmT49et1DW0bniVvV+BbFsZmHsbzxTnG3\n9punEYWBoU5xCADKnnjCiyyLh+7TU8xAzHmY4YPl3y9dEmsdhRRmcUTLkQKBgB9N\n/HISb6aMq1UMJ1CldhpzFWNSfHv8rxlXc7sdvi6d+6+2MMZudE1k6PyeCDiH86D4\n9e63dxBHAwWFQRZXpVV4d4fEE+YvpBB7xGxWVCnqepfRUXo77QppmazSgrcCRFXG\nDlrt5sb9JSEAVBNnTl8YGO3IObOLru3ivqnFrr+rAoGANQbOUKYKIYpHl1d1y5FO\nfU2rVBvu9CNKJdkvuLTUO9aGiFr92EfqLXfhZHDExkwfRfAq5W6Gt9bnRR9PkUEA\nO3hUGryep9sX8UVhWej9EZk9KdQPPYUc/J940oyasl9EKdsbUX+MIjBb8tqb1Mog\nJh1tXx11WS1kma+XA/+9pH8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-upzu4@bt4103-retimark.iam.gserviceaccount.com",
+  "client_id": "110630851605391704515",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-upzu4%40bt4103-retimark.iam.gserviceaccount.com"
+}

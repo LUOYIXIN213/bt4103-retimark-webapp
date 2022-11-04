@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<div style="margin-top:20px;
+        background-color:#f2f6fc;
+        color:#69707a;">
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Account details card-->
+                <div class="card">
+                    <div class="card-header">Account Details</div>
+                    <div class="card-body">
+                        <form action="{{ url_for('change_username') }}" method="POST">
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (username)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="username">Username (Current)</label>
+                                    <div class="form-control" id="username" type="text" name="username">{{username}}</div>
+                                </div>
+                                <!-- Form Group (email)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                    <div class="form-control" id="inputEmailAddress" type="email">{{email}}</div>
+                                </div>
+                            </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <!-- Form Group (full name)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputFirstName">Full name</label>
+                                    <div class="form-control" id="inputFirstName" type="text">{{fullname}}</div>
+                                </div>
+                                <!-- Form Group (birthday)-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                    <div class="form-control" id="inputBirthday" type="text" name="birthday">{{dob}}</div>
+                                </div>
+                            </div>
+                            <hr class="mt-0 mb-4">
+                            <div class="medium mb-1"> If you want to edit your username, you can change it here: </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="username">Username (To be edited)</label>
+                                    <input id="updatedUsername" name="username" class="form-control">
+                                </div>
+                                <!-- Save changes button-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputUsername" id="updateRiskScore">Click below to save the new username:</label><br>
+                                    <button class="btn btn-primary btn-sm" type="submit" onclick="saveUsername()">Save changes</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <!-- Log Out card-->
+                <div class="card mb-4">
+                    <div class="card-header">Log Out</div>
+                    <div class="card-body">
+                        <p>You will be logged out of your current account.</p>
+                        <a class="btn btn-primary" type="button" href="{{ url_for('login_page') }}">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-xl px-4 mt-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Risk score goal card-->
+                <div class="card mb-4">
+                    <div class="card-header">Risk Score Goal</div>
+                    <div class="card-body">
+                        <form action="{{ url_for('change_riskscore') }}" method="POST">
+                            <!-- Form Row-->
+                            <div class="md-3">
+                                <label class="small mb-1">Risk Score Goal (default is 40)</label>
+                                <div class="form-control" type="text">{{risk_score_goal}}</div>
+                            </div>
+                            <!-- Risk score options-->
+                            <hr class="mt-0 mb-4">
+                            <div class="medium mb-1"> If you want to edit your risk score, you can change it here (value of 0-100): </div>
+                            <!-- Form Row-->
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="riskScore">Risk Score Goal (To be edited)</label>
+                                    <input name="risk_score_goal" class="form-control">
+                                </div>
+                                <!-- Save changes button-->
+                                <div class="col-md-6">
+                                    <label class="small mb-1" for="inputRiskScore">Click below to save the new risk score:</label><br>
+                                    <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <!-- Delete account card-->
+                <div class="card mb-4">
+                    <div class="card-header">Delete Account</div>
+                    <div class="card-body">
+                        <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your account, select the button below.</p>
+                        <a class="btn btn-danger-soft text-danger" type="button" href="{{ url_for('delete_account') }}">I understand, delete my account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+
+    button{
+        margin-top: 2px;
+        position: relative;
+        display: center
+    }
+    .img-account-profile {
+        height: 10rem;
+    }
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+    .card .card-header {
+        font-weight: 500;
+    }
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+    .form-control, .dataTable-input {
+        display: block;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+        color: #69707a;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #c5ccd6;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.35rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .nav-borders .nav-link.active {
+        color: #0061f2;
+        border-bottom-color: #0061f2;
+    }
+    .nav-borders .nav-link {
+        color: #69707a;
+        border-bottom-width: 0.125rem;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .btn-danger-soft {
+        color: #000;
+        background-color: #f1e0e3;
+        border-color: #f1e0e3;
+    }
+</style>
+{% endblock %}
